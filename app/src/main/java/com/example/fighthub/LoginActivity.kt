@@ -1,5 +1,6 @@
 package com.example.fighthub
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
         //bottoni
         val btnLogin = findViewById<Button>(R.id.button_login)
         val btnRegistrazione = findViewById<Button>(R.id.button_registrazione)
+        val button = findViewById<Button>(R.id.btn_conferma_registrazione)
 
         //video in fondo
         videoView.setVideoURI(uri)
@@ -44,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         }
         videoView.start()
 
-        //tasto indietro per form
+        //funzione per settare tasto indietro per form
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
 
@@ -52,12 +54,12 @@ class LoginActivity : AppCompatActivity() {
                     layoutLogin.visibility = View.GONE
                     layoutBottoni.visibility = View.VISIBLE
                 }
-                // Se il form di registrazione è visibile, nascondilo e torna ai bottoni
+
                 else if (layoutRegistrazione.visibility == View.VISIBLE) {
                     layoutRegistrazione.visibility = View.GONE
                     layoutBottoni.visibility = View.VISIBLE
                 }
-                // Altrimenti chiudi l'app normalmente
+
                 else {
                     isEnabled = false
                     onBackPressedDispatcher.onBackPressed()
@@ -65,16 +67,24 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+        //Listener per bottone da login a form login
         btnLogin.setOnClickListener {
             layoutBottoni.visibility = View.GONE
             layoutLogin.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
         }
 
+        //Lister per bottone da registrazione a form registrazione
         btnRegistrazione.setOnClickListener {
             layoutBottoni.visibility = View.GONE
             layoutRegistrazione.visibility = View.VISIBLE
             layoutLogin.visibility = View.GONE
+        }
+
+        //btn_conferma_registrazione
+        button.setOnClickListener {
+            val intent = Intent(this, RegistrationActivity::class.java)
+            startActivity(intent)
         }
     }
 }
