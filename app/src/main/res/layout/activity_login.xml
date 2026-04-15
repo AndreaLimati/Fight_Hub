@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
+    android:backgroundTint="@color/black"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -30,30 +31,54 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/button_login"
-        android:layout_width="207dp"
-        android:layout_height="72dp"
-        android:backgroundTint="#1E1E1E"
-        android:text="login"
+    <FrameLayout
+        android:layout_width="250dp"
+        android:layout_height="436dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.47" />
+        app:layout_constraintTop_toTopOf="@+id/imageView3">
 
-    <Button
-        android:id="@+id/button_registration"
-        android:layout_width="212dp"
-        android:layout_height="72dp"
-        android:background="#1E1E1E"
-        android:backgroundTint="#1E1E1E"
-        android:text="registrazione"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.591" />
+        <LinearLayout
+            android:id="@+id/layout_bottoni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/button_registrazione"
+                android:layout_width="207dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/button_glow"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="Registrazione"
+                android:textSize="24sp"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/button_login"
+                android:layout_width="207dp"
+                android:layout_height="72dp"
+                android:background="@drawable/button_glow"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="Login"
+                android:textSize="24sp"
+                app:backgroundTint="@null" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+        </LinearLayout>
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
