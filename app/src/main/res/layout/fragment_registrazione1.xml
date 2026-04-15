@@ -104,11 +104,11 @@
                     android:textColor="#FFFFFF" />
 
                 <Button
-                    android:id="@+id/btnSubmit"
+                    android:id="@+id/btnInvia"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="60dp"
                     android:backgroundTint="#F5F5F5"
-                    android:text="Submit"
+                    android:text="Invia"
                     android:textColor="#1A1A1A"
                     app:cornerRadius="16dp" />
 

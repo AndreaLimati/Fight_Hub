@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
 import java.util.Locale
+import kotlin.text.replace
 
 class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +37,26 @@ class RegistrationActivity : AppCompatActivity() {
         }
         videoView.start()
 
-        //fragment1
+        //fragment container
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.fragment_registrazione1, RegistrazioneFragment1())
+                .add(R.id.fragment_registrazione_container, RegistrazioneFragment1())
                 .commit()
         }
 
     }
+
+    fun navigaAlSecondoStep() {
+        supportFragmentManager.beginTransaction()
+            // Animazione: entra da destra, esce a sinistra
+            .setCustomAnimations(
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
+            .replace(R.id.fragment_registrazione_container, RegistrazioneFragment2()) // Carica il secondo fragment
+            .addToBackStack(null) // Permette di tornare indietro col tasto back
+            .commit()
+    }
 }
+

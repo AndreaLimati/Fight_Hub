@@ -15,6 +15,8 @@ import java.util.Locale
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
+
 class RegistrazioneFragment1 : Fragment() {
 
     @SuppressLint("MissingInflatedId")
@@ -25,6 +27,7 @@ class RegistrazioneFragment1 : Fragment() {
         // Collega il layout XML della card
         val view = inflater.inflate(R.layout.fragment_registrazione1, container, false)
         val btnDate = view.findViewById<Button>(R.id.SceltaData)
+        val btnInvia=view.findViewById<Button>(R.id.btnInvia)
 
         btnDate.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -44,6 +47,13 @@ class RegistrazioneFragment1 : Fragment() {
                 btnDate.text = dateString
             }
         }
+
+        //bottone per cambiare fragment
+        btnInvia.setOnClickListener {
+            (activity as? RegistrationActivity)?.navigaAlSecondoStep()
+        }
+
+
 
         return view
     }

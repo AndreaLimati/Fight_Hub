@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RegistrazioneFragment2">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="294dp"
+        android:layout_height="509dp"
+        android:layout_gravity="center"
+        android:layout_margin="24dp"
+        app:cardBackgroundColor="#212121"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Che arte marziale pratichi?"
+                android:textColor="#EDE9E9"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnJudo"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector_artimarziali"
+                android:text="Judo"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnKarate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector_artimarziali"
+                android:text="Karate"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnBoxe"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector_artimarziali"
+                android:text="Boxe"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnMuayThai"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector_artimarziali"
+                android:text="Muay Thai"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnMMA"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector_artimarziali"
+                android:text="MMA"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnAltro"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_selector_artimarziali"
+                android:text="Altro..."
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnContinua"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/button_glow"
+                android:text="Continua"
+                android:textAllCaps="false"
+                android:textColor="#F4F1F1"
+                app:backgroundTint="@null" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="20dp"
+                android:progress="60"
+                android:progressTint="#FF0000" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>
