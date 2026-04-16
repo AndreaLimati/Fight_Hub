@@ -1,14 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistrazioneFragment4">
+    android:gravity="center">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#D9FFFFFF"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Benvenuto!"
+                    android:textColor="#1A1A1A"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:id="@+id/tvDisclaimer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fight Hub è una piattaforma dedicata esclusivamente alla condivisione di contenuti...\n\nNon organizziamo, promuoviamo né gestiamo incontri...\n\nQualsiasi interazione avviene sotto la totale responsabilità degli utenti coinvolti."
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp"
+                    android:gravity="start"/>
+
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="4dp"
+                    android:background="#FF0000"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="24dp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnAccetta"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#1A1A1A"
+            android:text="Accetta"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
 </FrameLayout>

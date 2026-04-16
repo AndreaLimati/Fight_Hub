@@ -11,6 +11,7 @@ import androidx.camera.viewfinder.core.ScaleType
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import com.example.fighthub.R
+import com.example.fighthub.RegistrationActivity
 
 class RegistrazioneFragment3 : Fragment() {
 
@@ -57,6 +58,11 @@ class RegistrazioneFragment3 : Fragment() {
                 // Qui chiamerai la funzione dell'Activity per andare al prossimo step
             }
         }
+
+        btnContinua.setOnClickListener {
+            (activity as? RegistrationActivity)?.navigaAlQuartoStep()
+        }
+
 
         return view
     }
