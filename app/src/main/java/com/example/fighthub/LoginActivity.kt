@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.VideoView
 import androidx.activity.enableEdgeToEdge
@@ -84,6 +85,8 @@ class LoginActivity : AppCompatActivity() {
         //btn_conferma_registrazione
         button.setOnClickListener {
             val intent = Intent(this, RegistrationActivity::class.java)
+            intent.putExtra("email", findViewById<EditText>(R.id.register_email).text.toString())
+            intent.putExtra("passw", findViewById<EditText>(R.id.register_password).text.toString())
             startActivity(intent)
         }
     }
