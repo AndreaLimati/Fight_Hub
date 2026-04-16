@@ -1,5 +1,6 @@
 package com.example.fighthub
 
+import RegistrazioneFragment3
 import android.app.DatePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
@@ -55,6 +56,30 @@ class RegistrationActivity : AppCompatActivity() {
                 android.R.anim.slide_out_right
             )
             .replace(R.id.fragment_registrazione_container, RegistrazioneFragment2()) // Carica il secondo fragment
+            .addToBackStack(null) // Permette di tornare indietro col tasto back
+            .commit()
+    }
+
+    fun navigaAlTerzoStep() {
+        supportFragmentManager.beginTransaction()
+            // Animazione: entra da destra esce a sinistra
+            .setCustomAnimations(
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
+            .replace(R.id.fragment_registrazione_container, RegistrazioneFragment3()) // Carica il terzo fragment
+            .addToBackStack(null) // Permette di tornare indietro col tasto back
+            .commit()
+    }
+
+    fun navigaAlQuartoStep() {
+        supportFragmentManager.beginTransaction()
+            // Animazione: entra da destra esce a sinistra
+            .setCustomAnimations(
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
+            .replace(R.id.fragment_registrazione_container, RegistrazioneFragment4()) // Carica il quarto fragment
             .addToBackStack(null) // Permette di tornare indietro col tasto back
             .commit()
     }

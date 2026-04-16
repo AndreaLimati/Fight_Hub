@@ -28,6 +28,7 @@ class RegistrazioneFragment2 : Fragment() {
     ): View? {
         // Collega il layout XML
         val view = inflater.inflate(R.layout.fragment_registrazione2, container, false)
+        val btnContinua = view.findViewById<Button>(R.id.btnContinua)
 
         // Lista degli ID dei bottoni definiti nell'XML
         val bottoniIds = listOf(
@@ -53,6 +54,11 @@ class RegistrazioneFragment2 : Fragment() {
                 Toast.makeText(context, "Hai scelto: $riepilogo", Toast.LENGTH_LONG).show()
                 // Qui puoi chiamare una funzione dell'Activity per salvare tutto
             }
+        }
+
+        //Bottone per passare a fragment 3
+        btnContinua.setOnClickListener {
+            (activity as? RegistrationActivity)?.navigaAlTerzoStep()
         }
 
         return view
