@@ -9,15 +9,19 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.VideoView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.fighthub.viewModel.RegistrationViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
 import java.util.Locale
 import kotlin.text.replace
 
 class RegistrationActivity : AppCompatActivity() {
+    private val registrationViewModel : RegistrationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +34,11 @@ class RegistrationActivity : AppCompatActivity() {
         val videoView = findViewById<VideoView>(R.id.videoView)
         val path = "android.resource://" + packageName + "/" + R.raw.mgs3_video
         val uri = Uri.parse(path)
+
+        val email = intent.getStringExtra("email")
+        val passw = intent.getStringExtra("passw")
+
+        registrationViewModel.updateEmailPassw(email, passw)
 
         //video in fondo
         videoView.setVideoURI(uri)
