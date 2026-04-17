@@ -1,59 +1,72 @@
-package com.example.fighthub
-
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.fighthub.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragmentProfiloUtente.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragmentProfiloUtente : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // Variabili separate come richiesto
+    private val nomeUtente: String = "Gino"
+    private val etaUtente: Int = 22
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_profilo_utente, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragmentProfiloUtente.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragmentProfiloUtente().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Imposta Nome ed Età
+        val tvNomeEta = view.findViewById<TextView>(R.id.tvNomeEta)
+        tvNomeEta.text = "$nomeUtente, $etaUtente"
+
+        // Configura RecyclerView
+        val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
+        rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
+
+        // Dati Mock
+        val listaRecensioni = listOf(
+            RecensioneMock("Utente1", "buon combattente, abbiamo avuto una bella sessione di sparring", 5),
+            RecensioneMock("Chuck", "debole...", 1),
+            RecensioneMock("Rocky", "ha del potenziale ma deve allenarsi", 4)
+        )
+
+        rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
     }
+}
+
+// Data Class per il Mockup
+data class RecensioneMock(val autore: String, val testo: String, val stelle: Int)
+
+// Adapter Interno per semplicità di copia
+class RecensioniAdapter(private val lista: List<RecensioneMock>) :
+    RecyclerView.Adapter<RecensioniAdapter.ViewHolder>() {
+
+    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val nome = v.findViewById<TextView>(R.id.tvAutore)
+        val testo = v.findViewById<TextView>(R.id.tvTesto)
+        val stelle = v.findViewById<TextView>(R.id.tvStelle)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_recensione, parent, false)
+        return ViewHolder(v)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = lista[position]
+        holder.nome.text = item.autore
+        holder.testo.text = item.testo
+        holder.stelle.text = "⭐ " + "★".repeat(item.stelle)
+    }
+
+    override fun getItemCount() = lista.size
 }

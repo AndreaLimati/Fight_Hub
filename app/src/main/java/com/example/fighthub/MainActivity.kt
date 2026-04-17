@@ -1,5 +1,6 @@
 package com.example.fighthub
 
+import MainFragmentProfiloUtente
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
