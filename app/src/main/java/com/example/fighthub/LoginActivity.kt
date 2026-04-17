@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         val btnLogin = findViewById<Button>(R.id.button_login)
         val btnRegistrazione = findViewById<Button>(R.id.button_registrazione)
         val button = findViewById<Button>(R.id.btn_conferma_registrazione)
+        val confLogin = findViewById<Button>(R.id.btn_conferma_login)
 
         //video in fondo
         videoView.setVideoURI(uri)
@@ -87,7 +88,27 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegistrationActivity::class.java)
             intent.putExtra("email", findViewById<EditText>(R.id.register_email).text.toString())
             intent.putExtra("passw", findViewById<EditText>(R.id.register_password).text.toString())
+            layoutBottoni.visibility = View.VISIBLE
+            layoutRegistrazione.visibility = View.GONE
+            startActivity(intent)
+        }
+
+        //btm_conferma_login
+        confLogin.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            layoutBottoni.visibility = View.VISIBLE
+            layoutRegistrazione.visibility = View.GONE
             startActivity(intent)
         }
     }
+    override fun onResume() {
+        super.onResume()
+        val videoView = findViewById<VideoView>(R.id.videoView)
+
+        videoView.start()
+
+         videoView.seekTo(0)
+    }
 }
+
+
