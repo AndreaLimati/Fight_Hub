@@ -1,3 +1,5 @@
+package com.example.fighthub
+
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -5,34 +7,53 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.viewfinder.core.ScaleType
-import androidx.fragment.app.Fragment
 import android.widget.ImageView
-import com.example.fighthub.R
-import com.example.fighthub.RegistrationActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 
 class RegistrazioneFragment3 : Fragment() {
 
-    private var imageUri: Uri? = null // Per salvare l'URI dell'immagine scelta
+    private var selectedImagesUris = mutableListOf<Uri>()
     private lateinit var btnUpload: ImageButton
+    private lateinit var tvPhotoCount: TextView
+    private val MAX_IMAGES = 10
 
-    // Launcher per aprire la galleria e ricevere il risultato
-    private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        // Questa funzione viene chiamata quando l'utente sceglie un'immagine
-        if (uri != null) {
-            imageUri = uri
-            // Mostra l'immagine scelta direttamente nel bottone centrale
-            btnUpload.setImageURI(uri)
-            btnUpload.scaleType = ImageView.ScaleType.CENTER_CROP // Adatta l'immagine
-            btnUpload.adjustViewBounds = true
-            // Rimuovi il tint dell'icona se vuoi vedere l'immagine a colori
-            btnUpload.imageTintList = null
-        } else {
-            Toast.makeText(requireContext(), "Nessuna immagine selezionata", Toast.LENGTH_SHORT).show()
+    // Launcher per selezione multipla
+    private val pickMultipleImagesLauncher = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris: List<Uri> ->
+        if (uris.isNotEmpty()) {
+            val spazioRimanente = MAX_IMAGES - selectedImagesUris.size
+
+            if (uris.size > spazioRimanente) {
+                Toast.makeText(requireContext(), "Puoi aggiungere solo altre $spazioRimanente foto!", Toast.LENGTH_SHORT).show()
+                selectedImagesUris.addAll(uris.take(spazioRimanente))
+            } else {
+                selectedImagesUris.addAll(uris)
+            }
+
+            aggiornaUI()
+        }
+    }
+
+    private fun aggiornaUI() {
+        // 1. Aggiorna il testo del contatore
+        tvPhotoCount.text = "Foto: ${selectedImagesUris.size}/$MAX_IMAGES"
+
+        // 2. Mostra l'ultima foto selezionata come anteprima nel bottone
+        if (selectedImagesUris.isNotEmpty()) {
+            btnUpload.setImageURI(selectedImagesUris.last())
+            btnUpload.scaleType = ImageView.ScaleType.CENTER_CROP
+            btnUpload.imageTintList = null // Toglie il colore grigio per vedere la foto
+        }
+
+        // 3. Se abbiamo raggiunto il limite, disabilitiamo l'upload
+        if (selectedImagesUris.size >= MAX_IMAGES) {
+            btnUpload.isEnabled = false
+            btnUpload.alpha = 0.5f
+            Toast.makeText(requireContext(), "Limite massimo raggiunto!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -42,27 +63,26 @@ class RegistrazioneFragment3 : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_registrazione3, container, false)
 
+        // Inizializzazione viste
         btnUpload = view.findViewById(R.id.btnUpload)
+        tvPhotoCount = view.findViewById(R.id.tvPhotoCount)
         val btnContinua = view.findViewById<Button>(R.id.btnContinuaPhoto)
 
-        // Cliccando sull'area grigia, apriamo la galleria per "immagini/*"
+        // Listener Click Upload
         btnUpload.setOnClickListener {
-            pickImageLauncher.launch("image/*")
+            pickMultipleImagesLauncher.launch("image/*")
         }
 
+        // Listener Click Continua
         btnContinua.setOnClickListener {
-            if (imageUri == null) {
+            if (selectedImagesUris.isEmpty()) {
                 Toast.makeText(requireContext(), "Inserisci almeno una foto!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Foto salvata! Procediamo...", Toast.LENGTH_SHORT).show()
-                // Qui chiamerai la funzione dell'Activity per andare al prossimo step
+                // Procedi e passa la lista di foto all'Activity
+                (activity as? RegistrationActivity)?.navigaAlQuartoStep()
+                // Nota: Assicurati che RegistrationActivity abbia questa funzione
             }
         }
-
-        btnContinua.setOnClickListener {
-            (activity as? RegistrationActivity)?.navigaAlQuartoStep()
-        }
-
 
         return view
     }

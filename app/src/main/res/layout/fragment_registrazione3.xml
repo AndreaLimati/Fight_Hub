@@ -4,64 +4,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="RegistrazioneFragment3">
+    tools:context=".RegistrazioneFragment3">
 
-<androidx.cardview.widget.CardView
-    android:layout_width="320dp"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardBackgroundColor="#CCFFFFFF"
-    app:cardCornerRadius="28dp"
-    app:cardElevation="8dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="24dp">
+        android:layout_gravity="center"
+        app:cardBackgroundColor="#CCFFFFFF"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Inserisci le tue foto:"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"
-            android:layout_gravity="start"/>
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
 
-        <ImageButton
-            android:id="@+id/btnUpload"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@drawable/bg_upload_area"
-            android:src="@drawable/bg_upload_area"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"
-            android:layout_marginBottom="32dp"
-            app:tint="#555555" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inserisci le tue foto:"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="start"/>
 
-        <Button
-            android:id="@+id/btnContinuaPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:backgroundTint="#212121"
-            android:text="Continua"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            app:cornerRadius="12dp" />
+            <ImageButton
+                android:id="@+id/btnUpload"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/bg_upload_area"
+                android:src="@drawable/bg_upload_area"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:layout_marginBottom="8dp"
+                app:tint="#555555" />
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_marginTop="24dp"
-            android:progress="80"
-            android:progressTint="#FF0000" />
+            <TextView
+                android:id="@+id/tvPhotoCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foto: 0/10"
+                android:textColor="#66000000"
+                android:textSize="14sp"
+                android:layout_marginBottom="12dp" />
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnContinuaPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="#212121"
+                android:text="Continua"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="12dp" />
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="24dp"
+                android:progress="80"
+                android:progressTint="#FF0000" />
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
