@@ -23,7 +23,7 @@ class RegistrationViewModel : ViewModel() {
         userData.value = userData.value?.copy(cognome = c)
     }
 
-    fun updateDataNascita(d: SimpleDateFormat?){
+    fun updateDataNascita(d: String?){
         userData.value = userData.value?.copy(dataNascita = d)
     }
 
@@ -45,5 +45,10 @@ class RegistrationViewModel : ViewModel() {
 
     fun updateUrlFoto(url: Set<String>){
         userData.value = userData.value?.copy(urlFoto = url)
+    }
+
+    fun updatePos(la: Float?, lo: Float?){
+        userData.value = userData.value?.copy(lat = la)
+        userData.value = userData.value?.copy(lon = lo)
     }
 }

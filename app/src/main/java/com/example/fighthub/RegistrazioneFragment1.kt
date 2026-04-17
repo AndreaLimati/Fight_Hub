@@ -32,13 +32,16 @@ class RegistrazioneFragment1 : Fragment() {
     ): View? {
         // Collega il layout XML della card
         val view = inflater.inflate(R.layout.fragment_registrazione1, container, false)
-        val nome = view.findViewById<EditText>(R.id.etNome).text.toString()
-        val cognome = view.findViewById<EditText>(R.id.etCognome).text.toString()
+
         val btnDate = view.findViewById<Button>(R.id.SceltaData)
         val btnInvia=view.findViewById<Button>(R.id.btnInvia)
+
+        val nome = view.findViewById<EditText>(R.id.etNome).text.toString()
+        val cognome = view.findViewById<EditText>(R.id.etCognome).text.toString()
         val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0
         val altezza = view.findViewById<EditText>(R.id.etAltezza).text.toString().toIntOrNull() ?: 0
         val descrizione = view.findViewById<EditText>(R.id.etDescrizione).text.toString()
+        var dateString: String? = null
 
         btnDate.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -50,7 +53,7 @@ class RegistrazioneFragment1 : Fragment() {
             datePicker.show(parentFragmentManager, "DATE_PICKER")
 
             datePicker.addOnPositiveButtonClickListener { selection ->
-                val dateString = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(
+                dateString = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(
                     Date(
                         selection
                     )
@@ -61,11 +64,15 @@ class RegistrazioneFragment1 : Fragment() {
 
         //bottone per cambiare fragment
         btnInvia.setOnClickListener {
+            //salvo info sul viewmodel
+            registrationViewModel.updateNome(nome)
+            registrationViewModel.updateCognome(cognome)
+            registrationViewModel.updateDataNascita(dateString)
+            registrationViewModel.updatePeso(peso)
+            registrationViewModel.updateAltezza(altezza)
+            registrationViewModel.updateDescrizione(descrizione)
             (activity as? RegistrationActivity)?.navigaAlSecondoStep()
         }
-
-
-
         return view
     }
 }
