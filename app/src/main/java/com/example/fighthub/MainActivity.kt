@@ -50,14 +50,17 @@ class MainActivity : AppCompatActivity() {
         navBar.setOnItemSelectedListener { item ->
            when(item.itemId) {
                 R.id.nav_chat -> {
+                    if(navBar.selectedItemId != R.id.nav_chat )
                     navigaAllaChat()
                     true
                 }
                 R.id.nav_fight -> {
+                    if(navBar.selectedItemId != R.id.nav_fight)
                     navigaAlMenu()
                     true
                 }
                 R.id.nav_profilo -> {
+                    if(navBar.selectedItemId != R.id.nav_profilo)
                     navigaAlProfilo()
                     true
                 }
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                 android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right
             )
-            .replace(R.id.fragment_main_container, MainFragmentChat()) // Carica il secondo fragment
+            .replace(R.id.fragment_main_container, MainFragmentChat()) // Carica il fragment chat
             .addToBackStack(null) // Permette di tornare indietro col tasto back
             .commit()
     }
@@ -86,10 +89,10 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             // Animazione: entra da destra, esce a sinistra
             .setCustomAnimations(
-                android.R.anim.slide_out_right,
+                R.anim.slide_in_right,
                 android.R.anim.slide_in_left
             )
-            .replace(R.id.fragment_main_container, MainFragmentProfiloUtente()) // Carica il secondo fragment
+            .replace(R.id.fragment_main_container, MainFragmentProfiloUtente()) // Carica il fragment Profilo Utente
             .addToBackStack(null) // Permette di tornare indietro col tasto back
             .commit()
     }
@@ -101,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                 android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right
             )
-            .replace(R.id.fragment_main_container, MainFragmentMenu()) // Carica il secondo fragment
+            .replace(R.id.fragment_main_container, MainFragmentMenu()) // Carica Fight
             .addToBackStack(null) // Permette di tornare indietro col tasto back
             .commit()
     }
