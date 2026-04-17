@@ -24,7 +24,6 @@ class ControlloreDB {
                     Log.e("Fallimento Registrazione", "Porcodio")
                 }
             }
-
     }
 
     fun salvaDatiUtente(user: User){
