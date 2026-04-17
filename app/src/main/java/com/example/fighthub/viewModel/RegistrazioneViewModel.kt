@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fighthub.model.User
 
-class UtenteViewModel : ViewModel() {
+class RegistrazioneViewModel : ViewModel() {
     val userData = MutableLiveData(User())
 
     fun updateUid(u: String?){
@@ -49,7 +49,7 @@ class UtenteViewModel : ViewModel() {
         userData.value = userData.value?.copy(urlFoto = url)
     }
 
-    fun updatePos(la: Float?, lo: Float?){
+    fun updatePos(la: Double?, lo: Double?){
         userData.value = userData.value?.copy(lat = la)
         userData.value = userData.value?.copy(lon = lo)
     }

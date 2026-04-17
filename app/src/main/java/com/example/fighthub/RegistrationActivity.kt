@@ -9,10 +9,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.fighthub.viewModel.UtenteViewModel
+import com.example.fighthub.controlloreDB.ControlloreDB
+import com.example.fighthub.viewModel.RegistrazioneViewModel
 
 class RegistrationActivity : AppCompatActivity() {
-    private val utenteViewModel : UtenteViewModel by viewModels()
+    private val registrazioneViewModel : RegistrazioneViewModel by viewModels()
+    private val controlloreDB = ControlloreDB()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,7 @@ class RegistrationActivity : AppCompatActivity() {
         val email = intent.getStringExtra("email")
         val passw = intent.getStringExtra("passw")
 
-        utenteViewModel.updateEmailPassw(email, passw)
+        controlloreDB.autenticaUtenteRegistrazione(email, passw)
 
         //video in fondo
         videoView.setVideoURI(uri)
