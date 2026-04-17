@@ -53,4 +53,8 @@ class RegistrazioneViewModel : ViewModel() {
         userData.value = userData.value?.copy(lat = la)
         userData.value = userData.value?.copy(lon = lo)
     }
+
+    fun getUser(): User? {
+        return userData.value
+    }
 }

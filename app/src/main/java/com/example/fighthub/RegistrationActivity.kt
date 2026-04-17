@@ -14,7 +14,6 @@ import com.example.fighthub.viewModel.RegistrazioneViewModel
 
 class RegistrationActivity : AppCompatActivity() {
     private val registrazioneViewModel : RegistrazioneViewModel by viewModels()
-    private val controlloreDB = ControlloreDB()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +31,8 @@ class RegistrationActivity : AppCompatActivity() {
         val email = intent.getStringExtra("email")!!
         val passw = intent.getStringExtra("passw")!!
 
-        controlloreDB.autenticaUtenteRegistrazione(email, passw)
+        registrazioneViewModel.updateEmailPassw(email, passw)
+
 
         //video in fondo
         videoView.setVideoURI(uri)

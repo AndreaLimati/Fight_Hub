@@ -3,6 +3,7 @@ package com.example.fighthub
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import com.example.fighthub.controlloreDB.ControlloreDB
 import com.example.fighthub.viewModel.RegistrazioneViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
@@ -24,6 +26,7 @@ private const val ARG_PARAM2 = "param2"
 class RegistrazioneFragment1 : Fragment() {
 
     private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
+    private val controlloreDB = ControlloreDB()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -71,6 +74,8 @@ class RegistrazioneFragment1 : Fragment() {
             registrazioneViewModel.updatePeso(peso)
             registrazioneViewModel.updateAltezza(altezza)
             registrazioneViewModel.updateDescrizione(descrizione)
+            controlloreDB.autenticaUtenteRegistrazione(registrazioneViewModel.getUser()!!)
+            Log.d("AIUTO UN NEGRO", "$nome $cognome $dateString $peso $altezza $descrizione")
             (activity as? RegistrationActivity)?.navigaAlSecondoStep()
         }
         return view
