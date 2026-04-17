@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import com.example.fighthub.viewModel.UtenteViewModel
+import com.example.fighthub.viewModel.RegistrazioneViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
 import java.util.Locale
@@ -23,7 +23,7 @@ private const val ARG_PARAM2 = "param2"
 
 class RegistrazioneFragment1 : Fragment() {
 
-    private val utenteViewModel : UtenteViewModel by activityViewModels()
+    private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -65,12 +65,12 @@ class RegistrazioneFragment1 : Fragment() {
         //bottone per cambiare fragment
         btnInvia.setOnClickListener {
             //salvo info sul viewmodel
-            utenteViewModel.updateNome(nome)
-            utenteViewModel.updateCognome(cognome)
-            utenteViewModel.updateDataNascita(dateString)
-            utenteViewModel.updatePeso(peso)
-            utenteViewModel.updateAltezza(altezza)
-            utenteViewModel.updateDescrizione(descrizione)
+            registrazioneViewModel.updateNome(nome)
+            registrazioneViewModel.updateCognome(cognome)
+            registrazioneViewModel.updateDataNascita(dateString)
+            registrazioneViewModel.updatePeso(peso)
+            registrazioneViewModel.updateAltezza(altezza)
+            registrazioneViewModel.updateDescrizione(descrizione)
             (activity as? RegistrationActivity)?.navigaAlSecondoStep()
         }
         return view

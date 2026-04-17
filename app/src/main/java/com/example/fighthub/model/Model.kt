@@ -12,8 +12,8 @@ data class User(
     var descrizione: String? = null,
     var artiPraticate: Set<String> = emptySet(),
     var urlFoto: Set<String> = emptySet(),
-    var lat: Float? = null,
-    var lon: Float? = null
+    var lat: Double? = null,
+    var lon: Double? = null
 )
 
 data class Recensione(

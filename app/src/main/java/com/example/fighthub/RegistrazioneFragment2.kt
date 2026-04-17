@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import com.example.fighthub.viewModel.UtenteViewModel
+import com.example.fighthub.viewModel.RegistrazioneViewModel
 import kotlin.getValue
 
 private const val ARG_PARAM1 = "param1"
@@ -17,7 +17,7 @@ private const val ARG_PARAM2 = "param2"
 
 class RegistrazioneFragment2 : Fragment() {
 
-    private val utenteViewModel : UtenteViewModel by activityViewModels()
+    private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
     // Set per memorizzare le arti marziali selezionate (evita duplicati)
     private val artiSelezionate = mutableSetOf<String>()
 
@@ -52,7 +52,7 @@ class RegistrazioneFragment2 : Fragment() {
                 val riepilogo = artiSelezionate.joinToString(", ")
                 Toast.makeText(context, "Hai scelto: $riepilogo", Toast.LENGTH_LONG).show()
                 // Qui puoi chiamare una funzione dell'Activity per salvare tutto
-                utenteViewModel.updateArtiPratiate(artiSelezionate)
+                registrazioneViewModel.updateArtiPratiate(artiSelezionate)
             }
         }
 
