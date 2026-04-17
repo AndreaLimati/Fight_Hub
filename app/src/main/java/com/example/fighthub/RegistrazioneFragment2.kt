@@ -19,7 +19,7 @@ private const val ARG_PARAM2 = "param2"
 class RegistrazioneFragment2 : Fragment() {
 
     private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
-    private val controlloreDB = ControlloreDB()
+
     // Set per memorizzare le arti marziali selezionate (evita duplicati)
     private val artiSelezionate = mutableSetOf<String>()
 
@@ -55,7 +55,6 @@ class RegistrazioneFragment2 : Fragment() {
                 Toast.makeText(context, "Hai scelto: $riepilogo", Toast.LENGTH_LONG).show()
                 // Qui puoi chiamare una funzione dell'Activity per salvare tutto
                 registrazioneViewModel.updateArtiPratiate(artiSelezionate.toList())
-                controlloreDB.autenticaUtenteRegistrazione(registrazioneViewModel.getUser()!!)
                 (activity as? RegistrationActivity)?.navigaAlTerzoStep()
             }
         }

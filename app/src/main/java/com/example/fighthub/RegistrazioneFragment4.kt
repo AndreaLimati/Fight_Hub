@@ -7,8 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.activityViewModels
+import com.example.fighthub.controlloreDB.ControlloreDB
+import com.example.fighthub.viewModel.RegistrazioneViewModel
+import kotlin.getValue
 
 class RegistrazioneFragment4 : Fragment() {
+    private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
+    private val controlloreDB = ControlloreDB()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +30,7 @@ class RegistrazioneFragment4 : Fragment() {
 
         accetta.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
+            controlloreDB.autenticaUtenteRegistrazione(registrazioneViewModel.getUser()!!)
             startActivity(intent)
         }
     }
