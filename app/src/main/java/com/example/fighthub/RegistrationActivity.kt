@@ -1,26 +1,18 @@
 package com.example.fighthub
 
 import RegistrazioneFragment3
-import android.app.DatePickerDialog
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
 import android.widget.VideoView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.fighthub.viewModel.RegistrationViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.util.Date
-import java.util.Locale
-import kotlin.text.replace
+import com.example.fighthub.viewModel.UtenteViewModel
 
 class RegistrationActivity : AppCompatActivity() {
-    private val registrationViewModel : RegistrationViewModel by viewModels()
+    private val utenteViewModel : UtenteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +30,7 @@ class RegistrationActivity : AppCompatActivity() {
         val email = intent.getStringExtra("email")
         val passw = intent.getStringExtra("passw")
 
-        registrationViewModel.updateEmailPassw(email, passw)
+        utenteViewModel.updateEmailPassw(email, passw)
 
         //video in fondo
         videoView.setVideoURI(uri)

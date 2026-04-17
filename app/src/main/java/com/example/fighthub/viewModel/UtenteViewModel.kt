@@ -2,12 +2,14 @@ package com.example.fighthub.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.fighthub.model.UserRegistration
-import java.text.SimpleDateFormat
+import com.example.fighthub.model.User
 
-class RegistrationViewModel : ViewModel() {
-    val userData = MutableLiveData(UserRegistration())
+class UtenteViewModel : ViewModel() {
+    val userData = MutableLiveData(User())
 
+    fun updateUid(u: String?){
+        userData.value = userData.value?.copy(uid = u)
+    }
     fun updateEmailPassw(m: String?, p: String?){
         userData.value = userData.value?.copy(
             email = m,
