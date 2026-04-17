@@ -1,6 +1,6 @@
 package com.example.fighthub
 
-import RegistrazioneFragment3
+
 import android.net.Uri
 import android.os.Bundle
 import android.widget.VideoView
