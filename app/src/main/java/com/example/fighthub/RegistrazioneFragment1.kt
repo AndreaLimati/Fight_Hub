@@ -26,7 +26,6 @@ private const val ARG_PARAM2 = "param2"
 class RegistrazioneFragment1 : Fragment() {
 
     private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
-    private val controlloreDB = ControlloreDB()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -39,11 +38,6 @@ class RegistrazioneFragment1 : Fragment() {
         val btnDate = view.findViewById<Button>(R.id.SceltaData)
         val btnInvia=view.findViewById<Button>(R.id.btnInvia)
 
-        val nome = view.findViewById<EditText>(R.id.etNome).text.toString()
-        val cognome = view.findViewById<EditText>(R.id.etCognome).text.toString()
-        val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0
-        val altezza = view.findViewById<EditText>(R.id.etAltezza).text.toString().toIntOrNull() ?: 0
-        val descrizione = view.findViewById<EditText>(R.id.etDescrizione).text.toString()
         var dateString: String? = null
 
         btnDate.setOnClickListener {
@@ -67,6 +61,12 @@ class RegistrazioneFragment1 : Fragment() {
 
         //bottone per cambiare fragment
         btnInvia.setOnClickListener {
+            //leggo variabili
+            val nome = view.findViewById<EditText>(R.id.etNome).text.toString()
+            val cognome = view.findViewById<EditText>(R.id.etCognome).text.toString()
+            val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0
+            val altezza = view.findViewById<EditText>(R.id.etAltezza).text.toString().toIntOrNull() ?: 0
+            val descrizione = view.findViewById<EditText>(R.id.etDescrizione).text.toString()
             //salvo info sul viewmodel
             registrazioneViewModel.updateNome(nome)
             registrazioneViewModel.updateCognome(cognome)
@@ -74,8 +74,7 @@ class RegistrazioneFragment1 : Fragment() {
             registrazioneViewModel.updatePeso(peso)
             registrazioneViewModel.updateAltezza(altezza)
             registrazioneViewModel.updateDescrizione(descrizione)
-            controlloreDB.autenticaUtenteRegistrazione(registrazioneViewModel.getUser()!!)
-            Log.d("AIUTO UN NEGRO", "$nome $cognome $dateString $peso $altezza $descrizione")
+            //mando allo step 2
             (activity as? RegistrationActivity)?.navigaAlSecondoStep()
         }
         return view
