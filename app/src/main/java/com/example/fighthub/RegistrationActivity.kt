@@ -29,8 +29,8 @@ class RegistrationActivity : AppCompatActivity() {
         val path = "android.resource://" + packageName + "/" + R.raw.mgs3_video
         val uri = Uri.parse(path)
 
-        val email = intent.getStringExtra("email")
-        val passw = intent.getStringExtra("passw")
+        val email = intent.getStringExtra("email")!!
+        val passw = intent.getStringExtra("passw")!!
 
         controlloreDB.autenticaUtenteRegistrazione(email, passw)
 

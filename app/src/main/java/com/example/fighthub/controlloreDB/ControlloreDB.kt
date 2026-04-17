@@ -12,18 +12,19 @@ class ControlloreDB {
     private val db = FirebaseFirestore.getInstance()
     private val collezioneUtenti = db.collection("utente")
 
-    fun autenticaUtenteRegistrazione(email: String?, password: String?){
-        if (email != null && password != null) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        val uid = auth.currentUser?.uid ?: ""
-                        val utenteNuovo = User(uid = uid, email = email, passw = password)
-                        salvaDatiUtente(utenteNuovo)
-                        Log.d("Prova", "$uid, $email, $password")
-                    }
+    fun autenticaUtenteRegistrazione(email: String, password: String){
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    val uid = auth.currentUser?.uid ?: ""
+                    val utenteNuovo = User(uid = uid, email = email, passw = password)
+                    salvaDatiUtente(utenteNuovo)
+                    Log.d("Prova", "$uid, $email, $password")
+                }else{
+                    Log.e("Fallimento Registrazione", "Porcodio")
                 }
-        }
+            }
+
     }
 
     fun salvaDatiUtente(user: User){

@@ -52,7 +52,7 @@ class RegistrazioneFragment2 : Fragment() {
                 val riepilogo = artiSelezionate.joinToString(", ")
                 Toast.makeText(context, "Hai scelto: $riepilogo", Toast.LENGTH_LONG).show()
                 // Qui puoi chiamare una funzione dell'Activity per salvare tutto
-                registrazioneViewModel.updateArtiPratiate(artiSelezionate)
+                registrazioneViewModel.updateArtiPratiate(artiSelezionate as List<String>)
             }
         }
 

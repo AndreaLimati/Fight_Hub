@@ -41,11 +41,11 @@ class RegistrazioneViewModel : ViewModel() {
         userData.value = userData.value?.copy(descrizione = desc)
     }
 
-    fun updateArtiPratiate(ap: Set<String>){
+    fun updateArtiPratiate(ap: List<String>){
         userData.value = userData.value?.copy(artiPraticate = ap)
     }
 
-    fun updateUrlFoto(url: Set<String>){
+    fun updateUrlFoto(url: List<String>){
         userData.value = userData.value?.copy(urlFoto = url)
     }
 

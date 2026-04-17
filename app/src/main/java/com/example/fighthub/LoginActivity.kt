@@ -85,12 +85,20 @@ class LoginActivity : AppCompatActivity() {
 
         //btn_conferma_registrazione
         button.setOnClickListener {
+            val mail = findViewById<EditText>(R.id.register_email).text.toString()
+            val pass = findViewById<EditText>(R.id.register_password).text.toString()
+
             val intent = Intent(this, RegistrationActivity::class.java)
-            intent.putExtra("email", findViewById<EditText>(R.id.register_email).text.toString())
-            intent.putExtra("passw", findViewById<EditText>(R.id.register_password).text.toString())
+
+            intent.putExtra("email", mail)
+            intent.putExtra("passw", pass)
+
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
-            startActivity(intent)
+
+            if(mail!="" && pass!="") {
+                startActivity(intent)
+            }
         }
 
         //btm_conferma_login

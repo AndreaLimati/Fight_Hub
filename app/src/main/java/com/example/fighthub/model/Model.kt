@@ -10,8 +10,8 @@ data class User(
     var peso: Int? = null,
     var altezza: Int? = null,
     var descrizione: String? = null,
-    var artiPraticate: Set<String> = emptySet(),
-    var urlFoto: Set<String> = emptySet(),
+    var artiPraticate: List<String> = emptyList(),
+    var urlFoto: List<String> = emptyList(),
     var lat: Double? = null,
     var lon: Double? = null
 )
