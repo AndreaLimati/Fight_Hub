@@ -80,7 +80,7 @@
                         android:layout_height="42dp"
                         android:backgroundTint="#F5F5F5"
                         android:text="Scegli"
-                        android:textColor="#55FFFFFF"
+                        android:textColor="#55000000"
                         app:cornerRadius="12dp" />
                 </LinearLayout>
 

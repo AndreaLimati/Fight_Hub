@@ -1,6 +1,7 @@
 package com.example.fighthub.controlloreDB
 
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
@@ -21,6 +22,18 @@ class ControlloreDB {
                     Log.d("Prova", "$user.uid, $user.email, $user.password")
                 }else{
                     Log.e("Fallimento Registrazione", "Porcodio")
+                }
+            }
+    }
+
+    fun verificaLoginUtente(email: String, passw: String, onResult: (String?) -> Unit){
+        auth.signInWithEmailAndPassword(email, passw)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    val userUID = auth.currentUser?.uid
+                    onResult(userUID)
+                }else{
+                    onResult(null)
                 }
             }
     }

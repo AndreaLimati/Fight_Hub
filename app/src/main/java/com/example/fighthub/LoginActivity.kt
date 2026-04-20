@@ -15,6 +15,7 @@ import androidx.core.os.TraceCompat.isEnabled
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.OnBackPressedCallback
+import com.example.fighthub.controlloreDB.ControlloreDB
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +27,8 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //Scheletro email
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"
         //video
         val videoView = findViewById<VideoView>(R.id.videoView)
         val path = "android.resource://" + packageName + "/" + R.raw.mgs3_video
@@ -88,12 +91,8 @@ class LoginActivity : AppCompatActivity() {
         button.setOnClickListener {
             val mail = findViewById<EditText>(R.id.register_email).text.toString()
             val pass = findViewById<EditText>(R.id.register_password).text.toString()
-            val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"
 
             val intent = Intent(this, RegistrationActivity::class.java)
-
-            intent.putExtra("email", mail)
-            intent.putExtra("passw", pass)
 
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
@@ -105,6 +104,8 @@ class LoginActivity : AppCompatActivity() {
             }else if(pass.length<6){
                 Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
             }else{
+                intent.putExtra("email", mail)
+                intent.putExtra("passw", pass)
                 startActivity(intent)
             }
         }
@@ -112,9 +113,29 @@ class LoginActivity : AppCompatActivity() {
         //btm_conferma_login
         confLogin.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            val mail = findViewById<EditText>(R.id.login_email_input).text.toString()
+            val pass = findViewById<EditText>(R.id.login_password_input).text.toString()
+
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
-            startActivity(intent)
+
+            if(mail.isEmpty() || pass.isEmpty()){
+                Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
+            }else if(!mail.matches(emailRegex.toRegex())){
+                Toast.makeText(this, "Inserisci una mail valida!", Toast.LENGTH_SHORT).show()
+            }else if(pass.length<6){
+                Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
+            }else{
+                val connessione = ControlloreDB()
+                val result = connessione.verificaLoginUtente(mail, pass){ uid ->
+                    if(uid!=null){
+                        intent.putExtra("uid", uid)
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this, "Credenziali errate", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
     override fun onResume() {
