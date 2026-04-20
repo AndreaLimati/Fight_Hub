@@ -3,6 +3,7 @@ package com.example.fighthub
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -127,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
             }else{
                 val connessione = ControlloreDB()
-                val result = connessione.verificaLoginUtente(mail, pass){ uid ->
+                connessione.verificaLoginUtente(mail, pass){ uid ->
                     if(uid!=null){
                         intent.putExtra("uid", uid)
                         startActivity(intent)

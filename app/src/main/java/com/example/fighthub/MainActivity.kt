@@ -3,18 +3,35 @@ package com.example.fighthub
 import MainFragmentProfiloUtente
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.fighthub.controlloreDB.ControlloreDB
+import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+    val controllore = ControlloreDB()
+    private val utenteViewModel : UtenteViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        val uid = intent.getStringExtra("uid")
+
+        controllore.getDatiUtente(uid){ user ->
+            if(user!=null){
+                utenteViewModel.updateTutto(user)
+            }else{
+                Toast.makeText(this, "Macello con utente", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Gestione dei padding per i bordi dello schermo (Edge-to-Edge)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

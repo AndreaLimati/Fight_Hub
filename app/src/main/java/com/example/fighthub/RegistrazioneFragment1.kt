@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.fighthub.viewModel.RegistrazioneViewModel
+import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
 import java.util.Locale
@@ -24,7 +24,7 @@ private const val ARG_PARAM2 = "param2"
 
 class RegistrazioneFragment1 : Fragment() {
 
-    private val registrazioneViewModel : RegistrazioneViewModel by activityViewModels()
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -70,12 +70,12 @@ class RegistrazioneFragment1 : Fragment() {
                 Toast.makeText(requireContext(), "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
             }else{
                 //salvo info sul viewmodel
-                registrazioneViewModel.updateNome(nome)
-                registrazioneViewModel.updateCognome(cognome)
-                registrazioneViewModel.updateDataNascita(dateString)
-                registrazioneViewModel.updatePeso(peso)
-                registrazioneViewModel.updateAltezza(altezza)
-                registrazioneViewModel.updateDescrizione(descrizione)
+                utenteViewModel.updateNome(nome)
+                utenteViewModel.updateCognome(cognome)
+                utenteViewModel.updateDataNascita(dateString)
+                utenteViewModel.updatePeso(peso)
+                utenteViewModel.updateAltezza(altezza)
+                utenteViewModel.updateDescrizione(descrizione)
                 //mando allo step 2
                 (activity as? RegistrationActivity)?.navigaAlSecondoStep()
             }

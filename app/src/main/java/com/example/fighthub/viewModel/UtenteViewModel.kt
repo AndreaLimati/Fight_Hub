@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fighthub.model.User
 
-class RegistrazioneViewModel : ViewModel() {
+class UtenteViewModel : ViewModel() {
     val userData = MutableLiveData(User())
 
     fun updateUid(u: String?){
@@ -56,5 +56,16 @@ class RegistrazioneViewModel : ViewModel() {
 
     fun getUser(): User? {
         return userData.value
+    }
+    fun getNome(): String? {
+        return userData.value?.nome
+    }
+
+    fun getEta(): Int?{
+        return 21
+    }
+
+    fun updateTutto(u: User){
+        userData.value = u
     }
 }

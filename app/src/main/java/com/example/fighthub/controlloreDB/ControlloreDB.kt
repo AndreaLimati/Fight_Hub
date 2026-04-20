@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.toObject
 
 class ControlloreDB {
 
@@ -41,6 +42,19 @@ class ControlloreDB {
     fun salvaDatiUtente(user: User){
         collezioneUtenti.document(user.uid!!).set(user, SetOptions.merge()).addOnSuccessListener {
             Log.d("DB", "Utente salvato con successo!")
+        }
+    }
+
+    fun getDatiUtente(uid: String?, onResult: (User?) -> Unit){
+        Log.d("UID PRIMA CAPITO", "$uid")
+        if(uid!=null){
+            val utente = collezioneUtenti.document(uid)
+            utente.get().addOnSuccessListener { document ->
+                val user = document.toObject<User>()
+                onResult(user)
+            }.addOnFailureListener{
+                onResult(null)
+            }
         }
     }
 }

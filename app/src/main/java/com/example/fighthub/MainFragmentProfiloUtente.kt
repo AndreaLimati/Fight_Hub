@@ -1,18 +1,21 @@
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fighthub.R
+import com.example.fighthub.controlloreDB.ControlloreDB
+import com.example.fighthub.model.User
+import com.example.fighthub.viewModel.UtenteViewModel
+import kotlin.getValue
 
 class MainFragmentProfiloUtente : Fragment() {
-
-    // Variabili separate come richiesto
-    private val nomeUtente: String = "Gino"
-    private val etaUtente: Int = 22
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,9 +27,15 @@ class MainFragmentProfiloUtente : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val nome = utenteViewModel.getNome()
+        val eta = utenteViewModel.getEta()
+
+        Log.d("nome", "$nome")
+        Log.d("eta", "$eta")
+
         // Imposta Nome ed Età
         val tvNomeEta = view.findViewById<TextView>(R.id.tvNomeEta)
-        tvNomeEta.text = "$nomeUtente, $etaUtente"
+        tvNomeEta.text = "$nome"+", "+"$eta"
 
         // Configura RecyclerView
         val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
