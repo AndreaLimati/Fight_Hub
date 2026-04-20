@@ -1,8 +1,13 @@
 package com.example.fighthub.viewModel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fighthub.model.User
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class UtenteViewModel : ViewModel() {
     val userData = MutableLiveData(User())
@@ -61,8 +66,17 @@ class UtenteViewModel : ViewModel() {
         return userData.value?.nome
     }
 
-    fun getEta(): Int?{
-        return 21
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getEta(): Int{
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        try {
+            val dataNascita = LocalDate.parse(userData.value?.dataNascita, formatter)
+            val oggi = LocalDate.now()
+            return Period.between(dataNascita, oggi).years
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return 0
+        }
     }
 
     fun updateTutto(u: User){
