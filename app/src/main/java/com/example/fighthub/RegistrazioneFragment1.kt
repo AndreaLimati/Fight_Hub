@@ -3,7 +3,6 @@ package com.example.fighthub
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import android.view.LayoutInflater
@@ -11,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import com.example.fighthub.controlloreDB.ControlloreDB
+import android.widget.Toast
 import com.example.fighthub.viewModel.RegistrazioneViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
@@ -67,15 +66,19 @@ class RegistrazioneFragment1 : Fragment() {
             val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0
             val altezza = view.findViewById<EditText>(R.id.etAltezza).text.toString().toIntOrNull() ?: 0
             val descrizione = view.findViewById<EditText>(R.id.etDescrizione).text.toString()
-            //salvo info sul viewmodel
-            registrazioneViewModel.updateNome(nome)
-            registrazioneViewModel.updateCognome(cognome)
-            registrazioneViewModel.updateDataNascita(dateString)
-            registrazioneViewModel.updatePeso(peso)
-            registrazioneViewModel.updateAltezza(altezza)
-            registrazioneViewModel.updateDescrizione(descrizione)
-            //mando allo step 2
-            (activity as? RegistrationActivity)?.navigaAlSecondoStep()
+            if(nome.isEmpty() || cognome.isEmpty() || descrizione.isEmpty()){
+                Toast.makeText(requireContext(), "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
+            }else{
+                //salvo info sul viewmodel
+                registrazioneViewModel.updateNome(nome)
+                registrazioneViewModel.updateCognome(cognome)
+                registrazioneViewModel.updateDataNascita(dateString)
+                registrazioneViewModel.updatePeso(peso)
+                registrazioneViewModel.updateAltezza(altezza)
+                registrazioneViewModel.updateDescrizione(descrizione)
+                //mando allo step 2
+                (activity as? RegistrationActivity)?.navigaAlSecondoStep()
+            }
         }
         return view
     }

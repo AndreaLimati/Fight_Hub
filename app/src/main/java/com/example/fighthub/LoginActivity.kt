@@ -88,6 +88,7 @@ class LoginActivity : AppCompatActivity() {
         button.setOnClickListener {
             val mail = findViewById<EditText>(R.id.register_email).text.toString()
             val pass = findViewById<EditText>(R.id.register_password).text.toString()
+            val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"
 
             val intent = Intent(this, RegistrationActivity::class.java)
 
@@ -97,7 +98,13 @@ class LoginActivity : AppCompatActivity() {
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
 
-            if(mail!="" && pass!="") {
+            if(mail.isEmpty() || pass.isEmpty()){
+                Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
+            }else if(!mail.matches(emailRegex.toRegex())){
+                Toast.makeText(this, "Inserisci una mail valida!", Toast.LENGTH_SHORT).show()
+            }else if(pass.length<6){
+                Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
+            }else{
                 startActivity(intent)
             }
         }
