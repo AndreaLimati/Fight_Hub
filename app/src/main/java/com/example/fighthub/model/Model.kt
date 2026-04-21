@@ -3,7 +3,6 @@ package com.example.fighthub.model
 data class User(
     var uid: String? = null,
     var email: String? = null,
-    var passw: String? = null,
     var nome: String? = null,
     var cognome: String? = null,
     var dataNascita: String? = null,

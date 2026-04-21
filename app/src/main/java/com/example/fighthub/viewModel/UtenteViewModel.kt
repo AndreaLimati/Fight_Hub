@@ -15,10 +15,9 @@ class UtenteViewModel : ViewModel() {
     fun updateUid(u: String?){
         userData.value = userData.value?.copy(uid = u)
     }
-    fun updateEmailPassw(m: String?, p: String?){
+    fun updateEmailPassw(m: String?){
         userData.value = userData.value?.copy(
-            email = m,
-            passw = p
+            email = m
         )
     }
 
@@ -77,6 +76,10 @@ class UtenteViewModel : ViewModel() {
             e.printStackTrace()
             return 0
         }
+    }
+
+    fun getEmail(): String?{
+        return userData.value?.email
     }
 
     fun updateTutto(u: User){

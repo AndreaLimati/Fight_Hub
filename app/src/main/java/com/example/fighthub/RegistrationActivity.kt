@@ -28,9 +28,8 @@ class RegistrationActivity : AppCompatActivity() {
         val uri = Uri.parse(path)
 
         val email = intent.getStringExtra("email")!!
-        val passw = intent.getStringExtra("passw")!!
 
-        utenteViewModel.updateEmailPassw(email, passw)
+        utenteViewModel.updateEmailPassw(email)
 
 
         //video in fondo
@@ -75,13 +74,15 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     fun navigaAlQuartoStep() {
+        val passw = intent.getStringExtra("passw")!!
+        val frag = RegistrazioneFragment4.newInstance(passw)
         supportFragmentManager.beginTransaction()
             // Animazione: entra da destra esce a sinistra
             .setCustomAnimations(
                 android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right
             )
-            .replace(R.id.fragment_registrazione_container, RegistrazioneFragment4()) // Carica il quarto fragment
+            .replace(R.id.fragment_registrazione_container, frag) // Carica il quarto fragment
             .addToBackStack(null) // Permette di tornare indietro col tasto back
             .commit()
     }

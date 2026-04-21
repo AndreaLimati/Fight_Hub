@@ -16,6 +16,16 @@ class RegistrazioneFragment4 : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
     private val controlloreDB = ControlloreDB()
 
+    companion object {
+        fun newInstance(mioDato: String): RegistrazioneFragment4 {
+            val fragment = RegistrazioneFragment4()
+            val args = Bundle()
+            args.putString("pass", mioDato)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,10 +37,11 @@ class RegistrazioneFragment4 : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val accetta = view.findViewById<Button>(R.id.btnAccetta)
+        var passw = arguments?.getString("pass")
 
         accetta.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
-            controlloreDB.autenticaUtenteRegistrazione(utenteViewModel.getUser()!!)
+            controlloreDB.autenticaUtenteRegistrazione(utenteViewModel.getUser()!!, passw!!)
             startActivity(intent)
         }
     }
