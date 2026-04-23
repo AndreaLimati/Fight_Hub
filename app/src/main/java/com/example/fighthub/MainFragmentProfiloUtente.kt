@@ -11,8 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fighthub.R
-import com.example.fighthub.controlloreDB.ControlloreDB
-import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
 

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
-import com.example.fighthub.controlloreDB.ControlloreDB
+import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
 

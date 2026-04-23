@@ -3,7 +3,6 @@ package com.example.fighthub
 import MainFragmentProfiloUtente
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.fighthub.controlloreDB.ControlloreDB
+import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

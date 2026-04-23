@@ -1,7 +1,6 @@
-package com.example.fighthub.controlloreDB
+package com.example.fighthub.controllori
 
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
