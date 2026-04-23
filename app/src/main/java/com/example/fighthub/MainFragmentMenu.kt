@@ -1,59 +1,78 @@
-package com.example.fighthub
 
+
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import com.example.fighthub.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragmentMenu.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragmentMenu : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var profileImage: ImageView
+    private lateinit var indicatorContainer: LinearLayout
+
+    // 1. Lista delle tue foto
+    private val listaFoto = listOf(
+        R.drawable.chuck_norris,
+        R.drawable.example_2,
+        R.drawable.example_3
+    )
+    private var indiceAttuale = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_menu, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragmentMenu.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragmentMenu().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        profileImage = view.findViewById(R.id.profileImage)
+        indicatorContainer = view.findViewById(R.id.indicatorContainer)
+
+        // Inizializza le lineette in alto
+        setupIndicators()
+
+        // Gestione Click sull'immagine per cambiare foto
+        profileImage.setOnClickListener {
+            indiceAttuale = (indiceAttuale + 1) % listaFoto.size
+            aggiornaInterfaccia()
+        }
+    }
+
+    private fun setupIndicators() {
+        indicatorContainer.removeAllViews()
+        listaFoto.forEachIndexed { index, _ ->
+            val viewS = View(context)
+            val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
+            params.setMargins(8, 0, 8, 0) // Spazio tra le lineette
+            viewS.layoutParams = params
+
+            // Colore iniziale (bianco per la prima, grigio per le altre)
+            viewS.setBackgroundColor(if (index == 0) Color.WHITE else Color.parseColor("#80FFFFFF"))
+            indicatorContainer.addView(viewS)
+        }
+    }
+
+    private fun aggiornaInterfaccia() {
+        // Cambia la foto
+        profileImage.setImageResource(listaFoto[indiceAttuale])
+
+        // Cambia il colore delle lineette
+        for (i in 0 until indicatorContainer.childCount) {
+            val indicator = indicatorContainer.getChildAt(i)
+            if (i == indiceAttuale) {
+                indicator.setBackgroundColor(Color.WHITE)
+            } else {
+                indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
             }
+        }
     }
 }
