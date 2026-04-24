@@ -1,12 +1,38 @@
 package com.example.fighthub.controllori
 
-//import io.github.jan_tennert.supabase.createSupabaseClient
-//import io.github.jan_tennert.supabase.storage.Storage
-//import io.github.jan_tennert.supabase.storage.storage
+import android.content.Context
+import android.net.Uri
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.storage.Storage
+import io.github.jan.supabase.storage.storage
+import java.util.UUID
 
 object ControlloreStorage {
     private const val url = "https://guebusnndyspxxmlmltl.supabase.co/rest/v1/"
     private const val anon_key = "sb_publishable_3GuKGRjkyRuqjzOOjQE1kw_USNeK-5z"
 
+    val supabase: SupabaseClient = createSupabaseClient(url, anon_key){
+        install(Storage)
+    }
 
+    suspend fun salvaFoto(context: Context, dati: MutableList<Uri>): List<String>{
+        val urlCaricati = mutableListOf<String>()
+        val bucket = supabase.storage.from("foto_fighthub")
+
+        dati.forEach{ uri ->
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val imageData = inputStream?.use { it.readBytes() }
+            if(imageData!=null){
+                val fileName = "img_${UUID.randomUUID()}.jpg"
+                bucket.upload(fileName, imageData){
+                    upsert=false
+                }
+                val link = bucket.publicUrl(fileName)
+                urlCaricati.add(link)
+            }
+        }
+
+        return urlCaricati
+    }
 }
