@@ -12,9 +12,16 @@ import android.widget.Toast
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.example.fighthub.controllori.ControlloreStorage
+import com.example.fighthub.viewModel.UtenteViewModel
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class RegistrazioneFragment3 : Fragment() {
 
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
     private var selectedImagesUris = mutableListOf<Uri>()
     private lateinit var btnUpload: ImageButton
     private lateinit var tvPhotoCount: TextView
@@ -74,12 +81,16 @@ class RegistrazioneFragment3 : Fragment() {
 
         // Listener Click Continua
         btnContinua.setOnClickListener {
-            if (selectedImagesUris.isEmpty()) {
-                Toast.makeText(requireContext(), "Inserisci almeno una foto!", Toast.LENGTH_SHORT).show()
-            } else {
-                // Procedi e passa la lista di foto all'Activity
-                (activity as? RegistrationActivity)?.navigaAlQuartoStep()
-                // Nota: Assicurati che RegistrationActivity abbia questa funzione
+            viewLifecycleOwner.lifecycleScope.launch {
+                if (selectedImagesUris.isEmpty()) {
+                    Toast.makeText(requireContext(), "Inserisci almeno una foto!", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Procedi e passa la lista di foto all'Activity
+                    val urlImmagini = ControlloreStorage.salvaFoto(requireContext(), selectedImagesUris)
+                    utenteViewModel.updateUrlFoto(urlImmagini)
+                    (activity as? RegistrationActivity)?.navigaAlQuartoStep()
+                    // Nota: Assicurati che RegistrationActivity abbia questa funzione
+                }
             }
         }
 
