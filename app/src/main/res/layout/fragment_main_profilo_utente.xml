@@ -23,19 +23,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivProfilo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        android:padding="4dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icona_profilo_navbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitolo" app:shapeAppearanceOverlay="@style/CircleImage"
-        app:strokeColor="#FF0000"
-        app:strokeWidth="3dp" />
+            android:id="@+id/ivProfilo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icona_profilo_navbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitolo" app:shapeAppearanceOverlay="@style/CircleImage"
+            app:strokeColor="#FF0000"
+            app:strokeWidth="3dp" />
 
         <TextView
             android:id="@+id/tvNomeEta"

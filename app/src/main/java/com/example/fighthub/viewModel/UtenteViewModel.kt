@@ -90,6 +90,10 @@ class UtenteViewModel : ViewModel() {
         return userData.value?.altezza
     }
 
+    fun getFoto(): List<String>?{
+        return userData.value?.urlFoto
+    }
+
     fun updateTutto(u: User){
         userData.value = u
     }

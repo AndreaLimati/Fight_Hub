@@ -55,4 +55,5 @@ dependencies {
     implementation(platform("io.github.jan-tennert.supabase:bom:3.5.0"))
     implementation("io.github.jan-tennert.supabase:storage-kt")
     implementation("io.ktor:ktor-client-android:3.0.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
