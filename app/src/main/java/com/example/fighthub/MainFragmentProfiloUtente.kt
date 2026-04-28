@@ -12,9 +12,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
+import kotlin.text.replace
 
 class MainFragmentProfiloUtente : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
@@ -51,6 +53,10 @@ class MainFragmentProfiloUtente : Fragment() {
             Glide.with(requireContext()).load(urls[0]).into(immagine)
         }
 
+        immagine.setOnClickListener {
+            apriProfilo(it) // Ora la funzione sotto diventerà colorata!
+        }
+
         // Configura RecyclerView
         val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
         rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
@@ -63,6 +69,17 @@ class MainFragmentProfiloUtente : Fragment() {
         )
 
         rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+    }
+    fun apriProfilo(view: View){
+        requireActivity().supportFragmentManager.beginTransaction()
+            // Animazione: entra da destra, esce a sinistra
+            .setCustomAnimations(
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
+            .replace(R.id.fragment_main_container, MainFragmentProfiloUtenteFoto()) // Carica Fight
+            .addToBackStack(null) // Permette di tornare indietro col tasto back
+            .commit()
     }
 }
 
@@ -92,4 +109,7 @@ class RecensioniAdapter(private val lista: List<RecensioneMock>) :
     }
 
     override fun getItemCount() = lista.size
+
+
 }
+

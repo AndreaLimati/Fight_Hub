@@ -12,6 +12,15 @@
         android:layout_height="wrap_content"
         android:padding="20dp">
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_profilo_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tvTitolo"
             android:layout_width="wrap_content"
@@ -31,10 +40,14 @@
             android:layout_marginTop="24dp"
             android:padding="4dp"
             android:scaleType="centerCrop"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="apriProfilo"
             android:src="@drawable/icona_profilo_navbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitolo" app:shapeAppearanceOverlay="@style/CircleImage"
+            app:layout_constraintTop_toBottomOf="@id/tvTitolo"
+            app:shapeAppearanceOverlay="@style/CircleImage"
             app:strokeColor="#FF0000"
             app:strokeWidth="3dp" />
 
