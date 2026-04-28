@@ -4,12 +4,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.fighthub.R
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
@@ -32,7 +34,7 @@ class MainFragmentProfiloUtente : Fragment() {
         val eta = utenteViewModel.getEta()
         val peso = utenteViewModel.getPeso()
         val altezza = utenteViewModel.getAltezza()
-
+        val urls = utenteViewModel.getFoto()
 
         Log.d("nome", "$nome")
         Log.d("eta", "$eta")
@@ -42,6 +44,12 @@ class MainFragmentProfiloUtente : Fragment() {
         tvNomeEta.text = "$nome"+", "+"$eta"
         val tvPesoAltezza = view.findViewById<TextView>(R.id.tvPesoAltezza)
         tvPesoAltezza.text = "$peso"+"kg, "+"$altezza"+"cm"
+
+        // Imposta foto
+        val immagine = view.findViewById<ImageView>(R.id.ivProfilo)
+        if(!urls.isNullOrEmpty()){
+            Glide.with(requireContext()).load(urls[0]).into(immagine)
+        }
 
         // Configura RecyclerView
         val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
