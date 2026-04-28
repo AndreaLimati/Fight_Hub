@@ -153,6 +153,8 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:elevation="10dp"
+        android:weightSum="1"
+        android:paddingHorizontal="40dp"
         app:layout_constraintTop_toTopOf="@+id/bottomNavigation"
         app:layout_constraintBottom_toTopOf="@+id/txtNavigationPlaceholder"
         app:layout_constraintVertical_bias="0.3">
@@ -167,6 +169,12 @@
             android:scaleType="centerInside"
             android:padding="20dp"
             android:src="@drawable/ic_pugno_si" />
+
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.4" />
 
         <ImageButton
             android:id="@+id/btnYes"
