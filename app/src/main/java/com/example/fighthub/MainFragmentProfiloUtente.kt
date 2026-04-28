@@ -30,13 +30,18 @@ class MainFragmentProfiloUtente : Fragment() {
 
         val nome = utenteViewModel.getNome()
         val eta = utenteViewModel.getEta()
+        val peso = utenteViewModel.getPeso()
+        val altezza = utenteViewModel.getAltezza()
+
 
         Log.d("nome", "$nome")
         Log.d("eta", "$eta")
 
-        // Imposta Nome ed Età
+        // Imposta Nome, Età, peso, altezza
         val tvNomeEta = view.findViewById<TextView>(R.id.tvNomeEta)
         tvNomeEta.text = "$nome"+", "+"$eta"
+        val tvPesoAltezza = view.findViewById<TextView>(R.id.tvPesoAltezza)
+        tvPesoAltezza.text = "$peso"+"kg, "+"$altezza"+"cm"
 
         // Configura RecyclerView
         val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)

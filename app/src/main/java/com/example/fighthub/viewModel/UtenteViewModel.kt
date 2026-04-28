@@ -82,6 +82,14 @@ class UtenteViewModel : ViewModel() {
         return userData.value?.email
     }
 
+    fun getPeso(): Int?{
+        return userData.value?.peso
+    }
+
+    fun getAltezza(): Int?{
+        return userData.value?.altezza
+    }
+
     fun updateTutto(u: User){
         userData.value = u
     }
