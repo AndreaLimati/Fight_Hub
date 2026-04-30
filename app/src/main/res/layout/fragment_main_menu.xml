@@ -9,6 +9,8 @@
 
     <!-- 1. CORNICE PER L'EFFETTO GLOW -->
     <!-- Questa View sta dietro la card e crea il bagliore neon -->
+
+
     <View
         android:id="@+id/glowBorder"
         android:layout_width="0dp"
