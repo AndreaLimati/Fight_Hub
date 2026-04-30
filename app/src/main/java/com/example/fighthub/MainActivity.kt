@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.viewModel.UtenteViewModel
@@ -22,6 +23,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        //per status bar sopra bianca.
+        val window = window
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+
+        // FALSE = Icone bianche (per sfondi scuri)
+        // TRUE = Icone scure (per sfondi chiari)
+        controller.isAppearanceLightStatusBars = false
+
+        // Opzionale: se vuoi icone bianche anche nella barra di navigazione in basso
+        controller.isAppearanceLightNavigationBars = false
+
+        //per navigation bar
+        window.navigationBarColor = android.graphics.Color.BLACK
+
+        //fine  status bar
 
         val uid = intent.getStringExtra("uid")
 
