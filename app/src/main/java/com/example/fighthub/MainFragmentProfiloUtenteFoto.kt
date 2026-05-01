@@ -7,19 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.example.fighthub.viewModel.UtenteViewModel
 import androidx.fragment.app.DialogFragment // Cambiato da Fragment a DialogFragment
+import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
+import kotlin.getValue
 
 class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragment
 
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout
-
-    // 1. Lista delle tue foto
-    private val listaFoto = listOf(
-        R.drawable.chuck_norris,
-        R.drawable.example_2,
-        R.drawable.example_3
-    )
+    private var urls: List<String> = emptyList()
     private var indiceAttuale = 0
 
     override fun onStart() {
@@ -40,7 +39,7 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
     // AGGIUNTO: Imposta lo stile per la trasparenza e il tutto schermo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
     }
 
     override fun onCreateView(
@@ -54,8 +53,11 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //val urls = utenteViewModel.getFoto()
+
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
+        urls = utenteViewModel.getFoto() ?: emptyList()
 
         // AGGIUNTO: Logica per chiudere il dialog toccando lo sfondo scuro
         // Assicurati che nel tuo XML il ConstraintLayout principale abbia android:id="@+id/rootLayout"
@@ -69,17 +71,23 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
 
         // Gestione Click sull'immagine per cambiare foto (Mantenuta tua logica)
         profileImage.setOnClickListener {
-            indiceAttuale = (indiceAttuale + 1) % listaFoto.size
+            indiceAttuale = (indiceAttuale + 1) % urls.size
             aggiornaInterfaccia()
         }
 
         // Evita che il click sulla foto chiuda il dialog (ferma il click al livello dell'immagine)
         profileImage.isClickable = true
+
+        // Imposta foto
+        val immagine = view.findViewById<ImageView>(R.id.profileImage)
+        if(!urls.isNullOrEmpty()){
+            Glide.with(requireContext()).load(urls[indiceAttuale]).into(immagine)
+        }
     }
 
     private fun setupIndicators() {
         indicatorContainer.removeAllViews()
-        listaFoto.forEachIndexed { index, _ ->
+        urls.forEachIndexed { index, _ ->
             val viewS = View(context)
             val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
             params.setMargins(8, 0, 8, 0)
@@ -91,7 +99,12 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
     }
 
     private fun aggiornaInterfaccia() {
-        profileImage.setImageResource(listaFoto[indiceAttuale])
+        if (urls.isEmpty()) return
+
+        Glide.with(this)
+            .load(urls[indiceAttuale])
+            .centerCrop()
+            .into(profileImage)
 
         for (i in 0 until indicatorContainer.childCount) {
             val indicator = indicatorContainer.getChildAt(i)

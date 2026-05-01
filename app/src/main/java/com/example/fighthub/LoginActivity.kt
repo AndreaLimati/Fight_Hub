@@ -119,7 +119,10 @@ class LoginActivity : AppCompatActivity() {
             }else{
                 intent.putExtra("email", mail)
                 intent.putExtra("passw", pass)
+                //arrivato nel main non tornerà indietro nel login
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+                finish()
             }
         }
 
@@ -143,7 +146,10 @@ class LoginActivity : AppCompatActivity() {
                 connessione.verificaLoginUtente(mail, pass){ uid ->
                     if(uid!=null){
                         intent.putExtra("uid", uid)
+                        //se si torna indietro nel main non va nel login
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
+                        finish()
                     }else{
                         Toast.makeText(this, "Credenziali errate", Toast.LENGTH_SHORT).show()
                     }

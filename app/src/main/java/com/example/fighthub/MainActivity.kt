@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val utenteViewModel : UtenteViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge() //per la navigation bar
         setContentView(R.layout.activity_main)
 
         //per status bar sopra bianca.
@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         //per navigation bar
         window.navigationBarColor = android.graphics.Color.BLACK
-
         //fine  status bar
 
         val uid = intent.getStringExtra("uid")
@@ -50,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         // Gestione dei padding per i bordi dello schermo (Edge-to-Edge)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top+20, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top+20, systemBars.right, 0)
             insets
         }
 
