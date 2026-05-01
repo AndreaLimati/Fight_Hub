@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.WindowCompat
 import com.example.fighthub.controllori.ControlloreDB
 
 class LoginActivity : AppCompatActivity() {
@@ -26,6 +27,19 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        //per status bar sopra bianca.
+        val window = window
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+
+        // FALSE = Icone bianche (per sfondi scuri)
+        // TRUE = Icone scure (per sfondi chiari)
+        controller.isAppearanceLightStatusBars = false
+
+        //per navigation bar
+        window.navigationBarColor = android.graphics.Color.BLACK
+        //fine  status bar
+
         //Scheletro email
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"
         //video

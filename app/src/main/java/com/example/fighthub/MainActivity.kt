@@ -32,9 +32,6 @@ class MainActivity : AppCompatActivity() {
         // TRUE = Icone scure (per sfondi chiari)
         controller.isAppearanceLightStatusBars = false
 
-        // Opzionale: se vuoi icone bianche anche nella barra di navigazione in basso
-        controller.isAppearanceLightNavigationBars = false
-
         //per navigation bar
         window.navigationBarColor = android.graphics.Color.BLACK
 

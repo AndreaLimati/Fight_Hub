@@ -61,7 +61,7 @@
         android:layout_marginEnd="8dp"
         android:text="MODIFICA"
         android:textColor="#FFFFFF"
-        app:strokeColor="#2C2B2B"
+        app:strokeColor="#FF0000"
         app:cornerRadius="12dp"
         app:layout_constraintEnd_toStartOf="@+id/btnStatistiche"
         app:layout_constraintHorizontal_bias="0.5"

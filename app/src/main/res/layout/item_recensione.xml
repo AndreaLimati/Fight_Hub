@@ -29,13 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nome Utente"
-                android:textColor="@color/black"
+                android:textColor="#FF0000"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvTesto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
                 android:text="Commento recensione..." />
         </LinearLayout>
 
