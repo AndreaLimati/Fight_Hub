@@ -12,17 +12,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
+class MyPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
+    override fun getItemCount(): Int = 3 // Numero dei tuoi fragment
+
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> MainFragmentChat()
+            1 -> MainFragmentMenu()
+            2 -> MainFragmentProfiloUtente()
+            else -> MainFragmentProfiloUtente()
+        }
+    }
+}
 class MainActivity : AppCompatActivity() {
     val controllore = ControlloreDB()
+
     private val utenteViewModel : UtenteViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //per la navigation bar
         setContentView(R.layout.activity_main)
+
+        //per scorrimento tra fragment
+        val viewPager = findViewById<ViewPager2>(R.id.fragment_main_container)
+        val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         //per status bar sopra bianca.
         val window = window
@@ -35,6 +56,28 @@ class MainActivity : AppCompatActivity() {
         //per navigation bar
         window.navigationBarColor = android.graphics.Color.BLACK
         //fine  status bar
+
+    // Imposta l'adapter per scorrimento tra fragment
+        viewPager.adapter = MyPagerAdapter(this)
+
+    // 1. Sincronizza Swipe -> BottomNav
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                navBar.menu.getItem(position).isChecked = true
+            }
+        })
+
+    // 2. Sincronizza BottomNav -> Swipe
+        navBar.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_chat -> viewPager.currentItem = 0
+                R.id.nav_fight -> viewPager.currentItem = 1
+                R.id.nav_profilo -> viewPager.currentItem = 2
+            }
+            true
+        }
+    //fine adapter scorrimento
 
         val uid = intent.getStringExtra("uid")
 
@@ -53,13 +96,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.fragment_main_container, MainFragmentMenu())
-                .commit()
-        }
-
         // Tasto indietro per andare nel login, non nella registrazione.
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -73,69 +109,8 @@ class MainActivity : AppCompatActivity() {
                 finish() // Chiude MainActivity
             }
         }
-
-        //navbar
-        val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        navBar.selectedItemId = R.id.nav_fight
-        navBar.setOnItemSelectedListener { item ->
-           when(item.itemId) {
-                R.id.nav_chat -> {
-                    if(navBar.selectedItemId != R.id.nav_chat )
-                    navigaAllaChat()
-                    true
-                }
-                R.id.nav_fight -> {
-                    if(navBar.selectedItemId != R.id.nav_fight)
-                    navigaAlMenu()
-                    true
-                }
-                R.id.nav_profilo -> {
-                    if(navBar.selectedItemId != R.id.nav_profilo)
-                    navigaAlProfilo()
-                    true
-                }
-                else -> false
-            }
-
-        }
-
         // Aggiunge il callback al dispatcher
         onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    fun navigaAllaChat() {
-        supportFragmentManager.beginTransaction()
-            // Animazione: entra da destra, esce a sinistra
-            .setCustomAnimations(
-                android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right
-            )
-            .replace(R.id.fragment_main_container, MainFragmentChat()) // Carica il fragment chat
-            .addToBackStack(null) // Permette di tornare indietro col tasto back
-            .commit()
-    }
-
-    fun navigaAlProfilo() {
-        supportFragmentManager.beginTransaction()
-            // Animazione: entra da destra, esce a sinistra
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                android.R.anim.slide_in_left
-            )
-            .replace(R.id.fragment_main_container, MainFragmentProfiloUtente()) // Carica il fragment Profilo Utente
-            .addToBackStack(null) // Permette di tornare indietro col tasto back
-            .commit()
-    }
-
-    fun navigaAlMenu() {
-        supportFragmentManager.beginTransaction()
-            // Animazione: entra da destra, esce a sinistra
-            .setCustomAnimations(
-                android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right
-            )
-            .replace(R.id.fragment_main_container, MainFragmentMenu()) // Carica Fight
-            .addToBackStack(null) // Permette di tornare indietro col tasto back
-            .commit()
-    }
 }
