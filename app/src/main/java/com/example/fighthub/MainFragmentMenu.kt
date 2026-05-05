@@ -2,16 +2,23 @@
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.fighthub.R
+import com.example.fighthub.controllori.ControlloreDB
+import com.example.fighthub.model.User
+import io.github.jan.supabase.auth.api.AuthenticatedApiConfig
+import org.w3c.dom.Text
 
 class MainFragmentMenu : Fragment() {
 
@@ -19,12 +26,10 @@ class MainFragmentMenu : Fragment() {
     private lateinit var indicatorContainer: LinearLayout
 
     // 1. Lista delle tue foto
-    private val listaFoto = listOf(
-        R.drawable.chuck_norris,
-        R.drawable.example_2,
-        R.drawable.example_3
-    )
+    private var listaFoto = emptyList<String>()
     private var indiceAttuale = 0
+
+    private var utenteMatch = User()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +41,27 @@ class MainFragmentMenu : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val controllore = ControlloreDB()
+
+        controllore.getUidUtenteMatch { uidAvversario ->
+            if(uidAvversario!=null && uidAvversario!="vuoto"){
+                Log.d("prova_uid", "$uidAvversario")
+                controllore.getDatiUtente(uidAvversario){datiUtenteMatch ->
+                    if(datiUtenteMatch!=null){
+                        utenteMatch = datiUtenteMatch.copy()
+                        Log.d("entrato dentro utente", "${utenteMatch.nome}")
+                        if(!utenteMatch.urlFoto.isEmpty()){
+                            listaFoto = utenteMatch.urlFoto
+                        }else{
+                            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+                        }
+                    }
+                    setupIndicators()
+                    aggiornaInterfaccia()
+                }
+            }
+        }
+
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
 
@@ -44,7 +70,7 @@ class MainFragmentMenu : Fragment() {
         val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
 
         // Inizializza le lineette in alto
-        setupIndicators()
+
 
         // Gestione Click sull'immagine per cambiare foto
         profileImage.setOnClickListener {
@@ -102,7 +128,7 @@ class MainFragmentMenu : Fragment() {
 
     private fun aggiornaInterfaccia() {
         // Cambia la foto
-        profileImage.setImageResource(listaFoto[indiceAttuale])
+        Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
 
         // Cambia il colore delle lineette
         for (i in 0 until indicatorContainer.childCount) {
@@ -111,6 +137,35 @@ class MainFragmentMenu : Fragment() {
                 indicator.setBackgroundColor(Color.WHITE)
             } else {
                 indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
+            }
+        }
+
+        //cambia le scritte
+
+        Log.d("cambiamo utente", "${utenteMatch.nome}")
+
+        val titolo = view?.findViewById<TextView>(R.id.txtName)
+        val desc = view?.findViewById<TextView>(R.id.txtBio)
+        titolo?.text = "${utenteMatch.nome}"+" "+"${utenteMatch.cognome}"
+        desc?.text = "${utenteMatch.descrizione}"
+        visualizzaArtiMarziali(utenteMatch.artiPraticate)
+    }
+
+    private fun visualizzaArtiMarziali(lista: List<String>){
+        val mappaId = mapOf(
+            "Judo" to view?.findViewById<TextView>(R.id.judo),
+            "Karate" to view?.findViewById<TextView>(R.id.karate),
+            "Boxe" to view?.findViewById<TextView>(R.id.boxe),
+            "Muay Thai" to view?.findViewById<TextView>(R.id.muaythai),
+            "MMA" to view?.findViewById<TextView>(R.id.mma),
+            "Altro" to view?.findViewById<TextView>(R.id.altro)
+        )
+
+        mappaId.values.forEach { it?.visibility = View.GONE }
+
+        lista.forEach { arte ->
+            mappaId[arte]?.apply{
+                visibility = View.VISIBLE
             }
         }
     }

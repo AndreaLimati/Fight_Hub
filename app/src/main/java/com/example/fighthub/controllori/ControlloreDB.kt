@@ -11,7 +11,6 @@ class ControlloreDB {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-    private val collezioneUtenti = db.collection("utente")
 
     fun autenticaUtenteRegistrazione(user: User, passw: String){
         auth.createUserWithEmailAndPassword(user.email!!, passw)
@@ -39,7 +38,7 @@ class ControlloreDB {
     }
 
     fun salvaDatiUtente(user: User){
-        collezioneUtenti.document(user.uid!!).set(user, SetOptions.merge()).addOnSuccessListener {
+        db.collection("utente").document(user.uid!!).set(user, SetOptions.merge()).addOnSuccessListener {
             Log.d("DB", "Utente salvato con successo!")
         }
     }
@@ -47,12 +46,26 @@ class ControlloreDB {
     fun getDatiUtente(uid: String?, onResult: (User?) -> Unit){
         Log.d("UID PRIMA CAPITO", "$uid")
         if(uid!=null){
-            val utente = collezioneUtenti.document(uid)
+            val utente = db.collection("utente").document(uid)
             utente.get().addOnSuccessListener { document ->
                 val user = document.toObject<User>()
                 onResult(user)
             }.addOnFailureListener{
                 onResult(null)
+            }
+        }
+    }
+
+    fun getUidUtenteMatch(onResult: (String?) -> Unit){
+        db.collection("utente").get().addOnSuccessListener { result ->
+            if(!result.isEmpty){
+                val rand = result.documents.random()
+                val uid = rand.id
+                if(!uid.isEmpty()){
+                    onResult(uid)
+                }else{
+                    onResult("vuoto")
+                }
             }
         }
     }
