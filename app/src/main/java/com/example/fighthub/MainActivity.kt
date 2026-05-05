@@ -28,7 +28,7 @@ class MyPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
             0 -> MainFragmentChat()
             1 -> MainFragmentMenu()
             2 -> MainFragmentProfiloUtente()
-            else -> MainFragmentProfiloUtente()
+            else -> MainFragmentMenu()
         }
     }
 }
@@ -53,10 +53,10 @@ class MainActivity : AppCompatActivity() {
         // TRUE = Icone scure (per sfondi chiari)
         controller.isAppearanceLightStatusBars = false
 
-        //per navigation bar
+
         window.navigationBarColor = android.graphics.Color.BLACK
         //fine  status bar
-
+        // per navigation bar
     // Imposta l'adapter per scorrimento tra fragment
         viewPager.adapter = MyPagerAdapter(this)
 
