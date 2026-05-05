@@ -172,7 +172,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Qui metti la storia di Chuck, le sue statistiche di combattimento, ecc."
+                android:text="sus."
                 android:textColor="#B0FFFFFF"
                 android:layout_marginTop="10dp"/>
         </LinearLayout>
