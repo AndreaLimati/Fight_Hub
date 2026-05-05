@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import com.example.fighthub.R
@@ -61,6 +62,28 @@ class MainFragmentMenu : Fragment() {
             }
             isOpen = !isOpen
         }
+
+        // Creiamo il callback per il tasto back
+        val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)
+            override fun handleOnBackPressed() {
+                // Se l'utente preme back, torniamo allo stato iniziale
+                motionLayout.transitionToStart()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
+
+        // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
+        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {}
+            override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
+            override fun onTransitionCompleted(p0: MotionLayout?, currentId: Int) {
+                // Se siamo nello stato END (info aperte), attiviamo il callback del tasto back
+                // Se siamo nello stato START (foto grande), lo disattiviamo così il back fa l'azione normale
+                backCallback.isEnabled = (currentId == R.id.end)
+            }
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
+        })
+        //fine configurazione tasto back
     }
 
     private fun setupIndicators() {
