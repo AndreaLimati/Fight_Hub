@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        app:constraintSetStart="@+id/start"
+        app:constraintSetEnd="@+id/end"
+        app:duration="500" />
+
+    <ConstraintSet android:id="@+id/start">
+        <!-- Stato attuale: tutto come nel tuo XML -->
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <!-- Rimpicciolisci la Card e il Glow -->
+        <Constraint android:id="@id/profileCard">
+            <Layout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_margin="0dp"
+                app:layout_constraintTop_toTopOf="parent" />
+        </Constraint>
+
+        <Constraint android:id="@id/glowBorder">
+            <PropertySet android:alpha="0" /> <!-- Nascondi il bagliore quando è piccolo -->
+        </Constraint>
+
+        <!-- Fai salire le info -->
+        <Constraint android:id="@id/detailsScroll">
+            <PropertySet android:alpha="1" />
+            <Layout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/profileCard"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </Constraint>
+
+        <!-- Nascondi i pulsanti pugno -->
+        <Constraint android:id="@id/actionsContainer">
+            <PropertySet android:alpha="0" />
+            <Layout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="parent" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

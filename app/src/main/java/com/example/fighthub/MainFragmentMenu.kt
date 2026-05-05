@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import com.example.fighthub.R
 
@@ -37,6 +38,10 @@ class MainFragmentMenu : Fragment() {
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
 
+        //tasto info
+        val imageButton = view.findViewById<ImageButton>(R.id.imageButton)
+        val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
+
         // Inizializza le lineette in alto
         setupIndicators()
 
@@ -44,6 +49,17 @@ class MainFragmentMenu : Fragment() {
         profileImage.setOnClickListener {
             indiceAttuale = (indiceAttuale + 1) % listaFoto.size
             aggiornaInterfaccia()
+        }
+
+        //per tasto info
+        var isOpen = false
+        imageButton.setOnClickListener {
+            if (!isOpen) {
+                motionLayout.transitionToEnd()
+            } else {
+                motionLayout.transitionToStart()
+            }
+            isOpen = !isOpen
         }
     }
 
