@@ -1,10 +1,10 @@
-// MANTIENI QUI IL TUO PACKAGE ORIGINALE (es. package com.example.fighthub)
 
+
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -18,24 +18,15 @@ import com.bumptech.glide.Glide
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.User
-import com.google.android.material.card.MaterialCardView
-import kotlin.math.abs
+import io.github.jan.supabase.auth.api.AuthenticatedApiConfig
+import org.w3c.dom.Text
 
 class MainFragmentMenu : Fragment() {
-
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout
-    private lateinit var motionLayout: MotionLayout
-    private lateinit var profileCard: MaterialCardView
-
     private var listaFoto = emptyList<String>()
     private var indiceAttuale = 0
     private var utenteMatch = User()
-
-    // Variabili per distinguere Click da Swipe
-    private var startX = 0f
-    private var startY = 0f
-    private val CLICK_THRESHOLD = 15f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,100 +35,94 @@ class MainFragmentMenu : Fragment() {
         return inflater.inflate(R.layout.fragment_main_menu, container, false)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getNextAvversario()
+
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
-        motionLayout = view.findViewById(R.id.motionLayout)
-        profileCard = view.findViewById(R.id.profileCard)
+
+        //tasto info
         val imageButton = view.findViewById<ImageButton>(R.id.imageButton)
+        val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
 
-        caricaDatiSupaBase()
+        // Inizializza le lineette in alto
 
-        // --- GESTIONE TOUCH (CLICK + SWIPE) ---
-        profileCard.setOnTouchListener { v, event ->
+
+        // Gestione Click sull'immagine per cambiare foto
+        /*profileImage.setOnClickListener {
+            indiceAttuale = (indiceAttuale + 1) % listaFoto.size
+            aggiornaInterfaccia()
+        }*/
+
+        //per tasto info
+        var isOpen = false
+        imageButton.setOnClickListener {
+            if (!isOpen) {
+                motionLayout.transitionToEnd()
+            } else {
+                motionLayout.transitionToStart()
+            }
+            isOpen = !isOpen
+        }
+
+        // Impedisce all'Activity di intercettare lo swipe mentre trascini la card
+        profileImage.setOnTouchListener { v, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    startX = event.x
-                    startY = event.y
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    // Dice all'Activity (e al ViewPager se presente) di non toccare questo gesto
                     v.parent.requestDisallowInterceptTouchEvent(true)
                 }
-                MotionEvent.ACTION_UP -> {
-                    val endX = event.x
-                    val endY = event.y
-                    val distanceX = abs(endX - startX)
-                    val distanceY = abs(endY - startY)
-
-                    // Se il tocco è un click (poco movimento)
-                    if (distanceX < CLICK_THRESHOLD && distanceY < CLICK_THRESHOLD) {
-                        if (motionLayout.currentState == R.id.start && listaFoto.isNotEmpty()) {
-                            indiceAttuale = (indiceAttuale + 1) % listaFoto.size
-                            aggiornaInterfaccia()
-                            return@setOnTouchListener true
-                        }
-                    }
+                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
                     v.parent.requestDisallowInterceptTouchEvent(false)
                 }
             }
-            false
+            false // Importante: false così il MotionLayout riceve comunque l'evento
         }
 
-        imageButton.setOnClickListener {
-            if (motionLayout.currentState == R.id.end) motionLayout.transitionToStart()
-            else motionLayout.transitionToEnd()
-        }
-
-        val backCallback = object : OnBackPressedCallback(false) {
+        // Creiamo il callback per il tasto back
+        val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)
             override fun handleOnBackPressed() {
+                // Se l'utente preme back, torniamo allo stato iniziale
                 motionLayout.transitionToStart()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
 
-        // --- LISTENER MOTIONLAYOUT ---
+        // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {}
             override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
             override fun onTransitionCompleted(p0: MotionLayout?, currentId: Int) {
+                // Se siamo nello stato END (info aperte), attiviamo il callback del tasto back
+                // Se siamo nello stato START (foto grande), lo disattiviamo così il back fa l'azione normale
                 backCallback.isEnabled = (currentId == R.id.end)
 
                 if (currentId == R.id.like || currentId == R.id.pass) {
-                    // Reset istantaneo per la nuova card
-                    motionLayout.setTransitionListener(null)
-
-                    // Riporta a START e carica nuovo utente
-                    motionLayout.setTransition(R.id.start, R.id.end)
-                    motionLayout.progress = 0f
-
-                    caricaNuovoUtente()
-
-                    motionLayout.post {
-                        motionLayout.setTransitionListener(this)
+                    if (currentId == R.id.like) {
+                        Log.d("SWIPE", "Like!")
+                    } else {
+                        Log.d("SWIPE", "Pass!")
                     }
+
+                    val profileCard = p0?.findViewById<View>(R.id.profileCard)
+                    // RESET FISICO: Forza la posizione e la rotazione a zero
+                    profileCard?.let {
+                        it.rotation = 0f
+                        it.translationX = 0f
+                        it.translationY = 0f
+                    }
+                    // Reset istantaneo e ricarica
+                    motionLayout.progress = 0f
+                    motionLayout.setTransition(R.id.start, R.id.end)
+                    getNextAvversario()
                 }
             }
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
         })
-    }
-
-    private fun caricaDatiSupaBase() {
-        ControlloreDB.getUidUtenteMatch { uidAvversario ->
-            if (!uidAvversario.isNullOrEmpty() && uidAvversario != "vuoto") {
-                ControlloreDB.getDatiUtente(uidAvversario) { dati ->
-                    if (dati != null) {
-                        utenteMatch = dati.copy()
-                        listaFoto = if (utenteMatch.urlFoto.isNotEmpty()) utenteMatch.urlFoto
-                        else listOf("https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg")
-
-                        indiceAttuale = 0
-                        setupIndicators()
-                        aggiornaInterfaccia()
-                    }
-                }
-            }
-        }
+        //fine configurazione tasto back
     }
 
     private fun setupIndicators() {
@@ -145,42 +130,77 @@ class MainFragmentMenu : Fragment() {
         listaFoto.forEachIndexed { index, _ ->
             val viewS = View(context)
             val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
-            params.setMargins(8, 0, 8, 0)
+            params.setMargins(8, 0, 8, 0) // Spazio tra le lineette
             viewS.layoutParams = params
+
+            // Colore iniziale (bianco per la prima, grigio per le altre)
             viewS.setBackgroundColor(if (index == 0) Color.WHITE else Color.parseColor("#80FFFFFF"))
             indicatorContainer.addView(viewS)
         }
     }
 
     private fun aggiornaInterfaccia() {
-        if (listaFoto.isEmpty()) return
+        // Cambia la foto
+        Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
 
-        Glide.with(requireContext())
-            .load(listaFoto[indiceAttuale])
-            .centerCrop()
-            .into(profileImage)
-
+        // Cambia il colore delle lineette
         for (i in 0 until indicatorContainer.childCount) {
             val indicator = indicatorContainer.getChildAt(i)
-            indicator.setBackgroundColor(if (i == indiceAttuale) Color.WHITE else Color.parseColor("#80FFFFFF"))
+            if (i == indiceAttuale) {
+                indicator.setBackgroundColor(Color.WHITE)
+            } else {
+                indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
+            }
         }
 
-        view?.findViewById<TextView>(R.id.txtName)?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
-        view?.findViewById<TextView>(R.id.txtBio)?.text = utenteMatch.descrizione
+        //cambia le scritte
+
+        Log.d("cambiamo utente", "${utenteMatch.nome}")
+
+        val titolo = view?.findViewById<TextView>(R.id.txtName)
+        val desc = view?.findViewById<TextView>(R.id.txtBio)
+        titolo?.text = "${utenteMatch.nome}"+" "+"${utenteMatch.cognome}"
+        desc?.text = "${utenteMatch.descrizione}"
         visualizzaArtiMarziali(utenteMatch.artiPraticate)
     }
 
-    private fun visualizzaArtiMarziali(lista: List<String>) {
+    private fun visualizzaArtiMarziali(lista: List<String>){
         val mappaId = mapOf(
-            "Judo" to R.id.judo, "Karate" to R.id.karate, "Boxe" to R.id.boxe,
-            "Muay Thai" to R.id.muaythai, "MMA" to R.id.mma, "Altro..." to R.id.altro
+            "Judo" to view?.findViewById<TextView>(R.id.judo),
+            "Karate" to view?.findViewById<TextView>(R.id.karate),
+            "Boxe" to view?.findViewById<TextView>(R.id.boxe),
+            "Muay Thai" to view?.findViewById<TextView>(R.id.muaythai),
+            "MMA" to view?.findViewById<TextView>(R.id.mma),
+            "Altro..." to view?.findViewById<TextView>(R.id.altro)
         )
-        mappaId.values.forEach { view?.findViewById<TextView>(it)?.visibility = View.GONE }
-        lista.forEach { arte -> mappaId[arte]?.let { view?.findViewById<TextView>(it)?.visibility = View.VISIBLE } }
+
+        mappaId.values.forEach { it?.visibility = View.GONE }
+
+        lista.forEach { arte ->
+            mappaId[arte]?.apply{
+                visibility = View.VISIBLE
+            }
+        }
     }
 
-    private fun caricaNuovoUtente() {
-        indiceAttuale = 0
-        caricaDatiSupaBase()
+    private fun getNextAvversario(){
+        ControlloreDB.getUidUtenteMatch { uidAvversario ->
+            if(uidAvversario!=null && uidAvversario!="vuoto"){
+                Log.d("prova_uid", "$uidAvversario")
+                ControlloreDB.getDatiUtente(uidAvversario){datiUtenteMatch ->
+                    if(datiUtenteMatch!=null){
+                        utenteMatch = datiUtenteMatch.copy()
+                        Log.d("entrato dentro utente", "${utenteMatch.nome}")
+                        if(!utenteMatch.urlFoto.isEmpty()){
+                            listaFoto = utenteMatch.urlFoto
+                        }else{
+                            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+                        }
+                    }
+                    setupIndicators()
+                    aggiornaInterfaccia()
+                }
+            }
+        }
     }
 }
