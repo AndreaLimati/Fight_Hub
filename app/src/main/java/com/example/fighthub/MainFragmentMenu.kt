@@ -41,12 +41,10 @@ class MainFragmentMenu : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val controllore = ControlloreDB()
-
-        controllore.getUidUtenteMatch { uidAvversario ->
+        ControlloreDB.getUidUtenteMatch { uidAvversario ->
             if(uidAvversario!=null && uidAvversario!="vuoto"){
                 Log.d("prova_uid", "$uidAvversario")
-                controllore.getDatiUtente(uidAvversario){datiUtenteMatch ->
+                ControlloreDB.getDatiUtente(uidAvversario){datiUtenteMatch ->
                     if(datiUtenteMatch!=null){
                         utenteMatch = datiUtenteMatch.copy()
                         Log.d("entrato dentro utente", "${utenteMatch.nome}")
@@ -158,7 +156,7 @@ class MainFragmentMenu : Fragment() {
             "Boxe" to view?.findViewById<TextView>(R.id.boxe),
             "Muay Thai" to view?.findViewById<TextView>(R.id.muaythai),
             "MMA" to view?.findViewById<TextView>(R.id.mma),
-            "Altro" to view?.findViewById<TextView>(R.id.altro)
+            "Altro..." to view?.findViewById<TextView>(R.id.altro)
         )
 
         mappaId.values.forEach { it?.visibility = View.GONE }

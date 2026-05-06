@@ -178,7 +178,7 @@
                     android:background="@drawable/tag_background"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="4dp"
-                    android:text="Altro"
+                    android:text="Altro..."
                     android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>

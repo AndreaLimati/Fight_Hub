@@ -21,7 +21,6 @@ import kotlin.getValue
 
 class RegistrazioneFragment4 : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
-    private val controlloreDB = ControlloreDB()
 
     private lateinit var fusedLocationClient: com.google.android.gms.location.FusedLocationProviderClient
 
@@ -63,7 +62,7 @@ class RegistrazioneFragment4 : Fragment() {
 
         accetta.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
-            controlloreDB.autenticaUtenteRegistrazione(utenteViewModel.getUser()!!, passw!!)
+            ControlloreDB.autenticaUtenteRegistrazione(utenteViewModel.getUser()!!, passw!!)
             startActivity(intent)
         }
     }

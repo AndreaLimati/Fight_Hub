@@ -142,8 +142,7 @@ class LoginActivity : AppCompatActivity() {
             }else if(pass.length<6){
                 Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
             }else{
-                val connessione = ControlloreDB()
-                connessione.verificaLoginUtente(mail, pass){ uid ->
+                ControlloreDB.verificaLoginUtente(mail, pass){ uid ->
                     if(uid!=null){
                         intent.putExtra("uid", uid)
                         //se si torna indietro nel main non va nel login

@@ -33,8 +33,6 @@ class MyPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
     }
 }
 class MainActivity : AppCompatActivity() {
-    val controllore = ControlloreDB()
-
     private val utenteViewModel : UtenteViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         val uid = intent.getStringExtra("uid")
 
-        controllore.getDatiUtente(uid){ user ->
+        ControlloreDB.getDatiUtente(uid){ user ->
             if(user!=null){
                 utenteViewModel.updateTutto(user)
             }else{

@@ -7,7 +7,7 @@ import com.example.fighthub.model.User
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 
-class ControlloreDB {
+object ControlloreDB {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
