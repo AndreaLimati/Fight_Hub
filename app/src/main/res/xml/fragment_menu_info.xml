@@ -2,6 +2,8 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <!-- 1. TRANSIZIONE PER INFO (Verticale) -->
     <Transition
         app:constraintSetStart="@+id/start"
         app:constraintSetEnd="@+id/end"
@@ -13,10 +15,36 @@
         app:dragDirection="dragUp" />
     </Transition>
 
+    <!-- 2. TRANSIZIONE PER LIKE (Destra) -->
+    <Transition
+        app:constraintSetStart="@+id/start"
+        app:constraintSetEnd="@+id/like"
+        app:duration="400">
+        <OnSwipe
+            app:touchAnchorId="@id/profileCard"
+            app:touchRegionId="@id/profileCard"
+            app:dragDirection="dragRight"
+            app:onTouchUp="stop"/>
+    </Transition>
+
+    <!-- 3. TRANSIZIONE PER PASS (Sinistra) -->
+    <Transition
+        app:constraintSetStart="@+id/start"
+        app:constraintSetEnd="@+id/pass"
+        app:duration="400">
+        <OnSwipe
+            app:touchAnchorId="@id/profileCard"
+            app:touchRegionId="@id/profileCard"
+            app:dragDirection="dragLeft"
+            app:onTouchUp="stop"/>
+    </Transition>
+
+    <!-- STATO START (Base) -->
     <ConstraintSet android:id="@+id/start">
         <!-- Stato attuale: tutto come nel tuo XML -->
     </ConstraintSet>
 
+    <!-- STATO END (Info espanse) -->
     <ConstraintSet android:id="@+id/end">
         <!-- Rimpicciolisci la Card e il Glow -->
         <Constraint android:id="@id/profileCard">
@@ -48,6 +76,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="parent" />
+        </Constraint>
+    </ConstraintSet>
+
+    <!-- STATO LIKE (Swipe a Destra) -->
+    <ConstraintSet android:id="@+id/like" app:deriveConstraintsFrom="@id/start">
+        <Constraint android:id="@id/profileCard">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="500dp"
+                app:touchRegionId="@id/profileCard"
+                app:layout_constraintStart_toEndOf="parent" />
+            <Transform android:rotation="30" />
+        </Constraint>
+        <Constraint android:id="@id/glowBorder">
+            <PropertySet android:alpha="0" />
+        </Constraint>
+    </ConstraintSet>
+
+    <!-- STATO PASS (Swipe a Sinistra) -->
+    <ConstraintSet android:id="@+id/pass" app:deriveConstraintsFrom="@id/start">
+        <Constraint android:id="@id/profileCard">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="500dp"
+                app:touchRegionId="@id/profileCard"
+                app:layout_constraintEnd_toStartOf="parent" />
+            <Transform android:rotation="-30" />
+        </Constraint>
+        <Constraint android:id="@id/glowBorder">
+            <PropertySet android:alpha="0" />
         </Constraint>
     </ConstraintSet>
 
