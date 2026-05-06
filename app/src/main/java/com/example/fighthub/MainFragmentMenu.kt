@@ -158,7 +158,7 @@ class MainFragmentMenu : Fragment() {
             "Boxe" to view?.findViewById<TextView>(R.id.boxe),
             "Muay Thai" to view?.findViewById<TextView>(R.id.muaythai),
             "MMA" to view?.findViewById<TextView>(R.id.mma),
-            "Altro" to view?.findViewById<TextView>(R.id.altro)
+            "Altro..." to view?.findViewById<TextView>(R.id.altro)
         )
 
         mappaId.values.forEach { it?.visibility = View.GONE }
