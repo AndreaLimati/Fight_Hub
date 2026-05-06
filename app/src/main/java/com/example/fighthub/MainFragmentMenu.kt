@@ -22,14 +22,10 @@ import io.github.jan.supabase.auth.api.AuthenticatedApiConfig
 import org.w3c.dom.Text
 
 class MainFragmentMenu : Fragment() {
-
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout
-
-    // 1. Lista delle tue foto
     private var listaFoto = emptyList<String>()
     private var indiceAttuale = 0
-
     private var utenteMatch = User()
 
     override fun onCreateView(
@@ -43,24 +39,7 @@ class MainFragmentMenu : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ControlloreDB.getUidUtenteMatch { uidAvversario ->
-            if(uidAvversario!=null && uidAvversario!="vuoto"){
-                Log.d("prova_uid", "$uidAvversario")
-                ControlloreDB.getDatiUtente(uidAvversario){datiUtenteMatch ->
-                    if(datiUtenteMatch!=null){
-                        utenteMatch = datiUtenteMatch.copy()
-                        Log.d("entrato dentro utente", "${utenteMatch.nome}")
-                        if(!utenteMatch.urlFoto.isEmpty()){
-                            listaFoto = utenteMatch.urlFoto
-                        }else{
-                            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
-                        }
-                    }
-                    setupIndicators()
-                    aggiornaInterfaccia()
-                }
-            }
-        }
+        getNextAvversario()
 
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
@@ -73,10 +52,10 @@ class MainFragmentMenu : Fragment() {
 
 
         // Gestione Click sull'immagine per cambiare foto
-        profileImage.setOnClickListener {
+        /*profileImage.setOnClickListener {
             indiceAttuale = (indiceAttuale + 1) % listaFoto.size
             aggiornaInterfaccia()
-        }
+        }*/
 
         //per tasto info
         var isOpen = false
@@ -128,10 +107,17 @@ class MainFragmentMenu : Fragment() {
                         Log.d("SWIPE", "Pass!")
                     }
 
+                    val profileCard = p0?.findViewById<View>(R.id.profileCard)
+                    // RESET FISICO: Forza la posizione e la rotazione a zero
+                    profileCard?.let {
+                        it.rotation = 0f
+                        it.translationX = 0f
+                        it.translationY = 0f
+                    }
                     // Reset istantaneo e ricarica
                     motionLayout.progress = 0f
                     motionLayout.setTransition(R.id.start, R.id.end)
-                    caricaNuovoUtente()
+                    getNextAvversario()
                 }
             }
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
@@ -197,6 +183,24 @@ class MainFragmentMenu : Fragment() {
         }
     }
 
-    private fun caricaNuovoUtente(){}
-
+    private fun getNextAvversario(){
+        ControlloreDB.getUidUtenteMatch { uidAvversario ->
+            if(uidAvversario!=null && uidAvversario!="vuoto"){
+                Log.d("prova_uid", "$uidAvversario")
+                ControlloreDB.getDatiUtente(uidAvversario){datiUtenteMatch ->
+                    if(datiUtenteMatch!=null){
+                        utenteMatch = datiUtenteMatch.copy()
+                        Log.d("entrato dentro utente", "${utenteMatch.nome}")
+                        if(!utenteMatch.urlFoto.isEmpty()){
+                            listaFoto = utenteMatch.urlFoto
+                        }else{
+                            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+                        }
+                    }
+                    setupIndicators()
+                    aggiornaInterfaccia()
+                }
+            }
+        }
+    }
 }

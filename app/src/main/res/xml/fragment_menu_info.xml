@@ -23,8 +23,7 @@
         <OnSwipe
             app:touchAnchorId="@id/profileCard"
             app:touchRegionId="@id/profileCard"
-            app:dragDirection="dragRight"
-            app:onTouchUp="stop"/>
+            app:dragDirection="dragRight"/>
     </Transition>
 
     <!-- 3. TRANSIZIONE PER PASS (Sinistra) -->
@@ -35,13 +34,16 @@
         <OnSwipe
             app:touchAnchorId="@id/profileCard"
             app:touchRegionId="@id/profileCard"
-            app:dragDirection="dragLeft"
-            app:onTouchUp="stop"/>
+            app:dragDirection="dragLeft"/>
     </Transition>
 
     <!-- STATO START (Base) -->
     <ConstraintSet android:id="@+id/start">
         <!-- Stato attuale: tutto come nel tuo XML -->
+        <Constraint android:id="@id/profileCard">
+            <!-- Aggiungi esplicitamente la rotazione 0 -->
+            <Transform android:rotation="0" />
+        </Constraint>
     </ConstraintSet>
 
     <!-- STATO END (Info espanse) -->
