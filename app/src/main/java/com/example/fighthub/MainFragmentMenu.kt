@@ -87,6 +87,20 @@ class MainFragmentMenu : Fragment() {
             isOpen = !isOpen
         }
 
+        // Impedisce all'Activity di intercettare lo swipe mentre trascini la card
+        profileImage.setOnTouchListener { v, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    // Dice all'Activity (e al ViewPager se presente) di non toccare questo gesto
+                    v.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            false // Importante: false così il MotionLayout riceve comunque l'evento
+        }
+
         // Creiamo il callback per il tasto back
         val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)
             override fun handleOnBackPressed() {
@@ -104,6 +118,19 @@ class MainFragmentMenu : Fragment() {
                 // Se siamo nello stato END (info aperte), attiviamo il callback del tasto back
                 // Se siamo nello stato START (foto grande), lo disattiviamo così il back fa l'azione normale
                 backCallback.isEnabled = (currentId == R.id.end)
+
+                if (currentId == R.id.like || currentId == R.id.pass) {
+                    if (currentId == R.id.like) {
+                        Log.d("SWIPE", "Like!")
+                    } else {
+                        Log.d("SWIPE", "Pass!")
+                    }
+
+                    // Reset istantaneo e ricarica
+                    motionLayout.progress = 0f
+                    motionLayout.setTransition(R.id.start, R.id.end)
+                    caricaNuovoUtente()
+                }
             }
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
         })
@@ -167,4 +194,7 @@ class MainFragmentMenu : Fragment() {
             }
         }
     }
+
+    private fun caricaNuovoUtente(){}
+
 }
