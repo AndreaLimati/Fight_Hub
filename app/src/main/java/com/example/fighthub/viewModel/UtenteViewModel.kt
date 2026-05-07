@@ -97,4 +97,12 @@ class UtenteViewModel : ViewModel() {
     fun updateTutto(u: User){
         userData.value = u
     }
+
+    fun getLat(): Double?{
+        return userData.value?.lat
+    }
+
+    fun getLon(): Double?{
+        return userData.value?.lon
+    }
 }
