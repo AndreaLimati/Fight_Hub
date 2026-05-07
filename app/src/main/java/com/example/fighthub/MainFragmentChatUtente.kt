@@ -8,9 +8,62 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
+data class MessaggioMock(
+    val testo: String,
+    val orario: String,
+    val inviatoDaMe: Boolean // Se true -> Rosso (destra), se false -> Grigio (sinistra)
+)
+class MessageAdapter(private val listaMessaggi: List<MessaggioMock>) :
+
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val TYPE_SENT = 1
+    private val TYPE_RECEIVED = 2
+
+    // Determina quale tipo di vista usare
+    override fun getItemViewType(position: Int): Int {
+        return if (listaMessaggi[position].inviatoDaMe) TYPE_SENT else TYPE_RECEIVED
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_SENT) {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.item_messaggio_mandato, parent, false)
+            SentViewHolder(v)
+        } else {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.item_messaggio_ricevuto, parent, false)
+            ReceivedViewHolder(v)
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val msg = listaMessaggi[position]
+        if (holder is SentViewHolder) {
+            holder.testo.text = msg.testo
+            holder.ora.text = msg.orario
+        } else if (holder is ReceivedViewHolder) {
+            holder.testo.text = msg.testo
+            holder.ora.text = msg.orario
+        }
+    }
+
+    override fun getItemCount() = listaMessaggi.size
+
+    // ViewHolder per i miei messaggi (Rossi)
+    class SentViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val testo = v.findViewById<TextView>(R.id.tvMessageContent)
+        val ora = v.findViewById<TextView>(R.id.tvMessageTime)
+    }
+
+    // ViewHolder per i messaggi ricevuti (Grigi)
+    class ReceivedViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val testo = v.findViewById<TextView>(R.id.tvMessageContent)
+        val ora = v.findViewById<TextView>(R.id.tvMessageTime)
+    }
+}
 class MainFragmentChatUtente : Fragment() {
-    // TODO: Rename and change types of parameters
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +96,23 @@ class MainFragmentChatUtente : Fragment() {
 
         // 1. Recupera il nome dell'utente passato dal Fragment precedente
         val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
+        //recycler view
+        val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
 
+        //messaggi esempio
+        val messaggiEsempio = listOf(
+            MessaggioMock("Ehi, come è andato lo sparring?", "10:30", false),
+            MessaggioMock("Bene! Rocky ha un bel gancio destro.", "10:31", true),
+            MessaggioMock("Dovrebbe allenare di più la difesa però.", "10:31", true),
+            MessaggioMock("Concordo, Chuck è molto più tecnico.", "10:32", false),
+            MessaggioMock("Ci alleniamo domani?", "10:35", true)
+        )
+        rvMessages.adapter = MessageAdapter(messaggiEsempio)
+
+        // Fa scorrere la chat all'ultimo messaggio automaticamente
+        rvMessages.scrollToPosition(messaggiEsempio.size - 1)
+
+        rvMessages.layoutManager = LinearLayoutManager(requireContext())
         // Imposta il nome nella Toolbar
         val tvName = view.findViewById<TextView>(R.id.tvChatPartnerName)
         tvName.text = nomeUtente
