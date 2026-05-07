@@ -2,6 +2,7 @@
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
@@ -16,14 +17,19 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.User
+import com.example.fighthub.viewModel.UtenteViewModel
 import io.github.jan.supabase.auth.api.AuthenticatedApiConfig
 import org.w3c.dom.Text
+import kotlin.getValue
+import kotlin.math.roundToInt
 
 class MainFragmentMenu : Fragment() {
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout
     private var listaFoto = emptyList<String>()
@@ -146,6 +152,7 @@ class MainFragmentMenu : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun aggiornaInterfaccia() {
         // Cambia la foto
         Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
@@ -166,9 +173,15 @@ class MainFragmentMenu : Fragment() {
 
         val titolo = view?.findViewById<TextView>(R.id.txtName)
         val desc = view?.findViewById<TextView>(R.id.txtBio)
-        titolo?.text = "${utenteMatch.nome}"+" "+"${utenteMatch.cognome}"
+        val descAvanzata = view?.findViewById<TextView>(R.id.descrizioneAvanzata)
+        val distanza = calcolaDistanza()?.roundToInt()
+        titolo?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
         desc?.text = "${utenteMatch.descrizione}"
         visualizzaArtiMarziali(utenteMatch.artiPraticate)
+        descAvanzata?.text = "Nato il: ${utenteMatch.dataNascita}\n" +
+                            "Peso: ${utenteMatch.peso}kg\n" +
+                            "Altezza: ${utenteMatch.altezza}cm\n" +
+                            "Distanza: ${distanza}km"
     }
 
     private fun visualizzaArtiMarziali(lista: List<String>){
@@ -187,6 +200,20 @@ class MainFragmentMenu : Fragment() {
             mappaId[arte]?.apply{
                 visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun calcolaDistanza(): Float?{
+        val results = FloatArray(1)
+        val lat1 = utenteViewModel.getLat()
+        val lon1 = utenteViewModel.getLon()
+        val lat2 = utenteMatch.lat
+        val lon2 = utenteMatch.lon
+        if(lat1!=null && lat2!=null && lon1!=null && lon2!=null){
+            Location.distanceBetween(lat1, lon1, lat2, lon2, results)
+            return (results[0]/1000)
+        }else{
+            return null
         }
     }
 
