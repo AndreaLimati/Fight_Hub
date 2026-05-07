@@ -3,6 +3,7 @@ package com.example.fighthub
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.WindowCompat
 import com.example.fighthub.controllori.ControlloreDB
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,6 +156,18 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+    override fun onStart(){
+        super.onStart()
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user != null) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("uid", user.uid)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
     }
     override fun onResume() {

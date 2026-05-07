@@ -1,3 +1,4 @@
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,9 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fighthub.LoginActivity
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
 import com.example.fighthub.viewModel.UtenteViewModel
+import com.google.firebase.auth.FirebaseAuth
 import kotlin.getValue
 import kotlin.text.replace
 
@@ -64,7 +67,11 @@ class MainFragmentProfiloUtente : Fragment() {
 
         //bottone log out:
         logOut.setOnClickListener {
-
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            requireActivity().finish()
         }
 
         // Configura RecyclerView
