@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -27,6 +29,7 @@ class MainFragmentMenu : Fragment() {
     private var listaFoto = emptyList<String>()
     private var indiceAttuale = 0
     private var utenteMatch = User()
+    private lateinit var clickDetector: GestureDetector
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,13 +53,6 @@ class MainFragmentMenu : Fragment() {
 
         // Inizializza le lineette in alto
 
-
-        // Gestione Click sull'immagine per cambiare foto
-        profileImage.setOnClickListener {
-                indiceAttuale = (indiceAttuale + 1) % listaFoto.size
-                aggiornaInterfaccia()
-        }
-
         //per tasto info
         var isOpen = false
         imageButton.setOnClickListener {
@@ -68,17 +64,28 @@ class MainFragmentMenu : Fragment() {
             isOpen = !isOpen
         }
 
+        clickDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                indiceAttuale = (indiceAttuale + 1) % listaFoto.size
+                aggiornaInterfaccia()
+                Log.d("GESTURE", "Click rilevato! Apro i dettagli...")
+                return true
+            }
+        })
+
         // Impedisce all'Activity di intercettare lo swipe mentre trascini la card
         profileImage.setOnTouchListener { v, event ->
+            clickDetector.onTouchEvent(event)
             when (event.action) {
-                android.view.MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> {
                     // Dice all'Activity (e al ViewPager se presente) di non toccare questo gesto
                     v.parent.requestDisallowInterceptTouchEvent(true)
                 }
-                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     v.parent.requestDisallowInterceptTouchEvent(false)
                 }
             }
+            motionLayout.onTouchEvent(event)
             false // Importante: false così il MotionLayout riceve comunque l'evento
         }
 
