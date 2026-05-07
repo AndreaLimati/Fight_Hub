@@ -25,7 +25,7 @@ class RegistrazioneFragment3 : Fragment() {
     private var selectedImagesUris = mutableListOf<Uri>()
     private lateinit var btnUpload: ImageButton
     private lateinit var tvPhotoCount: TextView
-    private val MAX_IMAGES = 10
+    private val MAX_IMAGES = 5
     // Launcher per selezione multipla
     private val pickMultipleImagesLauncher = registerForActivityResult(
         ActivityResultContracts.GetMultipleContents()
