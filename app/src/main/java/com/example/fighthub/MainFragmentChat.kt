@@ -1,23 +1,24 @@
 package com.example.fighthub
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.fighthub.viewModel.UtenteViewModel
+import kotlin.getValue
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragmentChat.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragmentChat : Fragment() {
-
+    //private val utenteViewModel : UtenteViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +32,48 @@ class MainFragmentChat : Fragment() {
         return inflater.inflate(R.layout.fragment_main_chat, container, false)
     }
 
-    companion object {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        fun newInstance(param1: String, param2: String) =
-            MainFragmentChat().apply {
 
-            }
+        // Configura RecyclerView
+        val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
+        rvChat.layoutManager = LinearLayoutManager(requireContext())
+
+        // Dati Mock
+        val listaChat = listOf(
+            ChatMock("Utente1", "buon combattente, abbiamo avuto una bella sessione di sparring"),
+            ChatMock("Chuck", "debole..."),
+            ChatMock("Rocky", "ha del potenziale ma deve allenarsi")
+        )
+
+        rvChat.adapter = ChatAdapter(listaChat)
     }
 }
+
+    data class ChatMock(val autore: String, val testo: String)
+
+    class ChatAdapter(private val lista: List<ChatMock>) :
+        RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+
+        class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+            val nome = v.findViewById<TextView>(R.id.tvAutore)
+            val testo = v.findViewById<TextView>(R.id.tvTesto)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val v =
+                LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
+            return ViewHolder(v)
+        }
+
+        override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
+            val item = lista[position]
+            holder.nome.text = item.autore
+            holder.testo.text = item.testo
+        }
+
+        override fun getItemCount() = lista.size
+
+    }
