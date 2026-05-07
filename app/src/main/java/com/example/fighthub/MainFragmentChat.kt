@@ -58,7 +58,7 @@ class MainFragmentChat : Fragment() {
         RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-            val nome = v.findViewById<TextView>(R.id.tvAutore)
+            val nome = v.findViewById<TextView>(R.id.tvNome)
             val testo = v.findViewById<TextView>(R.id.tvTesto)
         }
 
