@@ -130,6 +130,7 @@ class MainFragmentMenu : Fragment() {
                     // Reset istantaneo e ricarica
                     motionLayout.progress = 0f
                     motionLayout.setTransition(R.id.start, R.id.end)
+                    indiceAttuale = 0
                     getNextAvversario()
                 }
             }
