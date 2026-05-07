@@ -47,16 +47,24 @@ class MainFragmentProfiloUtente : Fragment() {
         val tvPesoAltezza = view.findViewById<TextView>(R.id.tvPesoAltezza)
         tvPesoAltezza.text = "$peso"+"kg, "+"$altezza"+"cm"
 
-        // Imposta foto
+        // foto profilo
         val immagine = view.findViewById<ImageView>(R.id.ivProfilo)
+        // foto log out
+        val logOut = view.findViewById<ImageView>(R.id.LogOut)
+
         if(!urls.isNullOrEmpty()){
             Glide.with(requireContext()).load(urls[0]).into(immagine)
         }
 
         immagine.setOnClickListener {
           //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
-            val gallery = MainFragmentProfiloUtenteFoto()
+            val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
             gallery.show(parentFragmentManager, "foto_gallery")
+        }
+
+        //bottone log out:
+        logOut.setOnClickListener {
+
         }
 
         // Configura RecyclerView
@@ -72,6 +80,7 @@ class MainFragmentProfiloUtente : Fragment() {
 
         rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
     }
+
     /*fun apriProfilo(view: View){
         requireActivity().supportFragmentManager.beginTransaction()
             // Animazione: entra da destra, esce a sinistra

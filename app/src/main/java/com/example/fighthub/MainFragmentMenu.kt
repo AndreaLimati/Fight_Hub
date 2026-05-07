@@ -52,10 +52,10 @@ class MainFragmentMenu : Fragment() {
 
 
         // Gestione Click sull'immagine per cambiare foto
-        /*profileImage.setOnClickListener {
-            indiceAttuale = (indiceAttuale + 1) % listaFoto.size
-            aggiornaInterfaccia()
-        }*/
+        profileImage.setOnClickListener {
+                indiceAttuale = (indiceAttuale + 1) % listaFoto.size
+                aggiornaInterfaccia()
+        }
 
         //per tasto info
         var isOpen = false
