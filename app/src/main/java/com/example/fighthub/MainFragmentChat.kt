@@ -48,13 +48,29 @@ class MainFragmentChat : Fragment() {
             ChatMock("Rocky", "ha del potenziale ma deve allenarsi")
         )
 
-        rvChat.adapter = ChatAdapter(listaChat)
+        rvChat.adapter = ChatAdapter(listaChat){ chatSelezionata ->
+            apriDettaglioChat(chatSelezionata)
+        }
     }
-}
 
+        private fun apriDettaglioChat(chat: ChatMock) {
+            val fragmentDettaglio = MainFragmentChatUtente() // Assicurati di averlo creato
+
+            // Passiamo i dati al nuovo fragment (il nome dell'utente)
+            val bundle = Bundle()
+            bundle.putString("nome_utente", chat.autore)
+            fragmentDettaglio.arguments = bundle
+
+            // Transizione con il BackStack per poter tornare indietro
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_chat_container, fragmentDettaglio) // Usa l'ID del tuo FrameLayout/FragmentContainerView
+                .addToBackStack(null)
+                .commit()
+        }
+}
     data class ChatMock(val autore: String, val testo: String)
 
-    class ChatAdapter(private val lista: List<ChatMock>) :
+    class ChatAdapter(private val lista: List<ChatMock>,private val onItemClick: (ChatMock) -> Unit) :
         RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -72,6 +88,11 @@ class MainFragmentChat : Fragment() {
             val item = lista[position]
             holder.nome.text = item.autore
             holder.testo.text = item.testo
+
+            //per il click
+            holder.itemView.setOnClickListener {
+                onItemClick(item)
+            }
         }
 
         override fun getItemCount() = lista.size
