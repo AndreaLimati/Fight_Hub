@@ -56,6 +56,9 @@ class MainFragmentMenu : Fragment() {
         //tasto info
         val imageButton = view.findViewById<ImageButton>(R.id.imageButton)
         val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
+        //tasti like e pass
+        val btnLike = view.findViewById<ImageButton>(R.id.btnYes)
+        val btnPass = view.findViewById<ImageButton>(R.id.btnNo)
 
         // Inizializza le lineette in alto
 
@@ -103,6 +106,16 @@ class MainFragmentMenu : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
+
+        btnLike.setOnClickListener {
+            // Forza il MotionLayout a spostarsi verso lo stato "like"
+            motionLayout.transitionToState(R.id.like)
+        }
+
+        btnPass.setOnClickListener {
+            // Forza il MotionLayout a spostarsi verso lo stato "pass"
+            motionLayout.transitionToState(R.id.pass)
+        }
 
         // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
