@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fighthub.LoginActivity
+import com.example.fighthub.MainFragmentProfiloModifica
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
 import com.example.fighthub.viewModel.UtenteViewModel
@@ -55,6 +57,9 @@ class MainFragmentProfiloUtente : Fragment() {
         // foto log out
         val logOut = view.findViewById<ImageView>(R.id.LogOut)
 
+        //bottoni oni oni ma material card non bottone lol
+        val btnModifica = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnModifica)
+
         if(!urls.isNullOrEmpty()){
             Glide.with(requireContext()).load(urls[0]).into(immagine)
         }
@@ -63,6 +68,21 @@ class MainFragmentProfiloUtente : Fragment() {
           //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
             val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
             gallery.show(parentFragmentManager, "foto_gallery")
+        }
+
+        //bottone modifica
+        btnModifica.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction()
+                // Animazione: entra da destra, esce a sinistra
+                .setCustomAnimations(
+                    android.R.anim.fade_in, // Entrata galleria
+                    android.R.anim.fade_out, // Uscita galleria
+                    android.R.anim.fade_in, // Ritorno al profilo (quando premi back)
+                    android.R.anim.fade_out  // Scomparsa galleria (quando premi back)
+                )
+                .replace(R.id.fragment_chat_container, MainFragmentProfiloModifica()) // Carica Fight
+                .addToBackStack(null) // Permette di tornare indietro col tasto back
+                .commit()
         }
 
         //bottone log out:
