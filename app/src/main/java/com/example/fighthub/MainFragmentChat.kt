@@ -63,6 +63,10 @@ class MainFragmentChat : Fragment() {
 
             // Transizione con il BackStack per poter tornare indietro
             parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,
+                    android.R.anim.slide_out_right
+                )
                 .replace(R.id.fragment_chat_container, fragmentDettaglio) // Usa l'ID del tuo FrameLayout/FragmentContainerView
                 .addToBackStack(null)
                 .commit()
