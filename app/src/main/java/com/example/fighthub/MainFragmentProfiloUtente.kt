@@ -124,9 +124,6 @@ class MainFragmentProfiloUtente : Fragment() {
     } */
 }
 
-// Data Class per il Mockup
-data class RecensioneMock(val autore: String, val testo: String, val stelle: Int)
-
 // Adapter Interno per semplicità di copia
 class RecensioniAdapter(private val lista: List<Recensione>) :
     RecyclerView.Adapter<RecensioniAdapter.ViewHolder>() {
