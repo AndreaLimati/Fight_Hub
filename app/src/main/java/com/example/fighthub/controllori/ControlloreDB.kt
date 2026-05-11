@@ -1,5 +1,6 @@
 package com.example.fighthub.controllori
 
+import android.location.Location
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -68,5 +69,65 @@ object ControlloreDB {
                 }
             }
         }
+    }
+
+    fun getUidUtenteMatch2(currentUser: User, onResult: (Pair<User, Double>?) -> Unit){
+        db.collection("utente").get().addOnSuccessListener { result ->
+            if(!result.isEmpty){
+                val listaUtenti = mutableListOf<User>()
+                for (doc in result.documents){
+                    val user = doc.toObject(User::class.java)
+                    if (user?.uid!=null && user.uid!=currentUser.uid){
+                        listaUtenti.add(user)
+                    }
+                }
+                val miglioriMatch = listaUtenti
+                    .map{potenziale -> potenziale to calcolaAffinita(currentUser, potenziale)}
+                    .maxByOrNull { it.second }
+
+                if(miglioriMatch!=null){
+                    onResult(miglioriMatch)
+                } else {
+                    onResult(null)
+                }
+            } else {
+                onResult(null)
+            }
+        }.addOnFailureListener {
+            onResult(null)
+        }
+    }
+
+    fun calcolaAffinita(user1: User, user2: User): Double{
+        var punteggio = 0.0
+
+        //filtro peso
+        if(user1.peso!=null && user2.peso!=null){
+            val diffPeso = Math.abs(user1.peso!!-user2.peso!!)
+            punteggio += when {
+                diffPeso <= 5 -> 40.0
+                diffPeso <= 10 -> 20.0
+                diffPeso <= 20 -> 5.0
+                else -> -50.0
+            }
+        }
+
+        //filtro arti
+        val stiliComuni = user1.artiPraticate.intersect(user2.artiPraticate)
+        punteggio += (stiliComuni.size * 25.0)
+
+        //filtro distanza
+        val results = FloatArray(1)
+        if(user1.lat!=null && user1.lon!=null && user2.lat!=null && user2.lon!=null){
+            Location.distanceBetween(user1.lat!!, user1.lon!!, user2.lat!!, user2.lon!!, results)
+        }
+        val dist = results[0]/1000
+        punteggio += when {
+            dist <= 10 -> 30.0
+            dist <= 30 -> 15.0
+            dist <= 100 -> 5.0
+            else -> 0.0
+        }
+        return punteggio
     }
 }
