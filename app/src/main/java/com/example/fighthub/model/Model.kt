@@ -16,11 +16,10 @@ data class User(
 )
 
 data class Recensione(
-    var uid: String? = null,
     var recensoreUid: String? = null,
     var recensitoUid: String? = null,
-    var valutazione: Int? = 6,
-    var testo: String? = null
+    var testo: String? = null,
+    var valutazione: Int? = null
 )
 
 data class Chat(

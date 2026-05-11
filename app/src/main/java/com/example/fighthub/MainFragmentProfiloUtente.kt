@@ -18,6 +18,7 @@ import com.example.fighthub.LoginActivity
 import com.example.fighthub.MainFragmentProfiloModifica
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
+import com.example.fighthub.model.Recensione
 import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.getValue
@@ -100,9 +101,9 @@ class MainFragmentProfiloUtente : Fragment() {
 
         // Dati Mock
         val listaRecensioni = listOf(
-            RecensioneMock("Utente1", "buon combattente, abbiamo avuto una bella sessione di sparring", 5),
-            RecensioneMock("Chuck", "debole...", 1),
-            RecensioneMock("Rocky", "ha del potenziale ma deve allenarsi", 4)
+            Recensione("Utente1","2", "buon combattente, abbiamo avuto una bella sessione di sparring", 5),
+            Recensione("Chuck", "2","debole...", 1),
+            Recensione("Rocky", "2","ha del potenziale ma deve allenarsi", 4)
         )
 
         rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
@@ -127,7 +128,7 @@ class MainFragmentProfiloUtente : Fragment() {
 data class RecensioneMock(val autore: String, val testo: String, val stelle: Int)
 
 // Adapter Interno per semplicità di copia
-class RecensioniAdapter(private val lista: List<RecensioneMock>) :
+class RecensioniAdapter(private val lista: List<Recensione>) :
     RecyclerView.Adapter<RecensioniAdapter.ViewHolder>() {
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -143,9 +144,11 @@ class RecensioniAdapter(private val lista: List<RecensioneMock>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = lista[position]
-        holder.nome.text = item.autore
-        holder.testo.text = item.testo
-        holder.stelle.text = "★".repeat(item.stelle)
+        if(item.valutazione!=null){
+            holder.nome.text = item.recensoreUid
+            holder.testo.text = item.testo
+            holder.stelle.text = "★".repeat(item.valutazione!!)
+        }
     }
 
     override fun getItemCount() = lista.size
