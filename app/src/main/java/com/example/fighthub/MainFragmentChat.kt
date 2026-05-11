@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fighthub.model.Chat
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
 
@@ -43,9 +44,9 @@ class MainFragmentChat : Fragment() {
 
         // Dati Mock
         val listaChat = listOf(
-            ChatMock("Utente1", "buon combattente, abbiamo avuto una bella sessione di sparring"),
-            ChatMock("Chuck", "debole..."),
-            ChatMock("Rocky", "ha del potenziale ma deve allenarsi")
+            Chat("1", "buon combattente, abbiamo avuto una bella sessione di sparring", "Utente1"),
+            Chat("2", "debole...", "Chuck"),
+            Chat("1", "ha del potenziale ma deve allenarsi", "Rocky")
         )
 
         rvChat.adapter = ChatAdapter(listaChat){ chatSelezionata ->
@@ -53,28 +54,26 @@ class MainFragmentChat : Fragment() {
         }
     }
 
-        private fun apriDettaglioChat(chat: ChatMock) {
-            val fragmentDettaglio = MainFragmentChatUtente() // Assicurati di averlo creato
+    private fun apriDettaglioChat(chat: Chat) {
+        val fragmentDettaglio = MainFragmentChatUtente() // Assicurati di averlo creato
 
-            // Passiamo i dati al nuovo fragment (il nome dell'utente)
-            val bundle = Bundle()
-            bundle.putString("nome_utente", chat.autore)
-            fragmentDettaglio.arguments = bundle
+        // Passiamo i dati al nuovo fragment (il nome dell'utente)
+        val bundle = Bundle()
+        bundle.putString("nome_utente", chat.altroPartecipante)
+        fragmentDettaglio.arguments = bundle
 
-            // Transizione con il BackStack per poter tornare indietro
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    android.R.anim.slide_out_right
-                )
-                .replace(R.id.fragment_chat_container, fragmentDettaglio) // Usa l'ID del tuo FrameLayout/FragmentContainerView
-                .addToBackStack(null)
-                .commit()
-        }
+        // Transizione con il BackStack per poter tornare indietro
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                android.R.anim.slide_out_right
+            )
+            .replace(R.id.fragment_chat_container, fragmentDettaglio) // Usa l'ID del tuo FrameLayout/FragmentContainerView
+            .addToBackStack(null)
+            .commit()
+    }
 }
-    data class ChatMock(val autore: String, val testo: String)
-
-    class ChatAdapter(private val lista: List<ChatMock>,private val onItemClick: (ChatMock) -> Unit) :
+    class ChatAdapter(private val lista: List<Chat>,private val onItemClick: (Chat) -> Unit) :
         RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -90,8 +89,8 @@ class MainFragmentChat : Fragment() {
 
         override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
             val item = lista[position]
-            holder.nome.text = item.autore
-            holder.testo.text = item.testo
+            holder.nome.text = item.altroPartecipante
+            holder.testo.text = item.ultimoAggiornamento
 
             //per il click
             holder.itemView.setOnClickListener {

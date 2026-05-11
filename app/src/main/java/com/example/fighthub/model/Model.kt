@@ -24,8 +24,8 @@ data class Recensione(
 
 data class Chat(
     var uid: String? = null,
-    var partecipanti: List<String> = emptyList(),
-    var ultimoAggiornamento: Long? = null
+    var ultimoAggiornamento: String? = null,
+    var altroPartecipante: String? = null
 )
 
 data class Messaggio(
