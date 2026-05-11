@@ -32,5 +32,6 @@ data class Chat(
 data class Messaggio(
     var mittenteUid: String? = null,
     var testo: String? = null,
-    var orario: Long? = null
+    var orario: String? = null,
+    var inviatoDaUtente: Boolean? = null
 )

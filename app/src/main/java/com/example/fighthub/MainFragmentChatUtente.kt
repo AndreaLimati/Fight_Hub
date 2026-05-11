@@ -9,13 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fighthub.model.Messaggio
 
-data class MessaggioMock(
-    val testo: String,
-    val orario: String,
-    val inviatoDaMe: Boolean // Se true -> Rosso (destra), se false -> Grigio (sinistra)
-)
-class MessageAdapter(private val listaMessaggi: List<MessaggioMock>) :
+class MessageAdapter(private val listaMessaggi: List<Messaggio>) :
 
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -24,7 +20,7 @@ class MessageAdapter(private val listaMessaggi: List<MessaggioMock>) :
 
     // Determina quale tipo di vista usare
     override fun getItemViewType(position: Int): Int {
-        return if (listaMessaggi[position].inviatoDaMe) TYPE_SENT else TYPE_RECEIVED
+        return if (listaMessaggi[position].inviatoDaUtente == true) TYPE_SENT else TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -100,11 +96,11 @@ class MainFragmentChatUtente : Fragment() {
 
         //messaggi esempio
         val messaggiEsempio = listOf(
-            MessaggioMock("Ehi, come è andato lo sparring?", "10:30", false),
-            MessaggioMock("Bene! Rocky ha un bel gancio destro.", "10:31", true),
-            MessaggioMock("Dovrebbe allenare di più la difesa però.", "10:31", true),
-            MessaggioMock("Concordo, Chuck è molto più tecnico.", "10:32", false),
-            MessaggioMock("Ci alleniamo domani?", "10:35", true)
+            Messaggio("1", "Ehi, come è andato lo sparring?", "10:30", false),
+            Messaggio("2", "Bene! Rocky ha un bel gancio destro.", "10:31", true),
+            Messaggio("1", "Dovrebbe allenare di più la difesa però.", "10:31", true),
+            Messaggio("2", "Concordo, Chuck è molto più tecnico.", "10:32", false),
+            Messaggio("1", "Ci alleniamo domani?", "10:35", true)
         )
         rvMessages.adapter = MessageAdapter(messaggiEsempio)
 
