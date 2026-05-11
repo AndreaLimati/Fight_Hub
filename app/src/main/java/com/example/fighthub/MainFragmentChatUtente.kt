@@ -67,8 +67,8 @@ class MainFragmentChatUtente : Fragment() {
     }
 
     override fun onResume() {
-        super.onResume() // Chiama il metodo corretto
-        // Nasconde la barra (usa l'ID che hai nella MainActivity)
+        super.onResume()
+        // Nasconde la navbar (usa l'ID che hai nella MainActivity)
         requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.GONE
     }
 
