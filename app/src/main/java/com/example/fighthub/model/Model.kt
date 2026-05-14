@@ -23,7 +23,7 @@ data class Recensione(
 )
 
 data class Chat(
-    var uid: String? = null,
+    var uidPartecipanti: String? = null,
     var ultimoAggiornamento: String? = null,
     var altroPartecipante: String? = null
 )
@@ -33,4 +33,10 @@ data class Messaggio(
     var testo: String? = null,
     var orario: String? = null,
     var inviatoDaUtente: Boolean? = null
+)
+
+data class Risposta(
+    var fromUid: String? = null,
+    var toUid: String? = null,
+    val tipo: String? = null
 )

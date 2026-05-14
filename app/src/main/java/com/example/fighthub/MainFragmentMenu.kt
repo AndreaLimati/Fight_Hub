@@ -21,8 +21,10 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
+import com.example.fighthub.model.Risposta
 import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
+import com.google.firebase.auth.FirebaseAuth
 import io.github.jan.supabase.auth.api.AuthenticatedApiConfig
 import org.w3c.dom.Text
 import java.util.PriorityQueue
@@ -31,6 +33,8 @@ import kotlin.math.roundToInt
 
 class MainFragmentMenu : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
+
+    private val auth = FirebaseAuth.getInstance()
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout
     private var listaFoto = emptyList<String>()
@@ -277,6 +281,13 @@ class MainFragmentMenu : Fragment() {
                 codaUtenti = PriorityQueue(coda)
                 getNextAvversario2()
             }
+        }
+    }
+
+    private fun registraScelta(risp: String){
+        if(auth.currentUser!=null){
+            val risposta = Risposta(auth.currentUser?.uid, utenteMatch.uid, risp)
+            ControlloreDB.salvaRispostaUtente(risposta)
         }
     }
 }

@@ -12,9 +12,6 @@ import java.time.format.DateTimeFormatter
 class UtenteViewModel : ViewModel() {
     val userData = MutableLiveData(User())
 
-    fun updateUid(u: String?){
-        userData.value = userData.value?.copy(uid = u)
-    }
     fun updateEmailPassw(m: String?){
         userData.value = userData.value?.copy(
             email = m

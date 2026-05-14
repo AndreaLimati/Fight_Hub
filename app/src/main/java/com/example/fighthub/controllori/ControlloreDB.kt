@@ -2,6 +2,7 @@ package com.example.fighthub.controllori
 
 import android.location.Location
 import android.util.Log
+import com.example.fighthub.model.Risposta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
@@ -125,5 +126,18 @@ object ControlloreDB {
             else -> 0.0
         }
         return punteggio
+    }
+    fun salvaRispostaUtente(risp: Risposta){
+        db.collection("risposta").add(risp).addOnSuccessListener {
+            if(risp.tipo=="LIKE"){
+                controlloCreazioneChat(risp.fromUid, risp.toUid)
+            }
+        }
+    }
+
+    fun controlloCreazioneChat(uid1: String?, uid2: String?){
+        if(uid1!=null && uid2!=null){
+            Log.d("nigga", "niggaa")
+        }
     }
 }
