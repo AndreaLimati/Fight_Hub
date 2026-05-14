@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
+import java.util.PriorityQueue
 
 object ControlloreDB {
 
@@ -71,25 +72,20 @@ object ControlloreDB {
         }
     }
 
-    fun getUidUtenteMatch2(currentUser: User, onResult: (Pair<User, Double>?) -> Unit){
+    fun getUidUtenteMatch2(currentUser: User, onResult: (PriorityQueue<Pair<User, Double>>?) -> Unit){
         db.collection("utente").get().addOnSuccessListener { result ->
             if(!result.isEmpty){
-                val listaUtenti = mutableListOf<User>()
+                val pq = PriorityQueue<Pair<User, Double>> { a, b ->
+                    b.second.compareTo(a.second)
+                }
                 for (doc in result.documents){
                     val user = doc.toObject(User::class.java)
                     if (user?.uid!=null && user.uid!=currentUser.uid){
-                        listaUtenti.add(user)
+                        val affinita = calcolaAffinita(currentUser, user)
+                        pq.add(user to affinita)
                     }
                 }
-                val miglioriMatch = listaUtenti
-                    .map{potenziale -> potenziale to calcolaAffinita(currentUser, potenziale)}
-                    .maxByOrNull { it.second }
-
-                if(miglioriMatch!=null){
-                    onResult(miglioriMatch)
-                } else {
-                    onResult(null)
-                }
+                onResult(pq)
             } else {
                 onResult(null)
             }

@@ -25,6 +25,7 @@ import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
 import io.github.jan.supabase.auth.api.AuthenticatedApiConfig
 import org.w3c.dom.Text
+import java.util.PriorityQueue
 import kotlin.getValue
 import kotlin.math.roundToInt
 
@@ -35,6 +36,8 @@ class MainFragmentMenu : Fragment() {
     private var listaFoto = emptyList<String>()
     private var indiceAttuale = 0
     private var utenteMatch = User()
+    private var codaUtenti = PriorityQueue<Pair<User, Double>>()
+    private var impostato = false
     private lateinit var clickDetector: GestureDetector
 
     override fun onCreateView(
@@ -48,7 +51,7 @@ class MainFragmentMenu : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getNextAvversario()
+        riempiCoda()
 
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
@@ -144,7 +147,7 @@ class MainFragmentMenu : Fragment() {
                     motionLayout.progress = 0f
                     motionLayout.setTransition(R.id.start, R.id.end)
                     indiceAttuale = 0
-                    getNextAvversario()
+                    getNextAvversario2()
                 }
             }
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
@@ -248,6 +251,33 @@ class MainFragmentMenu : Fragment() {
                     setupIndicators()
                     aggiornaInterfaccia()
                 }
+            }
+        }
+    }
+
+    private fun getNextAvversario2(){
+        if(codaUtenti.isNotEmpty()){
+            utenteMatch = codaUtenti.poll()!!.first
+            if(!utenteMatch.urlFoto.isEmpty()){
+                listaFoto = utenteMatch.urlFoto
+            }else{
+                listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+            }
+            setupIndicators()
+            aggiornaInterfaccia()
+        } else {
+            utenteMatch = User()
+            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+            setupIndicators()
+            aggiornaInterfaccia()
+        }
+    }
+
+    private fun riempiCoda(){
+        if(utenteViewModel.getUser()!=null){
+            ControlloreDB.getUidUtenteMatch2(utenteViewModel.getUser()!!){ coda ->
+                codaUtenti = PriorityQueue(coda)
+                getNextAvversario2()
             }
         }
     }
