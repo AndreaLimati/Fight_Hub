@@ -183,8 +183,7 @@ class MainFragmentMenu : Fragment() {
             }
         }
 
-        //cambia le scritte
-
+        //cambia le scritte occhio che cambia ogni volta che clicchi la foto dovrei solo cambiare foto ricordati!!!!
         Log.d("cambiamo utente", "${utenteMatch.nome}")
 
         val titolo = view?.findViewById<TextView>(R.id.txtName)
