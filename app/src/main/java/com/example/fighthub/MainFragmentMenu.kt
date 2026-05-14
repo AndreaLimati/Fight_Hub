@@ -37,7 +37,6 @@ class MainFragmentMenu : Fragment() {
     private var indiceAttuale = 0
     private var utenteMatch = User()
     private var codaUtenti = PriorityQueue<Pair<User, Double>>()
-    private var impostato = false
     private lateinit var clickDetector: GestureDetector
 
     override fun onCreateView(
