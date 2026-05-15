@@ -62,21 +62,7 @@ object ControlloreDB {
         }
     }
 
-    fun getUidUtenteMatch(onResult: (String?) -> Unit){
-        db.collection("utente").get().addOnSuccessListener { result ->
-            if(!result.isEmpty){
-                val rand = result.documents.random()
-                val uid = rand.id
-                if(!uid.isEmpty()){
-                    onResult(uid)
-                }else{
-                    onResult("vuoto")
-                }
-            }
-        }
-    }
-
-    fun getUidUtenteMatch2(currentUser: User, onResult: (PriorityQueue<Pair<User, Double>>?) -> Unit){
+    fun getUidUtenteMatch(currentUser: User, onResult: (PriorityQueue<Pair<User, Double>>?) -> Unit){
         db.collection("risposta").whereEqualTo("fromUid", currentUser.uid).get().addOnSuccessListener { risposte ->
             val utentiValutati = mutableSetOf<String>()
             if(!risposte.isEmpty){
@@ -154,7 +140,7 @@ object ControlloreDB {
             db.collection("risposta").whereEqualTo("fromUid", uid2).get().addOnSuccessListener { documents ->
                 for(document in documents){
                     val risposta = document.toObject<Risposta>()
-                    if(risposta.toUid == uid1){
+                    if(risposta.toUid == uid1 && uid1!=uid2){
                         iniziaChat(uid1, uid2)
                     }
                 }
