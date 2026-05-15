@@ -135,8 +135,10 @@ class MainFragmentMenu : Fragment() {
                 if (currentId == R.id.like || currentId == R.id.pass) {
                     if (currentId == R.id.like) {
                         Log.d("SWIPE", "Like!")
+                        registraScelta("LIKE")
                     } else {
                         Log.d("SWIPE", "Pass!")
+                        registraScelta("PASS")
                     }
 
                     val profileCard = p0?.findViewById<View>(R.id.profileCard)

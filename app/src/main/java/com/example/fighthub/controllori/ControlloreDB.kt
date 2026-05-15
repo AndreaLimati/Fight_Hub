@@ -11,6 +11,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 import java.util.PriorityQueue
+import kotlin.math.abs
 
 object ControlloreDB {
 
@@ -76,24 +77,35 @@ object ControlloreDB {
     }
 
     fun getUidUtenteMatch2(currentUser: User, onResult: (PriorityQueue<Pair<User, Double>>?) -> Unit){
-        db.collection("utente").get().addOnSuccessListener { result ->
-            if(!result.isEmpty){
-                val pq = PriorityQueue<Pair<User, Double>> { a, b ->
-                    b.second.compareTo(a.second)
-                }
-                for (doc in result.documents){
-                    val user = doc.toObject(User::class.java)
-                    if (user?.uid!=null && user.uid!=currentUser.uid){
-                        val affinita = calcolaAffinita(currentUser, user)
-                        pq.add(user to affinita)
+        db.collection("risposta").whereEqualTo("fromUid", currentUser.uid).get().addOnSuccessListener { risposte ->
+            val utentiValutati = mutableSetOf<String>()
+            if(!risposte.isEmpty){
+                for (doc in risposte){
+                    val target = doc.getString("toUid")
+                    if(target!=null){
+                        utentiValutati.add(target)
                     }
                 }
-                onResult(pq)
-            } else {
+            }
+            db.collection("utente").get().addOnSuccessListener { result ->
+                if(!result.isEmpty){
+                    val pq = PriorityQueue<Pair<User, Double>> { a, b ->
+                        b.second.compareTo(a.second)
+                    }
+                    for (doc in result.documents){
+                        val user = doc.toObject(User::class.java)
+                        if (user?.uid!=null && user.uid!=currentUser.uid && !utentiValutati.contains(user.uid)){
+                            val affinita = calcolaAffinita(currentUser, user)
+                            pq.add(user to affinita)
+                        }
+                    }
+                    onResult(pq)
+                } else {
+                    onResult(null)
+                }
+            }.addOnFailureListener {
                 onResult(null)
             }
-        }.addOnFailureListener {
-            onResult(null)
         }
     }
 
@@ -102,7 +114,7 @@ object ControlloreDB {
 
         //filtro peso
         if(user1.peso!=null && user2.peso!=null){
-            val diffPeso = Math.abs(user1.peso!!-user2.peso!!)
+            val diffPeso = abs(user1.peso!! - user2.peso!!)
             punteggio += when {
                 diffPeso <= 5 -> 40.0
                 diffPeso <= 10 -> 20.0
@@ -152,5 +164,6 @@ object ControlloreDB {
 
     fun iniziaChat(uid1: String, uid2: String){
         val chat = Chat(uid1, uid2, null)
+        db.collection("chat").add(chat)
     }
 }
