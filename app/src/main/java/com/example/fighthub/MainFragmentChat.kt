@@ -44,9 +44,9 @@ class MainFragmentChat : Fragment() {
 
         // Dati Mock
         val listaChat = listOf(
-            Chat("1", "buon combattente, abbiamo avuto una bella sessione di sparring", "Utente1"),
-            Chat("2", "debole...", "Chuck"),
-            Chat("1", "ha del potenziale ma deve allenarsi", "Rocky")
+            Chat("1", "Utente1", "buon combattente, abbiamo avuto una bella sessione di sparring"),
+            Chat("2", "Chuck", "debole..."),
+            Chat("1", "Rocky", "ha del potenziale ma deve allenarsi")
         )
 
         rvChat.adapter = ChatAdapter(listaChat){ chatSelezionata ->
@@ -59,7 +59,7 @@ class MainFragmentChat : Fragment() {
 
         // Passiamo i dati al nuovo fragment (il nome dell'utente)
         val bundle = Bundle()
-        bundle.putString("nome_utente", chat.altroPartecipante)
+        bundle.putString("nome_utente", chat.uid2)
         fragmentDettaglio.arguments = bundle
 
         // Transizione con il BackStack per poter tornare indietro
@@ -89,7 +89,7 @@ class MainFragmentChat : Fragment() {
 
         override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
             val item = lista[position]
-            holder.nome.text = item.altroPartecipante
+            holder.nome.text = item.uid2
             holder.testo.text = item.ultimoAggiornamento
 
             //per il click

@@ -2,12 +2,14 @@ package com.example.fighthub.controllori
 
 import android.location.Location
 import android.util.Log
+import com.example.fighthub.model.Chat
 import com.example.fighthub.model.Risposta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
+import kotlinx.coroutines.tasks.await
 import java.util.PriorityQueue
 
 object ControlloreDB {
@@ -137,7 +139,18 @@ object ControlloreDB {
 
     fun controlloCreazioneChat(uid1: String?, uid2: String?){
         if(uid1!=null && uid2!=null){
-            Log.d("nigga", "niggaa")
+            db.collection("risposta").whereEqualTo("fromUid", uid2).get().addOnSuccessListener { documents ->
+                for(document in documents){
+                    val risposta = document.toObject<Risposta>()
+                    if(risposta.toUid == uid1){
+                        iniziaChat(uid1, uid2)
+                    }
+                }
+            }
         }
+    }
+
+    fun iniziaChat(uid1: String, uid2: String){
+        val chat = Chat(uid1, uid2, null)
     }
 }
