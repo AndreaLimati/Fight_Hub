@@ -152,7 +152,7 @@ class MainFragmentMenu : Fragment() {
                     motionLayout.progress = 0f
                     motionLayout.setTransition(R.id.start, R.id.end)
                     indiceAttuale = 0
-                    getNextAvversario2()
+                    getNextAvversario()
                 }
             }
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
@@ -239,27 +239,6 @@ class MainFragmentMenu : Fragment() {
     }
 
     private fun getNextAvversario(){
-        ControlloreDB.getUidUtenteMatch { uidAvversario ->
-            if(uidAvversario!=null && uidAvversario!="vuoto"){
-                Log.d("prova_uid", "$uidAvversario")
-                ControlloreDB.getDatiUtente(uidAvversario){datiUtenteMatch ->
-                    if(datiUtenteMatch!=null){
-                        utenteMatch = datiUtenteMatch.copy()
-                        Log.d("entrato dentro utente", "${utenteMatch.nome}")
-                        if(!utenteMatch.urlFoto.isEmpty()){
-                            listaFoto = utenteMatch.urlFoto
-                        }else{
-                            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
-                        }
-                    }
-                    setupIndicators()
-                    aggiornaInterfaccia()
-                }
-            }
-        }
-    }
-
-    private fun getNextAvversario2(){
         if(codaUtenti.isNotEmpty()){
             utenteMatch = codaUtenti.poll()!!.first
             if(!utenteMatch.urlFoto.isEmpty()){
@@ -279,9 +258,9 @@ class MainFragmentMenu : Fragment() {
 
     private fun riempiCoda(){
         if(utenteViewModel.getUser()!=null){
-            ControlloreDB.getUidUtenteMatch2(utenteViewModel.getUser()!!){ coda ->
+            ControlloreDB.getUidUtenteMatch(utenteViewModel.getUser()!!){ coda ->
                 codaUtenti = PriorityQueue(coda)
-                getNextAvversario2()
+                getNextAvversario()
             }
         }
     }
