@@ -118,5 +118,6 @@ class MainFragmentChatUtente : Fragment() {
             // Torna indietro nella pila dei Fragment
             parentFragmentManager.popBackStack()
         }
+
     }
 }

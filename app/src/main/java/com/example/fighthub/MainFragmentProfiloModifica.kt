@@ -1,6 +1,8 @@
 package com.example.fighthub
 
+import android.content.Intent
 import android.graphics.Color
+import android.graphics.Color.TRANSPARENT
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,14 +15,35 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.fighthub.viewModel.UtenteViewModel
+import kotlin.getValue
 
 class MainFragmentProfiloModifica : Fragment() {
 
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
     private val mockPhotoUris = mutableListOf<Uri>()
     private val maxPhotos = 5
     private lateinit var photoAdapter: PhotoAdapter
+
+    //per aprire galleria
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            // 1. Permessi permanenti (per non perdere la foto al riavvio)
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            requireContext().contentResolver.takePersistableUriPermission(uri, flag)
+
+            // 2. Aggiungi al ViewModel
+           // utenteViewModel.aggiungiFoto(uri)
+
+            // 3. Notifica all'adapter che i dati sono cambiati
+            photoAdapter.notifyDataSetChanged()
+        }
+    }
+
     //adapter casino per foto lascia perdere dobbiamo rivederlo
     inner class PhotoAdapter : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
@@ -30,25 +53,25 @@ class MainFragmentProfiloModifica : Fragment() {
         }
 
         override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+            val fotoReali = utenteViewModel.getFoto() ?: emptyList()
+
             // Controlliamo se nella nostra lista MOCK c'è una foto per questa posizione
-            if (position < mockPhotoUris.size) {
+            if (position < fotoReali.size) {
                 // --- CASO: FOTO PRESENTE (Mock) ---
-                val currentUri = mockPhotoUris[position]
+                val currentUri = fotoReali[position]
 
-                // Dato che sono Uri finti, usiamo setImageDrawable per mostrare i colori
-                // ma manteniamo l'adapter pronto per l'URI vero
-                //holder.img.setImageURI(currentUri)
+                Glide.with(holder.itemView.context)
+                    .load(currentUri)
+                    .centerCrop()
+                    .into(holder.img)
 
-                // MOCK VISIVO: Mostriamo quadratini colorati invece di foto
-                val colors = listOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA)
-                holder.img.setBackgroundColor(colors[position % colors.size])
+                holder.img.setBackgroundColor(Color.TRANSPARENT)
 
                 holder.img.scaleType = ImageView.ScaleType.CENTER_CROP
                 holder.btnRemove.visibility = View.VISIBLE // Mostra la X
 
                 holder.btnRemove.setOnClickListener {
-                    mockPhotoUris.removeAt(position)
-                    notifyDataSetChanged() // Rinfresca la griglia
+                    //utenteViewModel.rimuoviFoto(position)
                 }
 
                 holder.img.setOnClickListener(null)
@@ -56,21 +79,23 @@ class MainFragmentProfiloModifica : Fragment() {
             } else {
                 // --- CASO: SLOT VUOTO (Tasto +) ---
                 // Ripuliamo lo sfondo colorato del mock
+
+                //svuotiamo il glide per sicurezza
+                Glide.with(holder.itemView.context).clear(holder.img)
+
                 holder.img.setBackgroundColor(Color.parseColor("#1E1E1E"))
 
                 holder.img.setImageResource(R.drawable.ic_add_photo) // L'icona che hai creato
                 holder.img.scaleType = ImageView.ScaleType.CENTER
                 holder.btnRemove.visibility = View.GONE // Nascondi la X
 
-                // LOGICA MOCK: Invece della galleria, aggiunge una foto finta
+                // LOGICA Vera
                 holder.img.setOnClickListener {
-                    if (mockPhotoUris.size < maxPhotos) {
-                        // Creiamo un Uri finto e lo aggiungiamo
-                        val fakeUri = Uri.parse("mock://photo_${System.currentTimeMillis()}")
-                        mockPhotoUris.add(fakeUri)
-                        notifyDataSetChanged()
+                    if (fotoReali.size < 5) { // Limite di 5 come da tua immagine
+                        // Qui apri il selettore della galleria (es. ActivityResultLauncher)
+                        //apriGalleria()
                     } else {
-                        Toast.makeText(requireContext(), "Limite di 5 foto raggiunto", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(holder.itemView.context, "Limite di 5 foto raggiunto", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

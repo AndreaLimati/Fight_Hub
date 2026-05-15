@@ -102,4 +102,5 @@ class UtenteViewModel : ViewModel() {
     fun getLon(): Double?{
         return userData.value?.lon
     }
+
 }
