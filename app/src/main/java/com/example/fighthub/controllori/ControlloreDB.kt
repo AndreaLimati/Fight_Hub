@@ -154,7 +154,7 @@ object ControlloreDB {
             db.collection("risposta").whereEqualTo("fromUid", uid2).get().addOnSuccessListener { documents ->
                 for(document in documents){
                     val risposta = document.toObject<Risposta>()
-                    if(risposta.toUid == uid1){
+                    if(risposta.toUid == uid1 && uid1!=uid2){
                         iniziaChat(uid1, uid2)
                     }
                 }
