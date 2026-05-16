@@ -149,7 +149,20 @@ object ControlloreDB {
     }
 
     fun iniziaChat(uid1: String, uid2: String){
-        val chat = Chat(uid1, uid2, null)
+        val chat = Chat(listOf(uid1, uid2), null)
         db.collection("chat").add(chat)
+    }
+
+    fun getListaChat(utente: User, onResult: (List<Chat>?) -> Unit){
+        if(utente.uid!=null){
+            db.collection("risposta").whereArrayContains("partecipanti", utente.uid!!).get().addOnSuccessListener { risposta ->
+                val listaChat: List<Chat> = risposta.toObjects(Chat::class.java)
+                if(listaChat.isEmpty()){
+                    onResult(null)
+                }else{
+                    onResult(listaChat)
+                }
+            }
+        }
     }
 }

@@ -14,12 +14,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Chat
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
 
 class MainFragmentChat : Fragment() {
-    //private val utenteViewModel : UtenteViewModel by activityViewModels()
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
+
+    private val listaChat = mutableListOf<Chat>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,24 +45,31 @@ class MainFragmentChat : Fragment() {
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
         rvChat.layoutManager = LinearLayoutManager(requireContext())
 
-        // Dati Mock
-        val listaChat = listOf(
-            Chat("1", "Utente1", "buon combattente, abbiamo avuto una bella sessione di sparring"),
-            Chat("2", "Chuck", "debole..."),
-            Chat("1", "Rocky", "ha del potenziale ma deve allenarsi")
-        )
+        // Dati
+        raccogliDati()
 
         rvChat.adapter = ChatAdapter(listaChat){ chatSelezionata ->
             apriDettaglioChat(chatSelezionata)
         }
     }
 
+    private fun raccogliDati(){
+        if(utenteViewModel.getUser()!=null){
+            ControlloreDB.getListaChat(utenteViewModel.getUser()!!){ res ->
+                if(res!=null){
+                    listaChat.addAll(res)
+                }
+            }
+        }
+    }
     private fun apriDettaglioChat(chat: Chat) {
         val fragmentDettaglio = MainFragmentChatUtente() // Assicurati di averlo creato
 
+        val altroUtente = (chat.partecipanti.subtract(listOf(utenteViewModel.getUser()?.uid))).first()
+
         // Passiamo i dati al nuovo fragment (il nome dell'utente)
         val bundle = Bundle()
-        bundle.putString("nome_utente", chat.uid2)
+        bundle.putString("nome_utente", altroUtente)
         fragmentDettaglio.arguments = bundle
 
         // Transizione con il BackStack per poter tornare indietro
@@ -87,9 +97,9 @@ class MainFragmentChat : Fragment() {
             return ViewHolder(v)
         }
 
-        override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = lista[position]
-            holder.nome.text = item.uid2
+            holder.nome.text = "prova"
             holder.testo.text = item.ultimoAggiornamento
 
             //per il click

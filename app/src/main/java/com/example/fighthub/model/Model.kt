@@ -23,8 +23,7 @@ data class Recensione(
 )
 
 data class Chat(
-    var uid1: String? = null,
-    var uid2: String? = null,
+    var partecipanti: List<String?> = emptyList(),
     var ultimoAggiornamento: String? = null
 )
 
