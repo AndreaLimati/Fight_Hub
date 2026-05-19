@@ -87,6 +87,11 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+        //per far in modo che ad apertura applicazione siamo su fight:
+        // Seleziona graficamente l'icona "nav_fight" sulla Bottom Bar
+        navBar.selectedItemId = R.id.nav_fight
+        // Sposta il ViewPager sulla pagina 1 senza mostrare l'animazione di transizione iniziale (smoothScroll = false)
+        viewPager.setCurrentItem(1, false)
     //fine adapter scorrimento
 
         // Gestione dei padding per i bordi dello schermo (Edge-to-Edge)
