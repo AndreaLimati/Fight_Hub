@@ -20,7 +20,7 @@ class MessageAdapter(private val listaMessaggi: List<Messaggio>) :
 
     // Determina quale tipo di vista usare
     override fun getItemViewType(position: Int): Int {
-        return if (listaMessaggi[position].inviatoDaUtente == true) TYPE_SENT else TYPE_RECEIVED
+        return if (listaMessaggi[position].mittenteUid == "a") TYPE_SENT else TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -96,11 +96,11 @@ class MainFragmentChatUtente : Fragment() {
 
         //messaggi esempio
         val messaggiEsempio = listOf(
-            Messaggio("1", "Ehi, come è andato lo sparring?", "10:30", false),
-            Messaggio("2", "Bene! Rocky ha un bel gancio destro.", "10:31", true),
-            Messaggio("1", "Dovrebbe allenare di più la difesa però.", "10:31", true),
-            Messaggio("2", "Concordo, Chuck è molto più tecnico.", "10:32", false),
-            Messaggio("1", "Ci alleniamo domani?", "10:35", true)
+            Messaggio("1", "2", "Ehi, come è andato lo sparring?", "10:30"),
+            Messaggio("2", "1", "Bene! Rocky ha un bel gancio destro.", "10:31"),
+            Messaggio("1", "2", "Dovrebbe allenare di più la difesa però.", "10:31"),
+            Messaggio("2", "1", "Concordo, Chuck è molto più tecnico.", "10:32"),
+            Messaggio("1", "2", "Ci alleniamo domani?", "10:35")
         )
         rvMessages.adapter = MessageAdapter(messaggiEsempio)
 

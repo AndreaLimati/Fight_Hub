@@ -29,9 +29,9 @@ data class Chat(
 
 data class Messaggio(
     var mittenteUid: String? = null,
+    var destinatarioUid: String? = null,
     var testo: String? = null,
-    var orario: String? = null,
-    var inviatoDaUtente: Boolean? = null
+    var orario: String? = null
 )
 
 data class Risposta(
