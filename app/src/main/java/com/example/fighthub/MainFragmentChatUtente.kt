@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -93,6 +95,23 @@ class MainFragmentChatUtente : Fragment() {
         val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
         //recycler view
         val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
+
+        val fragmentRootView = view
+
+        ViewCompat.setOnApplyWindowInsetsListener(fragmentRootView) { v, insets ->
+            // Prende lo spazio occupato dalle barre di sistema E dalla tastiera (ime)
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+            // Applica il padding inferiore in base a quanto è alta la tastiera
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                if (imeInsets.bottom > 0) imeInsets.bottom else systemBars.bottom
+            )
+            insets
+        }
 
         //messaggi esempio
         val messaggiEsempio = listOf(
