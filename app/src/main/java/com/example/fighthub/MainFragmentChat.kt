@@ -83,7 +83,7 @@ class MainFragmentChat : Fragment() {
             fragmentDettaglio.arguments = bundle
 
             // Transizione con il BackStack per poter tornare indietro
-            parentFragmentManager.beginTransaction()
+            childFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.anim.slide_in_right,
                     android.R.anim.slide_out_right

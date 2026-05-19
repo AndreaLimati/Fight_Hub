@@ -3,6 +3,7 @@ package com.example.fighthub.controllori
 import android.location.Location
 import android.util.Log
 import com.example.fighthub.model.Chat
+import com.example.fighthub.model.Messaggio
 import com.example.fighthub.model.Risposta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,6 +13,8 @@ import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 import java.util.PriorityQueue
 import kotlin.math.abs
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 object ControlloreDB {
 
@@ -164,5 +167,9 @@ object ControlloreDB {
                 }
             }
         }
+    }
+
+    fun inviaMessaggio(mittenteUid: String, destinatarioUid: String, testo: String){
+        val messaggio = Messaggio(mittenteUid, destinatarioUid, testo)
     }
 }

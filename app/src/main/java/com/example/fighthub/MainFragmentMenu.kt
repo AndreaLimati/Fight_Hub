@@ -33,7 +33,6 @@ import kotlin.math.roundToInt
 
 class MainFragmentMenu : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
-
     private val auth = FirebaseAuth.getInstance()
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout

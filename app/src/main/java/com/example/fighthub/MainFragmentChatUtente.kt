@@ -4,25 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fighthub.model.Messaggio
+import com.example.fighthub.model.User
+import com.example.fighthub.viewModel.UtenteViewModel
+import kotlin.getValue
 
-class MessageAdapter(private val listaMessaggi: List<Messaggio>) :
+class MessageAdapter(private val user: User?, private val listaMessaggi: List<Messaggio>) :
 
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     private val TYPE_SENT = 1
     private val TYPE_RECEIVED = 2
 
+
     // Determina quale tipo di vista usare
     override fun getItemViewType(position: Int): Int {
-        return if (listaMessaggi[position].mittenteUid == "a") TYPE_SENT else TYPE_RECEIVED
+        return if (listaMessaggi[position].mittenteUid == user?.uid) TYPE_SENT else TYPE_RECEIVED
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -61,7 +66,7 @@ class MessageAdapter(private val listaMessaggi: List<Messaggio>) :
     }
 }
 class MainFragmentChatUtente : Fragment() {
-
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -121,7 +126,7 @@ class MainFragmentChatUtente : Fragment() {
             Messaggio("2", "1", "Concordo, Chuck è molto più tecnico.", "10:32"),
             Messaggio("1", "2", "Ci alleniamo domani?", "10:35")
         )
-        rvMessages.adapter = MessageAdapter(messaggiEsempio)
+        rvMessages.adapter = MessageAdapter(utenteViewModel.getUser(), messaggiEsempio)
 
         // Fa scorrere la chat all'ultimo messaggio automaticamente
         rvMessages.scrollToPosition(messaggiEsempio.size - 1)
@@ -136,6 +141,14 @@ class MainFragmentChatUtente : Fragment() {
         btnBack.setOnClickListener {
             // Torna indietro nella pila dei Fragment
             parentFragmentManager.popBackStack()
+        }
+
+        val btnInvia = view.findViewById<ImageButton>(R.id.btnSendMessage)
+        btnInvia.setOnClickListener {
+            val testo = view.findViewById<EditText>(R.id.etMessageInput).toString()
+            if(!testo.isEmpty()){
+
+            }
         }
 
     }
