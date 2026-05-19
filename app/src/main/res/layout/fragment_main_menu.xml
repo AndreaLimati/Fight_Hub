@@ -189,6 +189,8 @@
                 android:id="@+id/imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/profileImage"
                 app:layout_constraintHorizontal_bias="0.922"
@@ -223,6 +225,8 @@
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
+
+
             <TextView
                 android:id="@+id/descrizioneAvanzata"
                 android:layout_width="match_parent"
@@ -250,9 +254,9 @@
             android:layout_marginEnd="40dp"
             android:background="@drawable/circle_red"
             android:elevation="8dp"
-            android:padding="18dp"
+            android:padding="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_pugno_si" />
+            android:src="@drawable/ic_close_white" />
 
         <ImageButton
             android:id="@+id/btnYes"
@@ -264,6 +268,42 @@
             android:scaleType="centerInside"
             android:src="@drawable/ic_pugno_si" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/circle_border_red"
+
+        android:src="@drawable/ic_modifica_filtri"
+        android:padding="12dp"
+        android:scaleType="centerInside"
+
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+
+        app:layout_constraintTop_toTopOf="@+id/actionsContainer"
+        app:layout_constraintBottom_toBottomOf="@+id/actionsContainer"
+
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp" />
+
+    <TextView
+        android:id="@+id/txtLabelFiltra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="filtra"
+        android:textAllCaps="true"
+        android:textColor="#99FFFFFF"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"
+        android:layout_marginTop="6dp"
+
+        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
+        app:layout_constraintStart_toStartOf="@+id/imageButton2"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton2" />
 
     <!-- 4. NAVIGATION BAR TRASPARENTE -->
     <LinearLayout
