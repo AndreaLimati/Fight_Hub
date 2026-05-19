@@ -154,12 +154,14 @@ object ControlloreDB {
     }
 
     fun getListaChat(utente: User, onResult: (List<Chat>?) -> Unit){
+        Log.d("chat", "$utente.uid")
         if(utente.uid!=null){
             db.collection("risposta").whereArrayContains("partecipanti", utente.uid!!).get().addOnSuccessListener { risposta ->
                 val listaChat: List<Chat> = risposta.toObjects(Chat::class.java)
                 if(listaChat.isEmpty()){
                     onResult(null)
                 }else{
+                    Log.d("chat", "$listaChat")
                     onResult(listaChat)
                 }
             }

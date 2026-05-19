@@ -40,13 +40,12 @@ class MainFragmentChat : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Dati
+        raccogliDati()
 
         // Configura RecyclerView
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
         rvChat.layoutManager = LinearLayoutManager(requireContext())
-
-        // Dati
-        raccogliDati()
 
         rvChat.adapter = ChatAdapter(listaChat){ chatSelezionata ->
             apriDettaglioChat(chatSelezionata)
