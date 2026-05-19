@@ -22,6 +22,7 @@ import kotlin.getValue
 class MainFragmentChat : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
 
+    private lateinit var chatAdapter: ChatAdapter
     private val listaChat = mutableListOf<Chat>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,23 +41,28 @@ class MainFragmentChat : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Dati
-        raccogliDati()
-
         // Configura RecyclerView
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
         rvChat.layoutManager = LinearLayoutManager(requireContext())
 
-        rvChat.adapter = ChatAdapter(listaChat){ chatSelezionata ->
+        chatAdapter = ChatAdapter(utenteViewModel.getUser()?.uid, listaChat){ chatSelezionata ->
             apriDettaglioChat(chatSelezionata)
         }
+        rvChat.adapter = chatAdapter
+
+
+        // Dati
+        raccogliDati()
     }
 
     private fun raccogliDati(){
         if(utenteViewModel.getUser()!=null){
             ControlloreDB.getListaChat(utenteViewModel.getUser()!!){ res ->
                 if(res!=null){
+                    listaChat.clear()
                     listaChat.addAll(res)
+                    chatAdapter.notifyDataSetChanged()
+                    Log.d("lista chat", "$listaChat")
                 }
             }
         }
@@ -66,23 +72,26 @@ class MainFragmentChat : Fragment() {
 
         val altroUtente = (chat.partecipanti.subtract(listOf(utenteViewModel.getUser()?.uid))).first()
 
-        // Passiamo i dati al nuovo fragment (il nome dell'utente)
-        val bundle = Bundle()
-        bundle.putString("nome_utente", altroUtente)
-        fragmentDettaglio.arguments = bundle
+        Log.d("Altroutente", "$altroUtente")
+        ControlloreDB.getDatiUtente(altroUtente){ user ->
+            // Passiamo i dati al nuovo fragment (il nome dell'utente)
+            val bundle = Bundle()
+            bundle.putString("nome_utente", user?.nome)
+            fragmentDettaglio.arguments = bundle
 
-        // Transizione con il BackStack per poter tornare indietro
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                android.R.anim.slide_out_right
-            )
-            .replace(R.id.fragment_chat_container, fragmentDettaglio) // Usa l'ID del tuo FrameLayout/FragmentContainerView
-            .addToBackStack(null)
-            .commit()
+            // Transizione con il BackStack per poter tornare indietro
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,
+                    android.R.anim.slide_out_right
+                )
+                .replace(R.id.fragment_chat_container, fragmentDettaglio) // Usa l'ID del tuo FrameLayout/FragmentContainerView
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }
-    class ChatAdapter(private val lista: List<Chat>,private val onItemClick: (Chat) -> Unit) :
+    class ChatAdapter(private val uid: String?, private val lista: List<Chat>, private val onItemClick: (Chat) -> Unit) :
         RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -98,12 +107,19 @@ class MainFragmentChat : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = lista[position]
-            holder.nome.text = "prova"
-            holder.testo.text = item.ultimoAggiornamento
+            val altroUtente = (item.partecipanti.subtract(listOf(uid))).first()
+            ControlloreDB.getDatiUtente(altroUtente){ user ->
+                holder.nome.text = user?.nome
+                if(item.ultimoAggiornamento!=null){
+                    holder.testo.text = item.ultimoAggiornamento
+                }else{
+                    holder.testo.text = "Nessun aggiornamento recente"
+                }
 
-            //per il click
-            holder.itemView.setOnClickListener {
-                onItemClick(item)
+                //per il click
+                holder.itemView.setOnClickListener {
+                    onItemClick(item)
+                }
             }
         }
 
