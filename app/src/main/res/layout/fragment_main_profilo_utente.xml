@@ -116,7 +116,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/logout" />
+        app:srcCompat="@drawable/logout"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"/>
 
     <TextView
         android:id="@+id/textView"
