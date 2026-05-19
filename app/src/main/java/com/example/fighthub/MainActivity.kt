@@ -4,6 +4,7 @@ import MainFragmentProfiloUtente
 import MainFragmentMenu
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +39,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //per la navigation bar
         setContentView(R.layout.activity_main)
+
+        val uid = intent.getStringExtra("uid")
+
+        ControlloreDB.getDatiUtente(uid){ user ->
+            if(user!=null){
+                utenteViewModel.updateTutto(user)
+                Log.d("Utente main", "${user.uid}")
+            }else{
+                Toast.makeText(this, "Macello con utente", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         //per scorrimento tra fragment
         val viewPager = findViewById<ViewPager2>(R.id.fragment_main_container)
@@ -81,16 +93,6 @@ class MainActivity : AppCompatActivity() {
         // Sposta il ViewPager sulla pagina 1 senza mostrare l'animazione di transizione iniziale (smoothScroll = false)
         viewPager.setCurrentItem(1, false)
     //fine adapter scorrimento
-
-        val uid = intent.getStringExtra("uid")
-
-        ControlloreDB.getDatiUtente(uid){ user ->
-            if(user!=null){
-                utenteViewModel.updateTutto(user)
-            }else{
-                Toast.makeText(this, "Macello con utente", Toast.LENGTH_SHORT).show()
-            }
-        }
 
         // Gestione dei padding per i bordi dello schermo (Edge-to-Edge)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
