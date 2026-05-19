@@ -1,5 +1,6 @@
 package com.example.fighthub
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -45,7 +46,7 @@ class MainFragmentChat : Fragment() {
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
         rvChat.layoutManager = LinearLayoutManager(requireContext())
 
-        chatAdapter = ChatAdapter(utenteViewModel.getUser()?.uid, listaChat){ chatSelezionata ->
+        chatAdapter = ChatAdapter(requireContext(), utenteViewModel.getUser()?.uid, listaChat){ chatSelezionata ->
             apriDettaglioChat(chatSelezionata)
         }
         rvChat.adapter = chatAdapter
@@ -91,12 +92,13 @@ class MainFragmentChat : Fragment() {
         }
     }
 }
-    class ChatAdapter(private val uid: String?, private val lista: List<Chat>, private val onItemClick: (Chat) -> Unit) :
+    class ChatAdapter(private val context: Context, private val uid: String?, private val lista: List<Chat>, private val onItemClick: (Chat) -> Unit) :
         RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val nome = v.findViewById<TextView>(R.id.tvNome)
             val testo = v.findViewById<TextView>(R.id.tvTesto)
+            val foto = v.findViewById<ImageView>(R.id.ivProfile)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -110,6 +112,9 @@ class MainFragmentChat : Fragment() {
             val altroUtente = (item.partecipanti.subtract(listOf(uid))).first()
             ControlloreDB.getDatiUtente(altroUtente){ user ->
                 holder.nome.text = user?.nome
+                if(!user?.urlFoto.isNullOrEmpty()){
+                    Glide.with(context).load(user?.urlFoto[0]).into(holder.foto)
+                }
                 if(item.ultimoAggiornamento!=null){
                     holder.testo.text = item.ultimoAggiornamento
                 }else{
