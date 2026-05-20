@@ -8,6 +8,7 @@ import com.example.fighthub.model.Risposta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
@@ -177,6 +178,25 @@ object ControlloreDB {
         val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
         db.collection("messaggio").add(messaggio).addOnSuccessListener {
             Log.d("Messaggio inviato", "$messaggio")
+        }
+    }
+
+    fun getListaMessaggi(mittenteUid: String, destinatarioUid: String, onResult: (List<Messaggio>?)->Unit){
+        val filtro1 = Filter.and(
+            Filter.equalTo("mittenteUid", mittenteUid),
+            Filter.equalTo("destinatarioUid", destinatarioUid)
+        )
+        val filtro2 = Filter.and(
+            Filter.equalTo("mittenteUid", destinatarioUid),
+            Filter.equalTo("destinatarioUid", mittenteUid)
+        )
+        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).get().addOnSuccessListener { ris ->
+            val listaMessaggi = ris.toObjects(Messaggio::class.java).sortedBy { it.orario }
+            if(!listaMessaggi.isEmpty()){
+                onResult(listaMessaggi)
+            }else{
+                onResult(null)
+            }
         }
     }
 }

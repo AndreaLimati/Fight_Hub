@@ -19,6 +19,102 @@ import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
 import kotlin.getValue
 
+class MainFragmentChatUtente : Fragment() {
+    private val utenteViewModel : UtenteViewModel by activityViewModels()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Nasconde la navbar (usa l'ID che hai nella MainActivity)
+        requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.GONE
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Fa riapparire la navigation bar quando esci dal fragment (così la lista la ritrova)
+        requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.VISIBLE
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_main_chat_utente, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 1. Recupera il nome dell'utente passato dal Fragment precedente
+        val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
+        val uidUtente = arguments?.getString("uidUtente")
+        //recycler view
+        val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
+        val uid1 = utenteViewModel.getUser()?.uid
+
+        val fragmentRootView = view
+
+        ViewCompat.setOnApplyWindowInsetsListener(fragmentRootView) { v, insets ->
+            // Prende lo spazio occupato dalle barre di sistema E dalla tastiera (ime)
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+            // Applica il padding inferiore in base a quanto è alta la tastiera
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                if (imeInsets.bottom > 0) imeInsets.bottom else systemBars.bottom
+            )
+            insets
+        }
+
+        //messaggi esempio
+        aggiornaInterfaccia(uid1, uidUtente, rvMessages)
+
+        rvMessages.layoutManager = LinearLayoutManager(requireContext())
+        // Imposta il nome nella Toolbar
+        val tvName = view.findViewById<TextView>(R.id.tvChatPartnerName)
+        tvName.text = nomeUtente
+
+        // 2. Gestione Tasto Back (Freccia in alto)
+        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            // Torna indietro nella pila dei Fragment
+            parentFragmentManager.popBackStack()
+        }
+
+        val btnInvia = view.findViewById<ImageButton>(R.id.btnSendMessage)
+        btnInvia.setOnClickListener {
+            val testo = view.findViewById<EditText>(R.id.etMessageInput).text.toString()
+            if(!testo.isEmpty()){
+                if(uid1!=null && uidUtente!=null){
+                    ControlloreDB.inviaMessaggio(uid1, uidUtente, testo)
+                    view.findViewById<EditText>(R.id.etMessageInput).text.clear()
+                }
+            }
+        }
+
+    }
+
+    fun aggiornaInterfaccia(uid1: String?, uid2: String?, rvMessages: RecyclerView){
+        if(uid1!=null && uid2!=null){
+            ControlloreDB.getListaMessaggi(uid1, uid2){ lista ->
+                if(lista!=null){
+                    rvMessages.adapter = MessageAdapter(utenteViewModel.getUser(), lista)
+                    // Fa scorrere la chat all'ultimo messaggio automaticamente
+                    rvMessages.scrollToPosition(lista.size - 1)
+                }
+            }
+        }
+    }
+}
+
 class MessageAdapter(private val user: User?, private val listaMessaggi: List<Messaggio>) :
 
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -64,98 +160,5 @@ class MessageAdapter(private val user: User?, private val listaMessaggi: List<Me
     class ReceivedViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val testo = v.findViewById<TextView>(R.id.tvMessageContent)
         val ora = v.findViewById<TextView>(R.id.tvMessageTime)
-    }
-}
-class MainFragmentChatUtente : Fragment() {
-    private val utenteViewModel : UtenteViewModel by activityViewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Nasconde la navbar (usa l'ID che hai nella MainActivity)
-        requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.GONE
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Fa riapparire la navigation bar quando esci dal fragment (così la lista la ritrova)
-        requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.VISIBLE
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_chat_utente, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // 1. Recupera il nome dell'utente passato dal Fragment precedente
-        val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
-        val uidUtente = arguments?.getString("uidUtente")
-        //recycler view
-        val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
-
-        val fragmentRootView = view
-
-        ViewCompat.setOnApplyWindowInsetsListener(fragmentRootView) { v, insets ->
-            // Prende lo spazio occupato dalle barre di sistema E dalla tastiera (ime)
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
-
-            // Applica il padding inferiore in base a quanto è alta la tastiera
-            v.setPadding(
-                systemBars.left,
-                systemBars.top,
-                systemBars.right,
-                if (imeInsets.bottom > 0) imeInsets.bottom else systemBars.bottom
-            )
-            insets
-        }
-
-        //messaggi esempio
-        val messaggiEsempio = listOf(
-            Messaggio("1", "2", "Ehi, come è andato lo sparring?", "10:30"),
-            Messaggio("2", "1", "Bene! Rocky ha un bel gancio destro.", "10:31"),
-            Messaggio("1", "2", "Dovrebbe allenare di più la difesa però.", "10:31"),
-            Messaggio("2", "1", "Concordo, Chuck è molto più tecnico.", "10:32"),
-            Messaggio("1", "2", "Ci alleniamo domani?", "10:35")
-        )
-        rvMessages.adapter = MessageAdapter(utenteViewModel.getUser(), messaggiEsempio)
-
-        // Fa scorrere la chat all'ultimo messaggio automaticamente
-        rvMessages.scrollToPosition(messaggiEsempio.size - 1)
-
-        rvMessages.layoutManager = LinearLayoutManager(requireContext())
-        // Imposta il nome nella Toolbar
-        val tvName = view.findViewById<TextView>(R.id.tvChatPartnerName)
-        tvName.text = nomeUtente
-
-        // 2. Gestione Tasto Back (Freccia in alto)
-        val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
-        btnBack.setOnClickListener {
-            // Torna indietro nella pila dei Fragment
-            parentFragmentManager.popBackStack()
-        }
-
-        val btnInvia = view.findViewById<ImageButton>(R.id.btnSendMessage)
-        btnInvia.setOnClickListener {
-            val testo = view.findViewById<EditText>(R.id.etMessageInput).text.toString()
-            if(!testo.isEmpty()){
-                val uid1 = utenteViewModel.getUser()?.uid
-                if(uid1!=null && uidUtente!=null){
-                    ControlloreDB.inviaMessaggio(uid1, uidUtente, testo)
-                    view.findViewById<EditText>(R.id.etMessageInput).text.clear()
-                }
-            }
-        }
-
     }
 }
