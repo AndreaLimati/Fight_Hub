@@ -11,9 +11,11 @@ import com.example.fighthub.model.User
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
+import java.sql.Time
 import java.util.PriorityQueue
 import kotlin.math.abs
 import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 object ControlloreDB {
@@ -169,7 +171,12 @@ object ControlloreDB {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun inviaMessaggio(mittenteUid: String, destinatarioUid: String, testo: String){
-        val messaggio = Messaggio(mittenteUid, destinatarioUid, testo)
+        val orario = Clock.System.now().toString()
+        val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
+        db.collection("messaggio").add(messaggio).addOnSuccessListener {
+            Log.d("Messaggio inviato", "$messaggio")
+        }
     }
 }

@@ -79,11 +79,12 @@ class MainFragmentChat : Fragment() {
         ControlloreDB.getDatiUtente(altroUtente){ user ->
             // Passiamo i dati al nuovo fragment (il nome dell'utente)
             val bundle = Bundle()
+            bundle.putString("uidUtente", user?.uid)
             bundle.putString("nome_utente", user?.nome)
             fragmentDettaglio.arguments = bundle
 
             // Transizione con il BackStack per poter tornare indietro
-            childFragmentManager.beginTransaction()
+            parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.anim.slide_in_right,
                     android.R.anim.slide_out_right

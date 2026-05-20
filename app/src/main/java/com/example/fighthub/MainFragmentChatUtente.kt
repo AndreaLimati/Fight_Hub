@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Messaggio
 import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
@@ -98,6 +99,7 @@ class MainFragmentChatUtente : Fragment() {
 
         // 1. Recupera il nome dell'utente passato dal Fragment precedente
         val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
+        val uidUtente = arguments?.getString("uidUtente")
         //recycler view
         val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
 
@@ -145,9 +147,13 @@ class MainFragmentChatUtente : Fragment() {
 
         val btnInvia = view.findViewById<ImageButton>(R.id.btnSendMessage)
         btnInvia.setOnClickListener {
-            val testo = view.findViewById<EditText>(R.id.etMessageInput).toString()
+            val testo = view.findViewById<EditText>(R.id.etMessageInput).text.toString()
             if(!testo.isEmpty()){
-
+                val uid1 = utenteViewModel.getUser()?.uid
+                if(uid1!=null && uidUtente!=null){
+                    ControlloreDB.inviaMessaggio(uid1, uidUtente, testo)
+                    view.findViewById<EditText>(R.id.etMessageInput).text.clear()
+                }
             }
         }
 
