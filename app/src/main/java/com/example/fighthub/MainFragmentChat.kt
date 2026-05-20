@@ -24,7 +24,6 @@ import kotlin.getValue
 
 class MainFragmentChat : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
-
     private lateinit var chatAdapter: ChatAdapter
     private val listaChat = mutableListOf<Chat>()
 

@@ -21,6 +21,9 @@ import kotlin.getValue
 
 class MainFragmentChatUtente : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
+    private lateinit var messageAdapter: MessageAdapter
+    private val listaMessaggi = mutableListOf<Messaggio>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,9 +56,13 @@ class MainFragmentChatUtente : Fragment() {
         // 1. Recupera il nome dell'utente passato dal Fragment precedente
         val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
         val uidUtente = arguments?.getString("uidUtente")
+        val uid1 = utenteViewModel.getUser()?.uid
         //recycler view
         val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
-        val uid1 = utenteViewModel.getUser()?.uid
+        messageAdapter = MessageAdapter(utenteViewModel.getUser(), listaMessaggi)
+        rvMessages.adapter = messageAdapter
+
+        raccogliDati(uid1, uidUtente)
 
         val fragmentRootView = view
 
@@ -75,7 +82,7 @@ class MainFragmentChatUtente : Fragment() {
         }
 
         //messaggi esempio
-        aggiornaInterfaccia(uid1, uidUtente, rvMessages)
+
 
         rvMessages.layoutManager = LinearLayoutManager(requireContext())
         // Imposta il nome nella Toolbar
@@ -94,28 +101,30 @@ class MainFragmentChatUtente : Fragment() {
             val testo = view.findViewById<EditText>(R.id.etMessageInput).text.toString()
             if(!testo.isEmpty()){
                 if(uid1!=null && uidUtente!=null){
-                    ControlloreDB.inviaMessaggio(uid1, uidUtente, testo)
+                    ControlloreDB.inviaMessaggio(uid1, uidUtente, testo){ esito ->
+                        if(esito){
+                            raccogliDati(uid1, uidUtente)
+                        }
+                    }
                     view.findViewById<EditText>(R.id.etMessageInput).text.clear()
                 }
             }
         }
-
     }
-
-    fun aggiornaInterfaccia(uid1: String?, uid2: String?, rvMessages: RecyclerView){
-        if(uid1!=null && uid2!=null){
-            ControlloreDB.getListaMessaggi(uid1, uid2){ lista ->
+    fun raccogliDati(uid1: String?, uidUtente: String?){
+        if(uid1!=null && uidUtente!=null){
+            ControlloreDB.getListaMessaggi(uid1, uidUtente){ lista ->
                 if(lista!=null){
-                    rvMessages.adapter = MessageAdapter(utenteViewModel.getUser(), lista)
-                    // Fa scorrere la chat all'ultimo messaggio automaticamente
-                    rvMessages.scrollToPosition(lista.size - 1)
+                    listaMessaggi.clear()
+                    listaMessaggi.addAll(lista)
+                    messageAdapter.notifyDataSetChanged()
                 }
             }
         }
     }
 }
 
-class MessageAdapter(private val user: User?, private val listaMessaggi: List<Messaggio>) :
+class MessageAdapter(private val user: User?, private var listaMessaggi: List<Messaggio>) :
 
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_SENT = 1

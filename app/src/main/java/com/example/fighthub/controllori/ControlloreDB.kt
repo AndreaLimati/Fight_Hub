@@ -173,11 +173,14 @@ object ControlloreDB {
     }
 
     @OptIn(ExperimentalTime::class)
-    fun inviaMessaggio(mittenteUid: String, destinatarioUid: String, testo: String){
+    fun inviaMessaggio(mittenteUid: String, destinatarioUid: String, testo: String, onResult: (Boolean) -> Unit){
         val orario = Clock.System.now().toString()
         val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
         db.collection("messaggio").add(messaggio).addOnSuccessListener {
             Log.d("Messaggio inviato", "$messaggio")
+            onResult(true)
+        }.addOnFailureListener {
+            onResult(false)
         }
     }
 
