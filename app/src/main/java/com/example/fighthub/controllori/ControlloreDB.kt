@@ -193,9 +193,13 @@ object ControlloreDB {
             Filter.equalTo("mittenteUid", destinatarioUid),
             Filter.equalTo("destinatarioUid", mittenteUid)
         )
-        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).get().addOnSuccessListener { ris ->
-            val listaMessaggi = ris.toObjects(Messaggio::class.java).sortedBy { it.orario }
-            if(!listaMessaggi.isEmpty()){
+        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).addSnapshotListener { ris, err ->
+            if(err!=null){
+                onResult(null)
+                return@addSnapshotListener
+            }
+            if(ris!=null && !ris.isEmpty){
+                val listaMessaggi = ris.toObjects(Messaggio::class.java).sortedBy { it.orario }
                 onResult(listaMessaggi)
             }else{
                 onResult(null)

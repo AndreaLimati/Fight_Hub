@@ -63,6 +63,7 @@ class MainFragmentChatUtente : Fragment() {
         rvMessages.adapter = messageAdapter
 
         raccogliDati(uid1, uidUtente)
+        rvMessages.scrollToPosition(listaMessaggi.size - 1)
 
         val fragmentRootView = view
 
@@ -103,7 +104,7 @@ class MainFragmentChatUtente : Fragment() {
                 if(uid1!=null && uidUtente!=null){
                     ControlloreDB.inviaMessaggio(uid1, uidUtente, testo){ esito ->
                         if(esito){
-                            raccogliDati(uid1, uidUtente)
+                            //raccogliDati(uid1, uidUtente)
                         }
                     }
                     view.findViewById<EditText>(R.id.etMessageInput).text.clear()
