@@ -85,7 +85,6 @@ class MainFragmentMenu : Fragment() {
             override fun onSingleTapUp(e: MotionEvent): Boolean {
                 indiceAttuale = (indiceAttuale + 1) % listaFoto.size
                 aggiornaInterfaccia()
-                Log.d("GESTURE", "Click rilevato! Apro i dettagli...")
                 return true
             }
         })

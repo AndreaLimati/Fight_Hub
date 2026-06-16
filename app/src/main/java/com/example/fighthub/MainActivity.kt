@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         ControlloreDB.getDatiUtente(uid){ user ->
             if(user!=null){
                 utenteViewModel.updateTutto(user)
-                Log.d("Utente main", "${user.uid}")
             }else{
                 Toast.makeText(this, "Macello con utente", Toast.LENGTH_SHORT).show()
             }
