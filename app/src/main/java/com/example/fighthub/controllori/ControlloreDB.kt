@@ -69,11 +69,13 @@ object ControlloreDB {
     }
 
     fun getUidUtenteMatch(currentUser: User, onResult: (PriorityQueue<Pair<User, Double>>?) -> Unit){
+        Log.d("UtenteUID", "${currentUser}")
         db.collection("risposta").whereEqualTo("fromUid", currentUser.uid).get().addOnSuccessListener { risposte ->
             val utentiValutati = mutableSetOf<String>()
             if(!risposte.isEmpty){
-                for (doc in risposte){
-                    val target = doc.getString("toUid")
+                for (doc in risposte.documents){
+                    val target = doc.getString("toUid")?.trim()
+                    Log.d("utentiValutati", "${target}")
                     if(target!=null){
                         utentiValutati.add(target)
                     }
