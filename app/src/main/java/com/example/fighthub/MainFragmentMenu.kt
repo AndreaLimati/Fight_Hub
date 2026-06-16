@@ -19,6 +19,8 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.example.fighthub.MainFragmentMenuFiltra
+import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Risposta
@@ -64,6 +66,7 @@ class MainFragmentMenu : Fragment() {
         //tasti like e pass
         val btnLike = view.findViewById<ImageButton>(R.id.btnYes)
         val btnPass = view.findViewById<ImageButton>(R.id.btnNo)
+        val btnFiltra = view.findViewById<ImageButton>(R.id.btn_filtra)
 
         // Inizializza le lineette in alto
 
@@ -157,6 +160,12 @@ class MainFragmentMenu : Fragment() {
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
         })
         //fine configurazione tasto back
+
+        btnFiltra.setOnClickListener {
+            //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
+            val filtro = MainFragmentMenuFiltra()  //Creazione istanza
+            filtro.show(parentFragmentManager, "foto_gallery")
+        }
     }
 
     private fun setupIndicators() {
