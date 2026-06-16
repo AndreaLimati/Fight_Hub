@@ -38,7 +38,7 @@ class MainFragmentMenuFiltra : DialogFragment() {
         // 2. LOGICA DELLO SLIDER (Aggiorna il testo mentre muovi il dito)
         sliderDistanza.addOnChangeListener { _, value, _ ->
             txtDistanzaSelezionata.text = "${value.toInt()} KM"
-            }
+        }
 
         btnApplicaFiltri.setOnClickListener {
             dismiss() // Chiude il popup
