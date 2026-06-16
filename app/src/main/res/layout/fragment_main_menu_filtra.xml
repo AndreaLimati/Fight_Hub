@@ -1,14 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainFragmentMenuFiltra">
+    android:layout_height="wrap_content"
+    android:background="#121212"
+    android:padding="24dp">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- BARRA ROSSA DI SEGNALAZIONE (Estetica "Gabbia/Ring") -->
+    <View
+        android:id="@+id/topAccentBar"
+        android:layout_width="60dp"
+        android:layout_height="4dp"
+        android:background="#FF1E27"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- TITOLO DEL DIALOG -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/txtTitleFiltri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="CON CHI VUOI COMBATTERE?"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/topAccentBar"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/txtSubtitleFiltri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trova il tuo prossimo avversario o partner"
+        android:textColor="#88FFFFFF"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/txtTitleFiltri"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- CONTENITORE SCROLLABILE PER I FILTRI -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollFiltri"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintTop_toBottomOf="@id/txtSubtitleFiltri"
+        app:layout_constraintBottom_toTopOf="@+id/btnApplicaFiltri">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ======================================================= -->
+            <!-- DA QUI IN POI PUOI INSERIRE I TUOI FILTRI (Esempio Spazio) -->
+            <!-- ======================================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                android:padding="16dp"
+                android:background="#1A1A1A">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="DISTANZA MASSIMA"
+                        android:textColor="#88FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1" />
+
+                    <TextView
+                        android:id="@+id/txtDistanzaSelezionata"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="50 KM"
+                        android:textColor="#FF1E27"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/sliderDistanza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:valueFrom="1.0"
+                    android:valueTo="100.0"
+                    android:value="50.0"
+                    android:stepSize="1.0"
+                    app:thumbColor="#FF1E27"
+                    app:trackColorActive="#FF1E27"
+                    app:trackColorInactive="#33FFFFFF"
+                    app:labelBehavior="gone" /> </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="[ INSERISCI QUI I TUOI COMPONENTI ]"
+                android:textColor="#44FFFFFF"
+                android:gravity="center"
+                android:padding="40dp"
+                android:textStyle="italic"/>
+
+            <!-- Puoi metterci: Seekbar per il raggio d'azione,
+                 Checkbox per le discipline (MMA, Boxe),
+                 RadioButtons per il genere, ecc. -->
+
+            <!-- ======================================================= -->
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- BOTTONE ANNULLA / AZZERA -->
+    <Button
+        android:id="@+id/btnAnnullaFiltri"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="8dp"
+        android:text="RESETTA"
+        android:textColor="#88FFFFFF"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnApplicaFiltri"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- BOTTONE APPLICA (Rosso Combattimento) -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnApplicaFiltri"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:background="#FF1E27"
+        android:text="ENTRA NEL RING"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnAnnullaFiltri" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

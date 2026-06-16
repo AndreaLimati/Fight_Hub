@@ -234,6 +234,7 @@
                 android:text="sus."
                 android:textColor="#B0FFFFFF"
                 android:layout_marginTop="10dp"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -289,23 +290,23 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="24dp" />
 
+    <!-- 4. NAVIGATION BAR TRASPARENTE -->
     <TextView
         android:id="@+id/txtLabelFiltra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:letterSpacing="0.1"
         android:text="filtra"
         android:textAllCaps="true"
         android:textColor="#99FFFFFF"
         android:textSize="9sp"
         android:textStyle="bold"
-        android:letterSpacing="0.1"
-        android:layout_marginTop="6dp"
 
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-        app:layout_constraintStart_toStartOf="@+id/imageButton2"
-        app:layout_constraintEnd_toEndOf="@+id/imageButton2" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_filtra"
+        app:layout_constraintStart_toStartOf="@+id/btn_filtra"
+        app:layout_constraintEnd_toEndOf="@+id/btn_filtra" />
 
-    <!-- 4. NAVIGATION BAR TRASPARENTE -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
