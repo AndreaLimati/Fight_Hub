@@ -30,9 +30,8 @@ object ControlloreDB {
                 if(task.isSuccessful){
                     user.uid = auth.currentUser?.uid
                     salvaDatiUtente(user)
-                    Log.d("Prova", "$user.email, $passw")
                 }else{
-                    Log.e("Fallimento Registrazione", "Porcodio")
+                    Log.e("Fallimento Registrazione", "Registrazione fallita")
                 }
             }
     }
@@ -56,7 +55,6 @@ object ControlloreDB {
     }
 
     fun getDatiUtente(uid: String?, onResult: (User?) -> Unit){
-        Log.d("UID PRIMA CAPITO", "$uid")
         if(uid!=null){
             val utente = db.collection("utente").document(uid)
             utente.get().addOnSuccessListener { document ->
@@ -69,13 +67,11 @@ object ControlloreDB {
     }
 
     fun getUidUtenteMatch(currentUser: User, onResult: (PriorityQueue<Pair<User, Double>>?) -> Unit){
-        Log.d("UtenteUID", "${currentUser}")
         db.collection("risposta").whereEqualTo("fromUid", currentUser.uid).get().addOnSuccessListener { risposte ->
             val utentiValutati = mutableSetOf<String>()
             if(!risposte.isEmpty){
                 for (doc in risposte.documents){
                     val target = doc.getString("toUid")?.trim()
-                    Log.d("utentiValutati", "${target}")
                     if(target!=null){
                         utentiValutati.add(target)
                     }
@@ -179,7 +175,6 @@ object ControlloreDB {
         val orario = Clock.System.now().toString()
         val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
         db.collection("messaggio").add(messaggio).addOnSuccessListener {
-            Log.d("Messaggio inviato", "$messaggio")
             onResult(true)
         }.addOnFailureListener {
             onResult(false)
