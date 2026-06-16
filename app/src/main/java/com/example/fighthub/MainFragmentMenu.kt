@@ -265,7 +265,7 @@ class MainFragmentMenu : Fragment() {
     }
 
     private fun riempiCoda(){
-        if(utenteViewModel.getUser()!=null){
+        if(utenteViewModel.getUser()?.uid!=null){
             ControlloreDB.getUidUtenteMatch(utenteViewModel.getUser()!!){ coda ->
                 codaUtenti = PriorityQueue(coda)
                 getNextAvversario()
@@ -274,7 +274,7 @@ class MainFragmentMenu : Fragment() {
     }
 
     private fun registraScelta(risp: String){
-        if(auth.currentUser!=null){
+        if(auth.currentUser!=null && utenteMatch.uid!=null){
             val risposta = Risposta(auth.currentUser?.uid, utenteMatch.uid, risp)
             ControlloreDB.salvaRispostaUtente(risposta)
         }
