@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import com.example.fighthub.controllori.ControlloreDB
 import com.google.android.material.slider.Slider
 
 class MainFragmentMenuFiltra : DialogFragment() {
@@ -21,7 +22,7 @@ class MainFragmentMenuFiltra : DialogFragment() {
         return inflater.inflate(R.layout.fragment_main_menu_filtra, container, false)
     }
 
-    private val artiSelezionate = mutableSetOf<String>()
+    private val artiSelezionate = mutableListOf<String>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,6 +31,7 @@ class MainFragmentMenuFiltra : DialogFragment() {
         val txtDistanzaSelezionata = view.findViewById<TextView>(R.id.txtDistanzaSelezionata)
         val btnApplicaFiltri = view.findViewById<Button>(R.id.btnApplicaFiltri)
         val btnAnnullaFiltri = view.findViewById<Button>(R.id.btnAnnullaFiltri)
+        var distanzaScelta = 0
 
         val bottoniIds = listOf(
             R.id.btnJudo, R.id.btnKarate, R.id.btnBoxe,
@@ -48,9 +50,11 @@ class MainFragmentMenuFiltra : DialogFragment() {
         // 2. LOGICA DELLO SLIDER (Aggiorna il testo mentre muovi il dito)
         sliderDistanza.addOnChangeListener { _, value, _ ->
             txtDistanzaSelezionata.text = "${value.toInt()} KM"
+            distanzaScelta = value.toInt()
         }
 
         btnApplicaFiltri.setOnClickListener {
+            ControlloreDB.modificaParametri(distanzaScelta, artiSelezionate)
             dismiss() // Chiude il popup
         }
 
