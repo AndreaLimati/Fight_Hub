@@ -24,6 +24,10 @@ object ControlloreDB {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
+    private var distanzaMax = 100
+
+    private var artiVolute = mutableListOf("Judo", "Karate", "Boxe", "Muay Thai", "MMA", "Altro...")
+
     fun autenticaUtenteRegistrazione(user: User, passw: String){
         auth.createUserWithEmailAndPassword(user.email!!, passw)
             .addOnCompleteListener { task ->
@@ -114,7 +118,7 @@ object ControlloreDB {
         }
 
         //filtro arti
-        val stiliComuni = user1.artiPraticate.intersect(user2.artiPraticate)
+        val stiliComuni = artiVolute.intersect(user2.artiPraticate)
         punteggio += (stiliComuni.size * 25.0)
 
         //filtro distanza
@@ -124,9 +128,9 @@ object ControlloreDB {
         }
         val dist = results[0]/1000
         punteggio += when {
-            dist <= 10 -> 30.0
-            dist <= 30 -> 15.0
-            dist <= 100 -> 5.0
+            dist <= distanzaMax/4 -> 30.0
+            dist <= distanzaMax/2 -> 15.0
+            dist <= distanzaMax -> 5.0
             else -> 0.0
         }
         return punteggio
@@ -202,5 +206,11 @@ object ControlloreDB {
                 onResult(null)
             }
         }
+    }
+
+    fun modificaParametri(distanza: Int, arti: List<String>){
+        distanzaMax = distanza
+        artiVolute.clear()
+        artiVolute.addAll(arti)
     }
 }
