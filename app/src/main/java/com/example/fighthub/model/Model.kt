@@ -31,7 +31,7 @@ data class Messaggio(
     var mittenteUid: String? = null,
     var destinatarioUid: String? = null,
     var testo: String? = null,
-    var orario: String? = null
+    var orario: Any? = null
 )
 
 data class Risposta(

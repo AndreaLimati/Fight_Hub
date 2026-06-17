@@ -8,8 +8,11 @@ import com.example.fighthub.model.Risposta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.firestoreSettings
+import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 import java.sql.Time
@@ -23,9 +26,14 @@ object ControlloreDB {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-
+    init {
+        val settings = firestoreSettings {
+            // Disattiva la persistenza su disco e usa solo la RAM
+            setLocalCacheSettings(memoryCacheSettings {})
+        }
+        db.firestoreSettings = settings
+    }
     private var distanzaMax = 100
-
     private var artiVolute = mutableListOf("Judo", "Karate", "Boxe", "Muay Thai", "MMA", "Altro...")
 
     fun autenticaUtenteRegistrazione(user: User, passw: String){
@@ -176,7 +184,7 @@ object ControlloreDB {
 
     @OptIn(ExperimentalTime::class)
     fun inviaMessaggio(mittenteUid: String, destinatarioUid: String, testo: String, onResult: (Boolean) -> Unit){
-        val orario = Clock.System.now().toString()
+        val orario = FieldValue.serverTimestamp()
         val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
         db.collection("messaggio").add(messaggio).addOnSuccessListener {
             onResult(true)
@@ -194,13 +202,13 @@ object ControlloreDB {
             Filter.equalTo("mittenteUid", destinatarioUid),
             Filter.equalTo("destinatarioUid", mittenteUid)
         )
-        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).addSnapshotListener { ris, err ->
+        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).orderBy("orario").addSnapshotListener { ris, err ->
             if(err!=null){
                 onResult(null)
                 return@addSnapshotListener
             }
             if(ris!=null && !ris.isEmpty){
-                val listaMessaggi = ris.toObjects(Messaggio::class.java).sortedBy { it.orario }
+                val listaMessaggi = ris.toObjects(Messaggio::class.java)
                 onResult(listaMessaggi)
             }else{
                 onResult(null)
