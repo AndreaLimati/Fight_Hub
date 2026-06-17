@@ -67,6 +67,9 @@ class MainFragmentProfiloAvversario : Fragment() {
                 immagine.setOnClickListener {
                     //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
                     val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
+                    gallery.arguments = Bundle().apply{
+                        putString("uid_avversario", arguments?.getString("uid_avversario"))
+                    }
                     gallery.show(parentFragmentManager, "foto_gallery")
                 }
 
