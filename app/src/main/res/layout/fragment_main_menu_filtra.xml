@@ -146,7 +146,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/button_selector_artimarziali"
                         android:text="Judo"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#050505"
                         android:textStyle="bold"/>
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -156,7 +156,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/button_selector_artimarziali"
                         android:text="Karate"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#0B0B0B"
                         android:textStyle="bold"/>
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -166,7 +166,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/button_selector_artimarziali"
                         android:text="Boxe"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#070707"
                         android:textStyle="bold"/>
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -176,7 +176,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/button_selector_artimarziali"
                         android:text="Muay Thai"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#0B0B0B"
                         android:textStyle="bold"/>
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -186,7 +186,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/button_selector_artimarziali"
                         android:text="MMA"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#070707"
                         android:textStyle="bold"/>
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -195,7 +195,7 @@
                         android:layout_height="50dp"
                         android:background="@drawable/button_selector_artimarziali"
                         android:text="Altro..."
-                        android:textColor="#88FFFFFF"
+                        android:textColor="#88161515"
                         android:textStyle="bold"/>
 
                 </LinearLayout>
