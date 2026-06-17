@@ -75,7 +75,7 @@ class MainFragmentChatUtente : Fragment() {
             // Applica il padding inferiore in base a quanto è alta la tastiera
             v.setPadding(
                 systemBars.left,
-                systemBars.top,
+                0,
                 systemBars.right,
                 if (imeInsets.bottom > 0) imeInsets.bottom else systemBars.bottom
             )
