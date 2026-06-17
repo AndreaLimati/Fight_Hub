@@ -11,6 +11,8 @@ import com.example.fighthub.model.User
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.firestoreSettings
+import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 import java.sql.Time
@@ -24,9 +26,14 @@ object ControlloreDB {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-
+    init {
+        val settings = firestoreSettings {
+            // Disattiva la persistenza su disco e usa solo la RAM
+            setLocalCacheSettings(memoryCacheSettings {})
+        }
+        db.firestoreSettings = settings
+    }
     private var distanzaMax = 100
-
     private var artiVolute = mutableListOf("Judo", "Karate", "Boxe", "Muay Thai", "MMA", "Altro...")
 
     fun autenticaUtenteRegistrazione(user: User, passw: String){
