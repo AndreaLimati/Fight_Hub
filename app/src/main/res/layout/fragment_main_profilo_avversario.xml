@@ -7,8 +7,6 @@
     android:background="#2C2B2B"
     android:padding="24dp">
 
-
-    <!-- Foto Profilo con un tocco di Glow Rosso -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivProfilo"
         android:layout_width="120dp"
@@ -24,7 +22,6 @@
         app:strokeColor="#FF0000"
         app:strokeWidth="3dp" />
 
-    <!-- Nome e Età -->
     <TextView
         android:id="@+id/tvNomeEta"
         android:layout_width="wrap_content"
@@ -38,7 +35,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivProfilo" />
 
-    <!-- Dati tecnici piccoli e eleganti -->
     <TextView
         android:id="@+id/tvPesoAltezza"
         android:layout_width="wrap_content"
@@ -64,14 +60,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPesoAltezza" />
 
-    <!-- Lista recensioni senza Card esterna, più pulita -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecensioni"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvRecensioniTitolo" />
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/btnLasciaRecensione"
+        app:layout_constraintTop_toBottomOf="@id/tvRecensioniTitolo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLasciaRecensione"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="100dp"
+        android:text="LASCIA UNA RECENSIONE"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-black"
+        android:letterSpacing="0.1"
+        app:backgroundTint="#E53935"
+        app:cornerRadius="8dp"
+        app:icon="@android:drawable/ic_menu_edit"
+        app:iconTint="#FFFFFF"
+        app:iconPadding="8dp"
+        app:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
