@@ -106,13 +106,17 @@ class MainFragmentChatUtente : Fragment() {
         // Apertura profilo avversario
         val btnApri_Profilo = view.findViewById<View>(R.id.btn_info_utente)
         btnApri_Profilo.setOnClickListener {
+            val frammento = MainFragmentProfiloAvversario()
+            frammento.arguments = Bundle().apply{
+                putString("uid_avversario", uidUtente)
+            }
             parentFragmentManager.beginTransaction()
                 // Animazione: entra da destra, esce a sinistra
                 .setCustomAnimations(
                     android.R.anim.slide_in_left,
                     android.R.anim.slide_out_right
                 )
-                .replace(R.id.fragment_chat_container, MainFragmentProfiloAvversario()) // Carica il secondo fragment
+                .replace(R.id.fragment_chat_container, frammento) // Carica il secondo fragment
                 .addToBackStack(null) // Permette di tornare indietro col tasto back
                 .commit()
         }
