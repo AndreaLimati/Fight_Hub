@@ -17,6 +17,9 @@ import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Messaggio
 import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.getValue
 
 class MainFragmentChatUtente : Fragment() {
@@ -151,11 +154,20 @@ class MessageAdapter(private val user: User?, private var listaMessaggi: List<Me
         val msg = listaMessaggi[position]
         if (holder is SentViewHolder) {
             holder.testo.text = msg.testo
-            holder.ora.text = msg.orario
+            holder.ora.text = formattaTimestamp(msg.orario)
         } else if (holder is ReceivedViewHolder) {
             holder.testo.text = msg.testo
-            holder.ora.text = msg.orario
+            holder.ora.text = formattaTimestamp(msg.orario)
         }
+    }
+
+    private fun formattaTimestamp(orarioGrezzo: Any?): String {
+        // Verifichiamo se l'oggetto è effettivamente un Timestamp di Firebase
+        val timestamp = orarioGrezzo as? Timestamp ?: return "Invio..."
+
+        val data = timestamp.toDate()
+        val formato = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return formato.format(data)
     }
 
     override fun getItemCount() = listaMessaggi.size
