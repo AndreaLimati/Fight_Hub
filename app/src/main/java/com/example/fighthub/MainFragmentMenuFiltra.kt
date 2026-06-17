@@ -54,8 +54,10 @@ class MainFragmentMenuFiltra : DialogFragment() {
         }
 
         btnApplicaFiltri.setOnClickListener {
-            ControlloreDB.modificaParametri(distanzaScelta, artiSelezionate)
-            dismiss() // Chiude il popup
+            if(artiSelezionate.isNotEmpty()){
+                ControlloreDB.modificaParametri(distanzaScelta, artiSelezionate)
+                dismiss() // Chiude il popup
+            }
         }
 
         btnAnnullaFiltri.setOnClickListener {
