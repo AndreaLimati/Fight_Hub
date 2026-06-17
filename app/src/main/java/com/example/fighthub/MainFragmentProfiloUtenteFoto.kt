@@ -11,10 +11,10 @@ import com.example.fighthub.viewModel.UtenteViewModel
 import androidx.fragment.app.DialogFragment // Cambiato da Fragment a DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.example.fighthub.controllori.ControlloreDB
 import kotlin.getValue
 
 class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragment
-
     private val utenteViewModel : UtenteViewModel by activityViewModels()
     private lateinit var profileImage: ImageView
     private lateinit var indicatorContainer: LinearLayout
@@ -57,7 +57,27 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
 
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
-        urls = utenteViewModel.getFoto() ?: emptyList()
+        //if nell'intent c'è qualcosa prendi url foto avversario, altrimenti questo sotto
+        val uidAvversario = arguments?.getString("uid_avversario")
+        if(uidAvversario!=null){
+            ControlloreDB.getDatiUtente(uidAvversario){ u ->
+                if(u != null){
+                    urls = u.urlFoto
+                    setupIndicators()
+                    val immagine = view.findViewById<ImageView>(R.id.profileImage)
+                    if(!urls.isNullOrEmpty()){
+                        Glide.with(requireContext()).load(urls[indiceAttuale]).into(immagine)
+                    }
+                }
+            }
+        } else {
+            urls = utenteViewModel.getFoto() ?: emptyList()
+            setupIndicators()
+            val immagine = view.findViewById<ImageView>(R.id.profileImage)
+            if(!urls.isNullOrEmpty()){
+                Glide.with(requireContext()).load(urls[indiceAttuale]).into(immagine)
+            }
+        }
 
         // AGGIUNTO: Logica per chiudere il dialog toccando lo sfondo scuro
         // Assicurati che nel tuo XML il ConstraintLayout principale abbia android:id="@+id/rootLayout"
@@ -67,7 +87,7 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
         }
 
         // Inizializza le lineette in alto
-        setupIndicators()
+
 
         // Gestione Click sull'immagine per cambiare foto (Mantenuta tua logica)
         profileImage.setOnClickListener {
@@ -79,10 +99,7 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
         profileImage.isClickable = true
 
         // Imposta foto
-        val immagine = view.findViewById<ImageView>(R.id.profileImage)
-        if(!urls.isNullOrEmpty()){
-            Glide.with(requireContext()).load(urls[indiceAttuale]).into(immagine)
-        }
+
     }
 
     private fun setupIndicators() {
