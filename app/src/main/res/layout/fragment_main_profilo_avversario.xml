@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2C2B2B"
+    android:padding="24dp">
+
+
+    <!-- Foto Profilo con un tocco di Glow Rosso -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivProfilo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop"
+        android:padding="2dp"
+        android:src="@drawable/icona_profilo_navbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircleImage"
+        app:strokeColor="#FF0000"
+        app:strokeWidth="3dp" />
+
+    <!-- Nome e Età -->
+    <TextView
+        android:id="@+id/tvNomeEta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Andrea, 21"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:fontFamily="sans-serif-black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivProfilo" />
+
+    <!-- Dati tecnici piccoli e eleganti -->
+    <TextView
+        android:id="@+id/tvPesoAltezza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="90 KG  •  180 CM"
+        android:textColor="#666666"
+        android:textSize="14sp"
+        android:letterSpacing="0.1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNomeEta" />
+
+    <TextView
+        android:id="@+id/tvRecensioniTitolo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="RECENSIONI"
+        android:textColor="#FF0000"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPesoAltezza" />
+
+    <!-- Lista recensioni senza Card esterna, più pulita -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecensioni"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRecensioniTitolo" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

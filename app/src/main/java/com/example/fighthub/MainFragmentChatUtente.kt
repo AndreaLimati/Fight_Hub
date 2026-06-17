@@ -1,5 +1,6 @@
 package com.example.fighthub
 
+import MainFragmentProfiloAvversario
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -96,6 +97,21 @@ class MainFragmentChatUtente : Fragment() {
             // Torna indietro nella pila dei Fragment
             parentFragmentManager.popBackStack()
         }
+
+        // Apertura profilo avversario
+        val btnApri_Profilo = view.findViewById<View>(R.id.btn_info_utente)
+        btnApri_Profilo.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                // Animazione: entra da destra, esce a sinistra
+                .setCustomAnimations(
+                    android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right
+                )
+                .replace(R.id.fragment_chat_container, MainFragmentProfiloAvversario()) // Carica il secondo fragment
+                .addToBackStack(null) // Permette di tornare indietro col tasto back
+                .commit()
+        }
+
 
         val btnInvia = view.findViewById<ImageButton>(R.id.btnSendMessage)
         btnInvia.setOnClickListener {
