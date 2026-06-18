@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
+import com.example.fighthub.MainFragmentRecensione
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Recensione
 import com.example.fighthub.viewModel.UtenteViewModel
+import com.google.android.material.button.MaterialButton
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -63,6 +65,8 @@ class MainFragmentProfiloAvversario : Fragment() {
                 // foto profilo
                 val immagine = view.findViewById<ImageView>(R.id.ivProfilo)
 
+                val inviaRecensione = view.findViewById<MaterialButton>(R.id.btnLasciaRecensione)
+
                 if(!urls.isNullOrEmpty()){
                     Glide.with(requireContext()).load(urls[0]).into(immagine)
                 }
@@ -80,6 +84,12 @@ class MainFragmentProfiloAvversario : Fragment() {
                         putString("uid_avversario", arguments?.getString("uid_avversario"))
                     }
                     gallery.show(parentFragmentManager, "foto_gallery")
+                }
+
+                inviaRecensione.setOnClickListener {
+                    //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
+                    val recensione = MainFragmentRecensione()  //Creazione istanza
+                    recensione.show(parentFragmentManager, "scrivi_recensione")
                 }
 
                 // Configura RecyclerView
