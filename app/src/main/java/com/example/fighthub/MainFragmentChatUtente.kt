@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Messaggio
 import com.example.fighthub.model.User
@@ -62,6 +64,7 @@ class MainFragmentChatUtente : Fragment() {
         // 1. Recupera il nome dell'utente passato dal Fragment precedente
         val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"
         val uidUtente = arguments?.getString("uidUtente")
+        val foto = arguments?.getString("foto")
         val uid1 = utenteViewModel.getUser()?.uid
         //recycler view
         val rvMessages = view.findViewById<RecyclerView>(R.id.rvMessages)
@@ -93,11 +96,15 @@ class MainFragmentChatUtente : Fragment() {
 
         //messaggi esempio
 
-
         rvMessages.layoutManager = LinearLayoutManager(requireContext())
         // Imposta il nome nella Toolbar
         val tvName = view.findViewById<TextView>(R.id.tvChatPartnerName)
         tvName.text = nomeUtente
+
+        val tvFoto = view.findViewById<ImageView>(R.id.ivProfileDetail)
+        if(!foto.isNullOrEmpty()){
+            Glide.with(requireContext()).load(foto).circleCrop().into(tvFoto)
+        }
 
         // 2. Gestione Tasto Back (Freccia in alto)
         val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
@@ -147,7 +154,6 @@ class MainFragmentChatUtente : Fragment() {
     fun raccogliDati(uid1: String?, uidUtente: String?, onResult: (Boolean) -> Unit){
         if(uid1!=null && uidUtente!=null){
             ControlloreDB.getListaMessaggi(uid1, uidUtente){ lista ->
-                Log.d("Check", "$lista")
                 if(lista!=null){
                     listaMessaggi.clear()
                     listaMessaggi.addAll(lista)

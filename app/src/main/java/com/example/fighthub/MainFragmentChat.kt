@@ -80,6 +80,8 @@ class MainFragmentChat : Fragment() {
             val bundle = Bundle()
             bundle.putString("uidUtente", user?.uid)
             bundle.putString("nome_utente", user?.nome)
+            val primaFoto = user?.urlFoto?.firstOrNull()
+            bundle.putString("foto", primaFoto)
             fragmentDettaglio.arguments = bundle
 
             // Transizione con il BackStack per poter tornare indietro
