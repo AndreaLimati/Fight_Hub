@@ -68,8 +68,11 @@ class MainFragmentChatUtente : Fragment() {
         messageAdapter = MessageAdapter(utenteViewModel.getUser(), listaMessaggi)
         rvMessages.adapter = messageAdapter
 
-        raccogliDati(uid1, uidUtente)
-        rvMessages.scrollToPosition(listaMessaggi.size - 1)
+        raccogliDati(uid1, uidUtente){ esito ->
+            if(esito){
+                rvMessages.scrollToPosition(listaMessaggi.size - 1)
+            }
+        }
 
         val fragmentRootView = view
 
@@ -129,7 +132,11 @@ class MainFragmentChatUtente : Fragment() {
                 if(uid1!=null && uidUtente!=null){
                     ControlloreDB.inviaMessaggio(uid1, uidUtente, testo){ esito ->
                         if(esito){
-                            //raccogliDati(uid1, uidUtente)
+                            raccogliDati(uid1, uidUtente){ esito ->
+                                if(esito){
+                                    rvMessages.scrollToPosition(listaMessaggi.size - 1)
+                                }
+                            }
                         }
                     }
                     view.findViewById<EditText>(R.id.etMessageInput).text.clear()
@@ -137,7 +144,7 @@ class MainFragmentChatUtente : Fragment() {
             }
         }
     }
-    fun raccogliDati(uid1: String?, uidUtente: String?){
+    fun raccogliDati(uid1: String?, uidUtente: String?, onResult: (Boolean) -> Unit){
         if(uid1!=null && uidUtente!=null){
             ControlloreDB.getListaMessaggi(uid1, uidUtente){ lista ->
                 Log.d("Check", "$lista")
@@ -145,6 +152,9 @@ class MainFragmentChatUtente : Fragment() {
                     listaMessaggi.clear()
                     listaMessaggi.addAll(lista)
                     messageAdapter.notifyDataSetChanged()
+                    onResult(true)
+                }else{
+                    onResult(false)
                 }
             }
         }
