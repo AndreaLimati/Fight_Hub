@@ -46,7 +46,7 @@ class RegistrazioneFragment2 : Fragment() {
         }
 
         // Bottone finale per inviare i dati
-        view.findViewById<Button>(R.id.btnContinua)?.setOnClickListener {
+        btnContinua?.setOnClickListener {
             if (artiSelezionate.isEmpty()) {
                 Toast.makeText(context, "Seleziona almeno un'arte marziale!", Toast.LENGTH_SHORT).show()
             } else {
