@@ -4,9 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,6 +67,12 @@ class MainFragmentProfiloAvversario : Fragment() {
                     Glide.with(requireContext()).load(urls[0]).into(immagine)
                 }
 
+                val btnBack = view.findViewById<ImageButton>(R.id.btnBack)
+                btnBack.setOnClickListener {
+                    // Torna indietro nella pila dei Fragment
+                    parentFragmentManager.popBackStack()
+                }
+
                 immagine.setOnClickListener {
                     //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
                     val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
@@ -87,6 +96,18 @@ class MainFragmentProfiloAvversario : Fragment() {
                 rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
             }
         }
+
+        //configurazione tasto back
+        val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
+        val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)
+            override fun handleOnBackPressed() {
+                // Se l'utente preme back, torniamo allo stato iniziale
+                parentFragmentManager.popBackStack()
+                motionLayout.transitionToStart()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
+
     }
 
     /*fun apriProfilo(view: View){

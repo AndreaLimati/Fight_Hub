@@ -22,6 +22,18 @@
         app:strokeColor="#FF0000"
         app:strokeWidth="3dp" />
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Torna indietro"
+        android:src="@drawable/tasto_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#FFFFFF" />
+
     <TextView
         android:id="@+id/tvNomeEta"
         android:layout_width="wrap_content"
