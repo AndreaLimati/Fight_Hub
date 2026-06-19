@@ -70,8 +70,6 @@ class MainFragmentMenu : Fragment() {
         val btnPass = view.findViewById<ImageButton>(R.id.btnNo)
         val btnFiltra = view.findViewById<ImageButton>(R.id.btn_filtra)
 
-        // Inizializza le lineette in alto
-
         //per tasto info
         var isOpen = false
         imageButton.setOnClickListener {
@@ -129,6 +127,12 @@ class MainFragmentMenu : Fragment() {
         //recensioni
         val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
         rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
+        val uidAvv = utenteMatch.uid
+        if(uidAvv!=null){
+            ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
+                rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+            }
+        }
 
         // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
