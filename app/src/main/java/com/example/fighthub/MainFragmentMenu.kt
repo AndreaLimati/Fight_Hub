@@ -18,6 +18,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fighthub.MainFragmentMenuFiltra
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
@@ -123,6 +125,10 @@ class MainFragmentMenu : Fragment() {
             // Forza il MotionLayout a spostarsi verso lo stato "pass"
             motionLayout.transitionToState(R.id.pass)
         }
+
+        //recensioni
+        val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
+        rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
 
         // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
@@ -230,6 +236,8 @@ class MainFragmentMenu : Fragment() {
             }
         }
     }
+
+
 
     private fun calcolaDistanza(): Float?{
         val results = FloatArray(1)

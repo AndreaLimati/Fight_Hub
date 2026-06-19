@@ -235,6 +235,28 @@
                 android:textColor="#B0FFFFFF"
                 android:layout_marginTop="10dp"/>
 
+            <TextView
+                android:id="@+id/tvRecensioniTitolo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="RECENSIONI"
+                android:textColor="#FF0000"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/descrizioneAvanzata" />
+
+            <!-- Lista recensioni senza Card esterna, più pulita -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecensioni"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRecensioniTitolo" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
