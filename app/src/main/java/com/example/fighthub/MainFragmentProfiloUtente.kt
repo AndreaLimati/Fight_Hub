@@ -69,6 +69,8 @@ class MainFragmentProfiloUtente : Fragment() {
             Glide.with(requireContext()).load(urls[0]).into(immagine)
         }
 
+
+
         immagine.setOnClickListener {
           //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
             val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
