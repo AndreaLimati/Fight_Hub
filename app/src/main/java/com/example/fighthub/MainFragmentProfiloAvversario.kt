@@ -89,6 +89,9 @@ class MainFragmentProfiloAvversario : Fragment() {
                 inviaRecensione.setOnClickListener {
                     //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
                     val recensione = MainFragmentRecensione()  //Creazione istanza
+                    recensione.arguments = Bundle().apply{
+                        putString("uid_avversario", arguments?.getString("uid_avversario"))
+                    }
                     recensione.show(parentFragmentManager, "scrivi_recensione")
                 }
 

@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import com.example.fighthub.model.Chat
 import com.example.fighthub.model.Messaggio
+import com.example.fighthub.model.Recensione
 import com.example.fighthub.model.Risposta
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -220,5 +221,14 @@ object ControlloreDB {
         distanzaMax = distanza
         artiVolute.clear()
         artiVolute.addAll(arti)
+    }
+
+    fun inviaRecensione(toUid: String, fromUid: String, valutazione: Int, testo: String, onResult: (Boolean) -> Unit){
+        val rec = Recensione(fromUid, toUid, testo, valutazione)
+        db.collection("recensione").add(rec).addOnSuccessListener{
+            onResult(true)
+        }.addOnFailureListener {
+            onResult(false)
+        }
     }
 }
