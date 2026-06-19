@@ -36,6 +36,18 @@ class MainFragmentProfiloAvversario : Fragment() {
         return inflater.inflate(R.layout.fragment_main_profilo_avversario, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Nasconde la navbar (usa l'ID che hai nella MainActivity)
+        requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.GONE
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Fa riapparire la navigation bar quando esci dal fragment (così la lista la ritrova)
+        requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.VISIBLE
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

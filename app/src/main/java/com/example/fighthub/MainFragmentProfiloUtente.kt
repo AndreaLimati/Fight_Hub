@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.fighthub.LoginActivity
 import com.example.fighthub.MainFragmentProfiloModifica
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
+import com.example.fighthub.MainFragmentStatistiche
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Recensione
@@ -62,6 +63,8 @@ class MainFragmentProfiloUtente : Fragment() {
         //bottoni oni oni ma material card non bottone lol
         val btnModifica = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnModifica)
 
+        val btnStatistiche = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnStatistiche)
+
         if(!urls.isNullOrEmpty()){
             Glide.with(requireContext()).load(urls[0]).into(immagine)
         }
@@ -70,6 +73,12 @@ class MainFragmentProfiloUtente : Fragment() {
           //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
             val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
             gallery.show(parentFragmentManager, "foto_gallery")
+        }
+
+        btnStatistiche.setOnClickListener {
+            //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
+            val statistiche = MainFragmentStatistiche()  //Creazione istanza
+            statistiche.show(parentFragmentManager, "statistiche")
         }
 
         //bottone modifica
