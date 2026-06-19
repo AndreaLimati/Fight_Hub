@@ -18,6 +18,7 @@ import com.example.fighthub.LoginActivity
 import com.example.fighthub.MainFragmentProfiloModifica
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
+import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Recensione
 import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -105,8 +106,12 @@ class MainFragmentProfiloUtente : Fragment() {
             Recensione("Chuck", "2","debole...", 1),
             Recensione("Rocky", "2","ha del potenziale ma deve allenarsi", 4)
         )
-
-        rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+        val uid = utenteViewModel.getUser()?.uid
+        if(uid!=null){
+            ControlloreDB.getListaRecensioni(uid){ listaRecensioni->
+                rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+            }
+        }
     }
 
     /*fun apriProfilo(view: View){
@@ -142,9 +147,11 @@ class RecensioniAdapter(private val lista: List<Recensione>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = lista[position]
         if(item.valutazione!=null){
-            holder.nome.text = item.recensoreUid
-            holder.testo.text = item.testo
-            holder.stelle.text = "★".repeat(item.valutazione!!)
+            ControlloreDB.getDatiUtente(item.recensoreUid){ u->
+                holder.nome.text = u?.nome + " " + u?.cognome
+                holder.testo.text = item.testo
+                holder.stelle.text = "★".repeat(item.valutazione!!)
+            }
         }
     }
 

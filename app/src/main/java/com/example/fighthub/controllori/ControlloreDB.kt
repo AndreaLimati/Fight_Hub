@@ -231,4 +231,15 @@ object ControlloreDB {
             onResult(false)
         }
     }
+
+    fun getListaRecensioni(toUid: String, onResult: (List<Recensione>) -> Unit){
+        db.collection("recensione").whereEqualTo("recensitoUid", toUid).get().addOnSuccessListener { risp ->
+            val listaRecensioni: List<Recensione> = risp.toObjects(Recensione::class.java)
+            if(listaRecensioni.isNotEmpty()){
+                onResult(listaRecensioni)
+            }else{
+                onResult(emptyList())
+            }
+        }
+    }
 }

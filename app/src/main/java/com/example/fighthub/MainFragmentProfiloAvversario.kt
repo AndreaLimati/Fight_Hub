@@ -19,7 +19,6 @@ import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.MainFragmentRecensione
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
-import com.example.fighthub.model.Recensione
 import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.android.material.button.MaterialButton
 import java.time.LocalDate
@@ -67,6 +66,8 @@ class MainFragmentProfiloAvversario : Fragment() {
 
                 val inviaRecensione = view.findViewById<MaterialButton>(R.id.btnLasciaRecensione)
 
+                val uidAvv = arguments?.getString("uid_avversario")
+
                 if(!urls.isNullOrEmpty()){
                     Glide.with(requireContext()).load(urls[0]).into(immagine)
                 }
@@ -81,7 +82,7 @@ class MainFragmentProfiloAvversario : Fragment() {
                     //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
                     val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
                     gallery.arguments = Bundle().apply{
-                        putString("uid_avversario", arguments?.getString("uid_avversario"))
+                        putString("uid_avversario", uidAvv)
                     }
                     gallery.show(parentFragmentManager, "foto_gallery")
                 }
@@ -90,7 +91,7 @@ class MainFragmentProfiloAvversario : Fragment() {
                     //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
                     val recensione = MainFragmentRecensione()  //Creazione istanza
                     recensione.arguments = Bundle().apply{
-                        putString("uid_avversario", arguments?.getString("uid_avversario"))
+                        putString("uid_avversario", uidAvv)
                     }
                     recensione.show(parentFragmentManager, "scrivi_recensione")
                 }
@@ -100,13 +101,11 @@ class MainFragmentProfiloAvversario : Fragment() {
                 rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
 
                 // Dati Mock
-                val listaRecensioni = listOf(
-                    Recensione("Utente1","2", "buon combattente, abbiamo avuto una bella sessione di sparring", 5),
-                    Recensione("Chuck", "2","debole...", 1),
-                    Recensione("Rocky", "2","ha del potenziale ma deve allenarsi", 4)
-                )
-
-                rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+                if(uidAvv!=null){
+                    ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
+                        rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+                    }
+                }
             }
         }
 
@@ -120,7 +119,6 @@ class MainFragmentProfiloAvversario : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
-
     }
 
     /*fun apriProfilo(view: View){
