@@ -23,8 +23,8 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
 
     override fun onStart() {
         super.onStart()
-        val window = dialog?.window
-        if (window != null) {
+
+        dialog?.window?.let { window ->
             // 1. Rimuove il background predefinito del sistema (che è nero/bianco)
             window.setBackgroundDrawableResource(android.R.color.transparent)
 
@@ -37,10 +37,10 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
     }
 
     // AGGIUNTO: Imposta lo stile per la trasparenza e il tutto schermo
-    override fun onCreate(savedInstanceState: Bundle?) {
+   /* override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
