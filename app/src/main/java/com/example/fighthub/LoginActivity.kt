@@ -18,6 +18,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.WindowCompat
 import com.example.fighthub.controllori.ControlloreDB
 import com.google.firebase.auth.FirebaseAuth
+import androidx.core.view.isVisible
+import androidx.core.net.toUri
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +45,11 @@ class LoginActivity : AppCompatActivity() {
         //fine  status bar
 
         //Scheletro email
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         //video
         val videoView = findViewById<VideoView>(R.id.videoView)
         val path = "android.resource://" + packageName + "/" + R.raw.mgs3_video
-        val uri = Uri.parse(path)
+        val uri = path.toUri()
 
         //layout
         val layoutBottoni = findViewById<LinearLayout>(R.id.layout_bottoni)
@@ -71,12 +73,12 @@ class LoginActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
 
-                if (layoutLogin.visibility == View.VISIBLE) {
+                if (layoutLogin.isVisible) {
                     layoutLogin.visibility = View.GONE
                     layoutBottoni.visibility = View.VISIBLE
                 }
 
-                else if (layoutRegistrazione.visibility == View.VISIBLE) {
+                else if (layoutRegistrazione.isVisible) {
                     layoutRegistrazione.visibility = View.GONE
                     layoutBottoni.visibility = View.VISIBLE
                 }
