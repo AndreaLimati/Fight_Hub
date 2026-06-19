@@ -124,15 +124,6 @@ class MainFragmentMenu : Fragment() {
             motionLayout.transitionToState(R.id.pass)
         }
 
-        //recensioni
-        val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
-        rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
-        val uidAvv = utenteMatch.uid
-        if(uidAvv!=null){
-            ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
-                rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
-            }
-        }
 
         // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
@@ -220,6 +211,15 @@ class MainFragmentMenu : Fragment() {
                             "Peso: ${utenteMatch.peso}kg\n" +
                             "Altezza: ${utenteMatch.altezza}cm\n" +
                             "Distanza: ${distanza}km"
+
+        val rvRecensioni = view?.findViewById<RecyclerView>(R.id.rvRecensioni)
+        rvRecensioni?.layoutManager = LinearLayoutManager(requireContext())
+        val uidAvv = utenteMatch.uid
+        if(uidAvv!=null){
+            ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
+                rvRecensioni?.adapter = RecensioniAdapter(listaRecensioni)
+            }
+        }
     }
 
     private fun visualizzaArtiMarziali(lista: List<String>){
