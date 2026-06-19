@@ -242,4 +242,8 @@ object ControlloreDB {
             }
         }
     }
+
+    fun getStatistiche(uid: String, onResult: (Double, Map<String, Int>) -> Unit){
+
+    }
 }
