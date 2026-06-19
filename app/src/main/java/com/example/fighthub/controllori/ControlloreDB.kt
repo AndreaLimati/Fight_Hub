@@ -244,6 +244,23 @@ object ControlloreDB {
     }
 
     fun getStatistiche(uid: String, onResult: (Double, Map<String, Int>) -> Unit){
+        var media = 0.0
+        var numeroRecLasciate = 0
+        var numeroRecRicevute = 0
+        var nMatch = 0
+        var likeRicevuti = 0
+        var passRicevuti = 0
 
+        getListaRecensioni(uid){ listaRec ->
+            if(listaRec.isNotEmpty()){
+                for(rec in listaRec){
+                    if(rec.valutazione!=null){
+                        media+=rec.valutazione!!
+                    }
+                }
+                numeroRecRicevute = listaRec.size
+                media/=numeroRecRicevute
+            }
+        }
     }
 }
