@@ -117,7 +117,7 @@ class MainFragmentChat : Fragment() {
             ControlloreDB.getDatiUtente(altroUtente){ user ->
                 holder.nome.text = user?.nome
                 if(!user?.urlFoto.isNullOrEmpty()){
-                    Glide.with(context).load(user?.urlFoto[0]).into(holder.foto)
+                    Glide.with(context).load(user?.urlFoto[0]).circleCrop().into(holder.foto)
                 }
                 if(item.ultimoAggiornamento!=null){
                     holder.testo.text = item.ultimoAggiornamento
