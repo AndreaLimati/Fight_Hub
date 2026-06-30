@@ -170,9 +170,9 @@ object ControlloreDB {
         db.collection("chat").add(chat)
     }
 
-    fun getListaChat(utente: User, onResult: (List<Chat>?) -> Unit){
-        if(utente.uid!=null){
-            db.collection("chat").whereArrayContains("partecipanti", utente.uid!!).get().addOnSuccessListener { risposta ->
+    fun getListaChat(uid: String, onResult: (List<Chat>?) -> Unit){
+        if(uid.isNotEmpty()){
+            db.collection("chat").whereArrayContains("partecipanti", uid).get().addOnSuccessListener { risposta ->
                 val listaChat: List<Chat> = risposta.toObjects(Chat::class.java)
                 if(listaChat.isEmpty()){
                     onResult(null)
@@ -260,6 +260,37 @@ object ControlloreDB {
                 }
                 numeroRecRicevute = listaRec.size
                 media/=numeroRecRicevute
+            }
+            db.collection("recensione").whereEqualTo("recensoreUid", uid).get().addOnSuccessListener { rispo ->
+                if(rispo.isEmpty){
+                    numeroRecLasciate = 0
+                } else {
+                    numeroRecLasciate = rispo.size()
+                }
+                getListaChat(uid){ listaMatch ->
+                    if(listaMatch.isNullOrEmpty()){
+                        nMatch = 0
+                    } else {
+                        nMatch = listaMatch.size
+                    }
+                    db.collection("risposta").whereEqualTo("fromUid", uid).get().addOnSuccessListener { risp ->
+                        val listaRisp: List<Risposta> = risp.toObjects(Risposta::class.java)
+                        for(r in listaRisp){
+                            if(r.tipo == "LIKE"){
+                                likeRicevuti++
+                            } else {
+                                passRicevuti++
+                            }
+                        }
+                        var risposta = mutableMapOf<String, Int>()
+                        risposta.put("recLasciate", numeroRecLasciate)
+                        risposta.put("recRicevute", numeroRecRicevute)
+                        risposta.put("numeroMatch", nMatch)
+                        risposta.put("likeRicevuti", likeRicevuti)
+                        risposta.put("passRicevuti", passRicevuti)
+                        onResult(media, risposta)
+                    }
+                }
             }
         }
     }

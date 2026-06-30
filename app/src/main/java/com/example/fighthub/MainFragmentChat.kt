@@ -59,7 +59,7 @@ class MainFragmentChat : Fragment() {
 
     private fun raccogliDati(){
         if(utenteViewModel.getUser()!=null){
-            ControlloreDB.getListaChat(utenteViewModel.getUser()!!){ res ->
+            ControlloreDB.getListaChat(utenteViewModel.getUser()?.uid!!){ res ->
                 if(res!=null){
                     listaChat.clear()
                     listaChat.addAll(res)
