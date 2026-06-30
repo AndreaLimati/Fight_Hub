@@ -32,16 +32,16 @@ class MainFragmentStatistiche : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var user = utenteViewModel.getUser()
-        var textMedia = view.findViewById<TextView>(R.id.textAverageRating)
-        var ratingMedia = view.findViewById<RatingBar>(R.id.ratingBar)
-        var recensioniRicevute = view.findViewById<TextView>(R.id.textReviewsReceivedCount)
-        var recensioniLasciate = view.findViewById<TextView>(R.id.textReviewsLeftCount)
-        var matchEffettuati = view.findViewById<TextView>(R.id.textOpponentsCount)
-        var contoLike = view.findViewById<TextView>(R.id.textLikeCount)
-        var contoPass = view.findViewById<TextView>(R.id.textDislikeCount)
-        var progressBar = view.findViewById<ProgressBar>(R.id.progressLikeRatio)
-        var btnAnnulla = view.findViewById<Button>(R.id.buttonClose)
+        val user = utenteViewModel.getUser()
+        val textMedia = view.findViewById<TextView>(R.id.textAverageRating)
+        val ratingMedia = view.findViewById<RatingBar>(R.id.ratingBar)
+        val recensioniRicevute = view.findViewById<TextView>(R.id.textReviewsReceivedCount)
+        val recensioniLasciate = view.findViewById<TextView>(R.id.textReviewsLeftCount)
+        val matchEffettuati = view.findViewById<TextView>(R.id.textOpponentsCount)
+        val contoLike = view.findViewById<TextView>(R.id.textLikeCount)
+        val contoPass = view.findViewById<TextView>(R.id.textDislikeCount)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressLikeRatio)
+        val btnAnnulla = view.findViewById<Button>(R.id.buttonClose)
 
         if(user!=null){
             ControlloreDB.getStatistiche(user.uid!!){ media, lista ->
@@ -50,13 +50,14 @@ class MainFragmentStatistiche : DialogFragment() {
                 recensioniRicevute.text = lista["recRicevute"].toString()
                 recensioniLasciate.text = lista["recLasciate"].toString()
                 matchEffettuati.text = lista["numeroMatch"].toString()
-                contoLike.text = lista["likeRicevuti"].toString()
-                contoPass.text = lista["passRicevuti"].toString()
-                if(lista["likeRicevuti"]!=0 || lista["passRicevuti"]!=0){
-                    var totLike = lista["likeRicevuti"]?.plus(lista["passRicevuti"]!!)
-                    if(totLike!=0){
-                        progressBar.progress = lista["likeRicevuti"]?.div(totLike!!)!!*100
-                    }
+                val like: Int = lista["likeRicevuti"]!!
+                val pass: Int = lista["passRicevuti"]!!
+                contoLike.text = like.toString()
+                contoPass.text = pass.toString()
+                if(like!=0 || pass!=0){
+                    val totRisp = (like + pass).toFloat()
+                    val ratio = ((like/totRisp)*100).toInt()
+                    progressBar.progress = ratio
                 }
             }
         }

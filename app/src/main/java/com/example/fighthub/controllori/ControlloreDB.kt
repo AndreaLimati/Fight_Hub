@@ -273,7 +273,7 @@ object ControlloreDB {
                     } else {
                         nMatch = listaMatch.size
                     }
-                    db.collection("risposta").whereEqualTo("fromUid", uid).get().addOnSuccessListener { risp ->
+                    db.collection("risposta").whereEqualTo("toUid", uid).get().addOnSuccessListener { risp ->
                         val listaRisp: List<Risposta> = risp.toObjects(Risposta::class.java)
                         for(r in listaRisp){
                             if(r.tipo == "LIKE"){
