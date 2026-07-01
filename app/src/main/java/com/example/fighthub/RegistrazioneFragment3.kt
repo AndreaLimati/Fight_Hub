@@ -86,6 +86,7 @@ class RegistrazioneFragment3 : Fragment() {
                     Toast.makeText(requireContext(), "Inserisci almeno una foto!", Toast.LENGTH_SHORT).show()
                 } else {
                     // Procedi e passa la lista di foto all'Activity
+                    btnContinua.isEnabled = false
                     val urlImmagini = ControlloreStorage.salvaFoto(requireContext(), selectedImagesUris)
                     utenteViewModel.updateUrlFoto(urlImmagini)
                     (activity as? RegistrationActivity)?.navigaAlQuartoStep()
