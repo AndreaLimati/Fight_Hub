@@ -1,3 +1,4 @@
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -120,7 +121,7 @@ class MainFragmentProfiloUtente : Fragment() {
         val uid = utenteViewModel.getUser()?.uid
         if(uid!=null){
             ControlloreDB.getListaRecensioni(uid){ listaRecensioni->
-                rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+                rvRecensioni.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
             }
         }
     }
@@ -141,13 +142,14 @@ class MainFragmentProfiloUtente : Fragment() {
 }
 
 // Adapter Interno per semplicità di copia
-class RecensioniAdapter(private val lista: List<Recensione>) :
+class RecensioniAdapter(private val context: Context, private val lista: List<Recensione>) :
     RecyclerView.Adapter<RecensioniAdapter.ViewHolder>() {
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val nome = v.findViewById<TextView>(R.id.tvAutore)
         val testo = v.findViewById<TextView>(R.id.tvTesto)
         val stelle = v.findViewById<TextView>(R.id.tvStelle)
+        val immagine = v.findViewById<ImageView>(R.id.ivAutore)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -162,6 +164,9 @@ class RecensioniAdapter(private val lista: List<Recensione>) :
                 holder.nome.text = u?.nome + " " + u?.cognome
                 holder.testo.text = item.testo
                 holder.stelle.text = "★".repeat(item.valutazione!!)
+                if(!u?.urlFoto.isNullOrEmpty()){
+                    Glide.with(context).load(u?.urlFoto?.get(0)).into(holder.immagine)
+                }
             }
         }
     }

@@ -115,7 +115,7 @@ class MainFragmentProfiloAvversario : Fragment() {
                 // Dati Mock
                 if(uidAvv!=null){
                     ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
-                        rvRecensioni.adapter = RecensioniAdapter(listaRecensioni)
+                        rvRecensioni.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
                     }
                 }
             }
