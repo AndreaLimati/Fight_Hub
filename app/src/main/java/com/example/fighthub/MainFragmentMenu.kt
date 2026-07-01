@@ -217,7 +217,7 @@ class MainFragmentMenu : Fragment() {
         val uidAvv = utenteMatch.uid
         if(uidAvv!=null){
             ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
-                rvRecensioni?.adapter = RecensioniAdapter(listaRecensioni)
+                rvRecensioni?.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
             }
         }
     }
