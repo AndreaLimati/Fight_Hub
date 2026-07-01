@@ -48,10 +48,9 @@
         android:id="@+id/scrollFiltri"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintHeight_percent="0.6"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/txtSubtitleFiltri"
         app:layout_constraintBottom_toTopOf="@+id/btnApplicaFiltri">
 
@@ -60,15 +59,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ======================================================= -->
-            <!-- DA QUI IN POI PUOI INSERIRE I TUOI FILTRI (Esempio Spazio) -->
-            <!-- ======================================================= -->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="4dp"
                 android:padding="16dp"
                 android:background="#1A1A1A">
 
@@ -115,7 +111,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="#1A1A1A"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="4dp"
@@ -201,23 +199,9 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="[ INSERISCI QUI I TUOI COMPONENTI ]"
-                android:textColor="#44FFFFFF"
-                android:gravity="center"
-                android:padding="40dp"
-                android:textStyle="italic"/>
-
-            <!-- Puoi metterci: Seekbar per il raggio d'azione,
-                 Checkbox per le discipline (MMA, Boxe),
-                 RadioButtons per il genere, ecc. -->
-
-            <!-- ======================================================= -->
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 
     <!-- BOTTONE ANNULLA / AZZERA -->
     <Button

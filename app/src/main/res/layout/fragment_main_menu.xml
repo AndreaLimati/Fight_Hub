@@ -51,7 +51,7 @@
                 android:scaleType="centerCrop"
                 android:clickable="true"
                 android:focusable="true"
-                android:src="@drawable/chuck_norris" />
+                android:src="@drawable/icona_profilo_navbar" />
 
             <!-- Gradiente scuro interno per leggibilità testo -->
             <View
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="8dp"
-                android:text="Chuck 86"
+                android:text="Caricamento..."
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="16dp"
-                android:text="Non sto cercando un 'match'.\nSto cercando qualcuno che sopravviva."
+                android:text="Caricamento..."
                 android:textColor="#E0FFFFFF"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/tagContainer"
@@ -231,9 +231,15 @@
                 android:id="@+id/descrizioneAvanzata"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="sus."
-                android:textColor="#B0FFFFFF"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="16dp"
+
+                android:lineSpacingExtra="10dp"
+
+                android:textColor="#E0FFFFFF"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-light"
+                android:letterSpacing="0.02"
+                android:text="Nato il: --/--/----\nPeso: --kg\nAltezza: --cm\nDistanza: --km" />
 
             <TextView
                 android:id="@+id/tvRecensioniTitolo"
