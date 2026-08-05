@@ -66,7 +66,7 @@ class RegistrazioneFragment1 : Fragment() {
             val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0
             val altezza = view.findViewById<EditText>(R.id.etAltezza).text.toString().toIntOrNull() ?: 0
             val descrizione = view.findViewById<EditText>(R.id.etDescrizione).text.toString()
-            if(nome.isEmpty() || cognome.isEmpty() || descrizione.isEmpty()){
+            if(nome.isEmpty() || cognome.isEmpty() || descrizione.isEmpty() || dateString==null){
                 Toast.makeText(requireContext(), "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
             }else{
                 //salvo info sul viewmodel
