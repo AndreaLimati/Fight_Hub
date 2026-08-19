@@ -184,40 +184,47 @@ class MainFragmentMenu : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun aggiornaInterfaccia() {
-        // Cambia la foto
-        Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
-
-        // Cambia il colore delle lineette
-        for (i in 0 until indicatorContainer.childCount) {
-            val indicator = indicatorContainer.getChildAt(i)
-            if (i == indiceAttuale) {
-                indicator.setBackgroundColor(Color.WHITE)
-            } else {
-                indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
-            }
-        }
-
-        //cambia le scritte occhio che cambia ogni volta che clicchi la foto dovrei solo cambiare foto ricordati!!!!
-        Log.d("cambiamo utente", "${utenteMatch.nome}")
-
         val titolo = view?.findViewById<TextView>(R.id.txtName)
         val desc = view?.findViewById<TextView>(R.id.txtBio)
         val descAvanzata = view?.findViewById<TextView>(R.id.descrizioneAvanzata)
         val distanza = calcolaDistanza()?.roundToInt()
-        titolo?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
-        desc?.text = "${utenteMatch.descrizione}"
-        visualizzaArtiMarziali(utenteMatch.artiPraticate)
-        descAvanzata?.text = "Nato il: ${utenteMatch.dataNascita}\n" +
-                            "Peso: ${utenteMatch.peso}kg\n" +
-                            "Altezza: ${utenteMatch.altezza}cm\n" +
-                            "Distanza: ${distanza}km"
+        if(codaUtenti.isEmpty()){
+            titolo?.text = "Utenti terminati"
+            desc?.text = ""
+            descAvanzata?.text = ""
+            visualizzaArtiMarziali(emptyList())
+        } else {
+            // Cambia la foto
+            Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
 
-        val rvRecensioni = view?.findViewById<RecyclerView>(R.id.rvRecensioni)
-        rvRecensioni?.layoutManager = LinearLayoutManager(requireContext())
-        val uidAvv = utenteMatch.uid
-        if(uidAvv!=null){
-            ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
-                rvRecensioni?.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
+            // Cambia il colore delle lineette
+            for (i in 0 until indicatorContainer.childCount) {
+                val indicator = indicatorContainer.getChildAt(i)
+                if (i == indiceAttuale) {
+                    indicator.setBackgroundColor(Color.WHITE)
+                } else {
+                    indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
+                }
+            }
+
+            //cambia le scritte occhio che cambia ogni volta che clicchi la foto dovrei solo cambiare foto ricordati!!!!
+            Log.d("cambiamo utente", "${utenteMatch.nome}")
+
+            titolo?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
+            desc?.text = "${utenteMatch.descrizione}"
+            visualizzaArtiMarziali(utenteMatch.artiPraticate)
+            descAvanzata?.text = "Nato il: ${utenteMatch.dataNascita}\n" +
+                    "Peso: ${utenteMatch.peso}kg\n" +
+                    "Altezza: ${utenteMatch.altezza}cm\n" +
+                    "Distanza: ${distanza}km"
+
+            val rvRecensioni = view?.findViewById<RecyclerView>(R.id.rvRecensioni)
+            rvRecensioni?.layoutManager = LinearLayoutManager(requireContext())
+            val uidAvv = utenteMatch.uid
+            if(uidAvv!=null){
+                ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
+                    rvRecensioni?.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
+                }
             }
         }
     }
