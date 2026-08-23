@@ -119,6 +119,16 @@ class MainFragmentProfiloAvversario : Fragment() {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, // Assicura che la callback si distrugga con il ciclo di vita del Fragment
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Esegue il popBackStack
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
+
         //configurazione tasto back
         val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
         val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)

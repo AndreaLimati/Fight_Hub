@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -209,6 +210,7 @@ class MainFragmentProfiloModifica : Fragment() {
                     Toast.makeText(requireContext(), "Errore durante il salvataggio del profilo", Toast.LENGTH_LONG).show()
                 }
             }
+            parentFragmentManager.popBackStack()
         }
 
         photoAdapter = PhotoAdapter()
@@ -218,6 +220,21 @@ class MainFragmentProfiloModifica : Fragment() {
         rvPhotos.adapter = photoAdapter
 
         return rootView
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, // Assicura che la callback si distrugga con il ciclo di vita del Fragment
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Esegue il popBackStack
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
     }
 
     private fun toggleSelezione(btn: Button) {
