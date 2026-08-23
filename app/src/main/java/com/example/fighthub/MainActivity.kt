@@ -22,7 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MyPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
-    override fun getItemCount(): Int = 3 // Numero dei tuoi fragment
+    override fun getItemCount(): Int = 3 // Numero dei fragment
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {

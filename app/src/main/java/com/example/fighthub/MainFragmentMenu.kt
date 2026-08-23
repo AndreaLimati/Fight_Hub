@@ -25,6 +25,7 @@ import com.example.fighthub.MainFragmentMenuFiltra
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
+import com.example.fighthub.controllori.ControlloreInterno
 import com.example.fighthub.model.Risposta
 import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
@@ -187,7 +188,7 @@ class MainFragmentMenu : Fragment() {
         val titolo = view?.findViewById<TextView>(R.id.txtName)
         val desc = view?.findViewById<TextView>(R.id.txtBio)
         val descAvanzata = view?.findViewById<TextView>(R.id.descrizioneAvanzata)
-        val distanza = calcolaDistanza()?.roundToInt()
+        val distanza = ControlloreInterno.calcolaDistanza(utenteViewModel.getLat(), utenteViewModel.getLon(), utenteMatch.lat, utenteMatch.lon)?.roundToInt()
         if(codaUtenti.isEmpty()){
             titolo?.text = "Utenti terminati"
             desc?.text = ""
@@ -245,22 +246,6 @@ class MainFragmentMenu : Fragment() {
             mappaId[arte]?.apply{
                 visibility = View.VISIBLE
             }
-        }
-    }
-
-
-
-    private fun calcolaDistanza(): Float?{
-        val results = FloatArray(1)
-        val lat1 = utenteViewModel.getLat()
-        val lon1 = utenteViewModel.getLon()
-        val lat2 = utenteMatch.lat
-        val lon2 = utenteMatch.lon
-        if(lat1!=null && lat2!=null && lon1!=null && lon2!=null){
-            Location.distanceBetween(lat1, lon1, lat2, lon2, results)
-            return (results[0]/1000)
-        }else{
-            return null
         }
     }
 

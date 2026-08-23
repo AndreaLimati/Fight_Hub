@@ -1,7 +1,9 @@
 package com.example.fighthub.controllori
 
+import android.content.Context
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
 import com.example.fighthub.model.Chat
 import com.example.fighthub.model.Messaggio
 import com.example.fighthub.model.Recensione
@@ -131,16 +133,16 @@ object ControlloreDB {
         punteggio += (stiliComuni.size * 25.0)
 
         //filtro distanza
-        val results = FloatArray(1)
-        if(user1.lat!=null && user1.lon!=null && user2.lat!=null && user2.lon!=null){
-            Location.distanceBetween(user1.lat!!, user1.lon!!, user2.lat!!, user2.lon!!, results)
-        }
-        val dist = results[0]/1000
-        punteggio += when {
-            dist <= distanzaMax/4 -> 30.0
-            dist <= distanzaMax/2 -> 15.0
-            dist <= distanzaMax -> 5.0
-            else -> 0.0
+        val dist = ControlloreInterno.calcolaDistanza(user1.lat, user1.lon, user2.lat, user2.lon)
+        if (dist != null) {
+            punteggio += when {
+                dist <= distanzaMax/4 -> 30.0
+                dist <= distanzaMax/2 -> 15.0
+                dist <= distanzaMax -> 5.0
+                else -> 0.0
+            }
+        }else{
+            punteggio = 0.0
         }
         return punteggio
     }

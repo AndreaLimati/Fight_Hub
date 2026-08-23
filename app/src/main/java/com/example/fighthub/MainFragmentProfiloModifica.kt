@@ -55,9 +55,8 @@ class MainFragmentProfiloModifica : Fragment() {
         override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
             val fotoReali = utenteViewModel.getFoto() ?: emptyList()
 
-            // Controlliamo se nella nostra lista MOCK c'è una foto per questa posizione
             if (position < fotoReali.size) {
-                // --- CASO: FOTO PRESENTE (Mock) ---
+                // foto presente
                 val currentUri = fotoReali[position]
 
                 Glide.with(holder.itemView.context)
@@ -77,10 +76,7 @@ class MainFragmentProfiloModifica : Fragment() {
                 holder.img.setOnClickListener(null)
 
             } else {
-                // --- CASO: SLOT VUOTO (Tasto +) ---
-                // Ripuliamo lo sfondo colorato del mock
-
-                //svuotiamo il glide per sicurezza
+                // foto non presente
                 Glide.with(holder.itemView.context).clear(holder.img)
 
                 holder.img.setBackgroundColor(Color.parseColor("#1E1E1E"))

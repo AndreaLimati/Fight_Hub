@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.fighthub.controllori.ControlloreInterno
 import com.example.fighthub.viewModel.UtenteViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Date
@@ -66,9 +67,7 @@ class RegistrazioneFragment1 : Fragment() {
             val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0
             val altezza = view.findViewById<EditText>(R.id.etAltezza).text.toString().toIntOrNull() ?: 0
             val descrizione = view.findViewById<EditText>(R.id.etDescrizione).text.toString()
-            if(nome.isEmpty() || cognome.isEmpty() || descrizione.isEmpty() || dateString==null){
-                Toast.makeText(requireContext(), "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
-            }else{
+            if(ControlloreInterno.controllaDati(nome, cognome, dateString!!, peso, altezza, descrizione)){
                 //salvo info sul viewmodel
                 utenteViewModel.updateNome(nome)
                 utenteViewModel.updateCognome(cognome)
@@ -78,6 +77,8 @@ class RegistrazioneFragment1 : Fragment() {
                 utenteViewModel.updateDescrizione(descrizione)
                 //mando allo step 2
                 (activity as? RegistrationActivity)?.navigaAlSecondoStep()
+            }else{
+                Toast.makeText(requireContext(), "Campi non validi", Toast.LENGTH_SHORT).show()
             }
         }
         return view
