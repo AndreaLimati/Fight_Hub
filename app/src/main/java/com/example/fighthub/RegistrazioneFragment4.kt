@@ -62,6 +62,7 @@ class RegistrazioneFragment4 : Fragment() {
 
         accetta.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.putExtra("uid", utenteViewModel.getUser()!!.uid)
             ControlloreDB.autenticaUtenteRegistrazione(utenteViewModel.getUser()!!, passw!!)
             startActivity(intent)
         }

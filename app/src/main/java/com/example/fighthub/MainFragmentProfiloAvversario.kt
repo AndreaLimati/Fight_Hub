@@ -27,8 +27,6 @@ import java.time.format.DateTimeFormatter
 import kotlin.getValue
 
 class MainFragmentProfiloAvversario : Fragment() {
-    private val utenteViewModel : UtenteViewModel by activityViewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -132,22 +130,6 @@ class MainFragmentProfiloAvversario : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
     }
-
-    /*fun apriProfilo(view: View){
-        requireActivity().supportFragmentManager.beginTransaction()
-            // Animazione: entra da destra, esce a sinistra
-            .setCustomAnimations(
-                android.R.anim.fade_in, // Entrata galleria
-                android.R.anim.fade_out, // Uscita galleria
-                android.R.anim.fade_in, // Ritorno al profilo (quando premi back)
-                android.R.anim.fade_out  // Scomparsa galleria (quando premi back)
-            )
-            .replace(R.id.fragment_main_container, MainFragmentProfiloUtenteFoto()) // Carica Fight
-            .addToBackStack(null) // Permette di tornare indietro col tasto back
-            .commit()
-    } */
 }
-
-// Adapter Interno per semplicità di copia
 
 

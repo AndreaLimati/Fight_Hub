@@ -31,7 +31,6 @@ class RegistrationActivity : AppCompatActivity() {
 
         utenteViewModel.updateEmailPassw(email)
 
-
         //video in fondo
         videoView.setVideoURI(uri)
         videoView.setOnPreparedListener { mp ->

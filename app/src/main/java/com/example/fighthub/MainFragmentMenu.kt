@@ -25,6 +25,7 @@ import com.example.fighthub.MainFragmentMenuFiltra
 import com.example.fighthub.MainFragmentProfiloUtenteFoto
 import com.example.fighthub.R
 import com.example.fighthub.controllori.ControlloreDB
+import com.example.fighthub.controllori.ControlloreInterno
 import com.example.fighthub.model.Risposta
 import com.example.fighthub.model.User
 import com.example.fighthub.viewModel.UtenteViewModel
@@ -184,40 +185,47 @@ class MainFragmentMenu : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun aggiornaInterfaccia() {
-        // Cambia la foto
-        Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
-
-        // Cambia il colore delle lineette
-        for (i in 0 until indicatorContainer.childCount) {
-            val indicator = indicatorContainer.getChildAt(i)
-            if (i == indiceAttuale) {
-                indicator.setBackgroundColor(Color.WHITE)
-            } else {
-                indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
-            }
-        }
-
-        //cambia le scritte occhio che cambia ogni volta che clicchi la foto dovrei solo cambiare foto ricordati!!!!
-        Log.d("cambiamo utente", "${utenteMatch.nome}")
-
         val titolo = view?.findViewById<TextView>(R.id.txtName)
         val desc = view?.findViewById<TextView>(R.id.txtBio)
         val descAvanzata = view?.findViewById<TextView>(R.id.descrizioneAvanzata)
-        val distanza = calcolaDistanza()?.roundToInt()
-        titolo?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
-        desc?.text = "${utenteMatch.descrizione}"
-        visualizzaArtiMarziali(utenteMatch.artiPraticate)
-        descAvanzata?.text = "Nato il: ${utenteMatch.dataNascita}\n" +
-                            "Peso: ${utenteMatch.peso}kg\n" +
-                            "Altezza: ${utenteMatch.altezza}cm\n" +
-                            "Distanza: ${distanza}km"
+        val distanza = ControlloreInterno.calcolaDistanza(utenteViewModel.getLat(), utenteViewModel.getLon(), utenteMatch.lat, utenteMatch.lon)?.roundToInt()
+        if(codaUtenti.isEmpty()){
+            titolo?.text = "Utenti terminati"
+            desc?.text = ""
+            descAvanzata?.text = ""
+            visualizzaArtiMarziali(emptyList())
+        } else {
+            // Cambia la foto
+            Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
 
-        val rvRecensioni = view?.findViewById<RecyclerView>(R.id.rvRecensioni)
-        rvRecensioni?.layoutManager = LinearLayoutManager(requireContext())
-        val uidAvv = utenteMatch.uid
-        if(uidAvv!=null){
-            ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
-                rvRecensioni?.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
+            // Cambia il colore delle lineette
+            for (i in 0 until indicatorContainer.childCount) {
+                val indicator = indicatorContainer.getChildAt(i)
+                if (i == indiceAttuale) {
+                    indicator.setBackgroundColor(Color.WHITE)
+                } else {
+                    indicator.setBackgroundColor(Color.parseColor("#80FFFFFF"))
+                }
+            }
+
+            //cambia le scritte occhio che cambia ogni volta che clicchi la foto dovrei solo cambiare foto ricordati!!!!
+            Log.d("cambiamo utente", "${utenteMatch.nome}")
+
+            titolo?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
+            desc?.text = "${utenteMatch.descrizione}"
+            visualizzaArtiMarziali(utenteMatch.artiPraticate)
+            descAvanzata?.text = "Nato il: ${utenteMatch.dataNascita}\n" +
+                    "Peso: ${utenteMatch.peso}kg\n" +
+                    "Altezza: ${utenteMatch.altezza}cm\n" +
+                    "Distanza: ${distanza}km"
+
+            val rvRecensioni = view?.findViewById<RecyclerView>(R.id.rvRecensioni)
+            rvRecensioni?.layoutManager = LinearLayoutManager(requireContext())
+            val uidAvv = utenteMatch.uid
+            if(uidAvv!=null){
+                ControlloreDB.getListaRecensioni(uidAvv){ listaRecensioni ->
+                    rvRecensioni?.adapter = RecensioniAdapter(requireContext(), listaRecensioni)
+                }
             }
         }
     }
@@ -238,22 +246,6 @@ class MainFragmentMenu : Fragment() {
             mappaId[arte]?.apply{
                 visibility = View.VISIBLE
             }
-        }
-    }
-
-
-
-    private fun calcolaDistanza(): Float?{
-        val results = FloatArray(1)
-        val lat1 = utenteViewModel.getLat()
-        val lon1 = utenteViewModel.getLon()
-        val lat2 = utenteMatch.lat
-        val lon2 = utenteMatch.lon
-        if(lat1!=null && lat2!=null && lon1!=null && lon2!=null){
-            Location.distanceBetween(lat1, lon1, lat2, lon2, results)
-            return (results[0]/1000)
-        }else{
-            return null
         }
     }
 

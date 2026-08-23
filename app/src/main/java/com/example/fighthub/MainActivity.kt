@@ -22,7 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MyPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
-    override fun getItemCount(): Int = 3 // Numero dei tuoi fragment
+    override fun getItemCount(): Int = 3 // Numero dei fragment
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
@@ -52,20 +52,15 @@ class MainActivity : AppCompatActivity() {
             //per scorrimento tra fragment
             val viewPager = findViewById<ViewPager2>(R.id.fragment_main_container)
             val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
             //per status bar sopra bianca.
             val window = window
             val controller = WindowCompat.getInsetsController(window, window.decorView)
-
             // FALSE = Icone bianche (per sfondi scuri)
             // TRUE = Icone scure (per sfondi chiari)
             controller.isAppearanceLightStatusBars = false
 
 
             window.navigationBarColor = android.graphics.Color.BLACK
-            //fine  status bar
-            // per navigation bar
-            // Imposta l'adapter per scorrimento tra fragment
             viewPager.adapter = MyPagerAdapter(this)
 
             // 1. Sincronizza Swipe -> BottomNav
@@ -85,14 +80,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
-            //per far in modo che ad apertura applicazione siamo su fight:
-            // Seleziona graficamente l'icona "nav_fight" sulla Bottom Bar
             navBar.selectedItemId = R.id.nav_fight
             // Sposta il ViewPager sulla pagina 1 senza mostrare l'animazione di transizione iniziale (smoothScroll = false)
             viewPager.setCurrentItem(1, false)
-            //fine adapter scorrimento
-
-            // Gestione dei padding per i bordi dello schermo (Edge-to-Edge)
+            // Gestione dei padding per i bordi dello schermo
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top+20, systemBars.right, 0)
@@ -102,7 +93,6 @@ class MainActivity : AppCompatActivity() {
             // Tasto indietro per andare nel login, non nella registrazione.
             val callback = object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // Sostituisci "AltraActivity::class.java" con il nome della tua Activity di destinazione
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
 
                     // Opzionale: pulisce lo stack per evitare di accumulare pagine

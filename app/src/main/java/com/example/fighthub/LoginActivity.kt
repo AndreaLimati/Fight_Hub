@@ -20,6 +20,7 @@ import com.example.fighthub.controllori.ControlloreDB
 import com.google.firebase.auth.FirebaseAuth
 import androidx.core.view.isVisible
 import androidx.core.net.toUri
+import com.example.fighthub.controllori.ControlloreInterno
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +45,6 @@ class LoginActivity : AppCompatActivity() {
         window.navigationBarColor = android.graphics.Color.BLACK
         //fine  status bar
 
-        //Scheletro email
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         //video
         val videoView = findViewById<VideoView>(R.id.videoView)
         val path = "android.resource://" + packageName + "/" + R.raw.mgs3_video
@@ -114,19 +113,21 @@ class LoginActivity : AppCompatActivity() {
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
 
-            if(mail.isEmpty() || pass.isEmpty()){
-                Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
-            }else if(!mail.matches(emailRegex.toRegex())){
-                Toast.makeText(this, "Inserisci una mail valida!", Toast.LENGTH_SHORT).show()
-            }else if(pass.length<6){
-                Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
-            }else{
+            val r = ControlloreInterno.validaInput(mail, pass)
+
+            if(r==0){
                 intent.putExtra("email", mail)
                 intent.putExtra("passw", pass)
                 //arrivato nel main non tornerà indietro nel login
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
+            }else if(r==1){
+                Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
+            }else if(r==2){
+                Toast.makeText(this, "Inserisci una mail valida!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -139,15 +140,13 @@ class LoginActivity : AppCompatActivity() {
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
 
-            if(mail.isEmpty() || pass.isEmpty()){
-                Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
-            }else if(!mail.matches(emailRegex.toRegex())){
-                Toast.makeText(this, "Inserisci una mail valida!", Toast.LENGTH_SHORT).show()
-            }else if(pass.length<6){
-                Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
-            }else{
+            val r = ControlloreInterno.validaInput(mail, pass)
+
+            if(r==0){
+                confLogin.isEnabled = false
                 ControlloreDB.verificaLoginUtente(mail, pass){ uid ->
                     if(uid!=null){
+                        confLogin.isEnabled = true
                         intent.putExtra("uid", uid)
                         //se si torna indietro nel main non va nel login
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -155,8 +154,15 @@ class LoginActivity : AppCompatActivity() {
                         finish()
                     }else{
                         Toast.makeText(this, "Credenziali errate", Toast.LENGTH_SHORT).show()
+                        confLogin.isEnabled = true
                     }
                 }
+            }else if(r==1){
+                Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
+            }else if(r==2){
+                Toast.makeText(this, "Inserisci una mail valida!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Inserisci una password con almeno 6 caratteri!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -180,6 +186,7 @@ class LoginActivity : AppCompatActivity() {
 
          videoView.seekTo(0)
     }
+
 }
 
 
