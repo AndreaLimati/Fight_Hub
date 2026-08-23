@@ -2,7 +2,6 @@ package com.example.fighthub
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Color.TRANSPARENT
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,16 +9,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fighthub.controllori.ControlloreDB
+import com.example.fighthub.controllori.ControlloreInterno
 import com.example.fighthub.viewModel.UtenteViewModel
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 class MainFragmentProfiloModifica : Fragment() {
@@ -37,7 +42,7 @@ class MainFragmentProfiloModifica : Fragment() {
             requireContext().contentResolver.takePersistableUriPermission(uri, flag)
 
             // 2. Aggiungi al ViewModel
-           // utenteViewModel.aggiungiFoto(uri)
+           utenteViewModel.aggiungiFoto(uri.toString())
 
             // 3. Notifica all'adapter che i dati sono cambiati
             photoAdapter.notifyDataSetChanged()
@@ -70,7 +75,8 @@ class MainFragmentProfiloModifica : Fragment() {
                 holder.btnRemove.visibility = View.VISIBLE // Mostra la X
 
                 holder.btnRemove.setOnClickListener {
-                    //utenteViewModel.rimuoviFoto(position)
+                    utenteViewModel.rimuoviFoto(position)
+                    notifyDataSetChanged()
                 }
 
                 holder.img.setOnClickListener(null)
@@ -87,9 +93,8 @@ class MainFragmentProfiloModifica : Fragment() {
 
                 // LOGICA Vera
                 holder.img.setOnClickListener {
-                    if (fotoReali.size < 5) { // Limite di 5 come da tua immagine
-                        // Qui apri il selettore della galleria (es. ActivityResultLauncher)
-                        //apriGalleria()
+                    if (fotoReali.size < maxPhotos) {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     } else {
                         Toast.makeText(holder.itemView.context, "Limite di 5 foto raggiunto", Toast.LENGTH_SHORT).show()
                     }
@@ -133,6 +138,12 @@ class MainFragmentProfiloModifica : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_main_profilo_modifica, container, false)
 
+        val peso = rootView?.findViewById<EditText>(R.id.etPeso)
+        val desc = rootView?.findViewById<EditText>(R.id.etBio)
+
+        peso?.setText(utenteViewModel.getPeso()?.toString() ?: "")
+        desc?.setText(utenteViewModel.getDescrizione() ?: "")
+
         // Lista degli ID dei bottoni degli sport definiti nell'XML
         val bottoniIds = listOf(
             R.id.btnJudo, R.id.btnKarate, R.id.btnBoxe,
@@ -150,8 +161,54 @@ class MainFragmentProfiloModifica : Fragment() {
 
         val btnSave = rootView.findViewById<Button>(R.id.btnSave)
         btnSave.setOnClickListener {
-            // Torna indietro nella pila dei Fragment temporaneo
-            parentFragmentManager.popBackStack()
+            val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+
+            if (currentUserId == null) {
+                Toast.makeText(requireContext(), "Utente non autenticato!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (!ControlloreInterno.validaSelezioneArtiMarziali(artiSelezionate)) {
+                Toast.makeText(requireContext(), "Seleziona almeno un'arte marziale", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Foto correnti (possono contenere http:// e content://)
+            val fotoCorrentiStringhe: List<String> = utenteViewModel.getFoto() ?: emptyList()
+            val fotoCorrentiUris: List<Uri> = fotoCorrentiStringhe.map { Uri.parse(it) }
+
+            // Foto originali caricate all'inizio dall'utente su Supabase
+            val vecchieFotoUrls: List<String> = utenteViewModel.getFotoPrecedenti()
+
+            btnSave.isEnabled = false
+            Toast.makeText(requireContext(), "Salvataggio in corso...", Toast.LENGTH_SHORT).show()
+
+            val p = peso?.text.toString().toIntOrNull()
+            val d = desc?.text.toString()
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                val successo = ControlloreDB.aggiornaProfiloEFoto(
+                    context = requireContext(),
+                    userId = currentUserId,
+                    peso = p,
+                    desc = d,
+                    artiMarziali = artiSelezionate,
+                    vecchieFotoUrls = vecchieFotoUrls,
+                    nuoveFotoUris = fotoCorrentiUris
+                )
+
+                if (successo) {
+                    utenteViewModel.updatePeso(p)
+                    utenteViewModel.updateDescrizione(d)
+                    utenteViewModel.updateArtiPratiate(artiSelezionate.toList())
+                    Toast.makeText(requireContext(), "Profilo aggiornato con successo!", Toast.LENGTH_SHORT).show()
+                    requireActivity().findViewById<View>(R.id.bottom_navigation)?.visibility = View.VISIBLE
+                    parentFragmentManager.popBackStack()
+                } else {
+                    btnSave.isEnabled = true
+                    Toast.makeText(requireContext(), "Errore durante il salvataggio del profilo", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         photoAdapter = PhotoAdapter()

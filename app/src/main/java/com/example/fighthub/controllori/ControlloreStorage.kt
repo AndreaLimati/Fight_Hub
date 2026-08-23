@@ -18,8 +18,8 @@ object ControlloreStorage {
         install(Storage)
     }
 
-    suspend fun salvaFoto(context: Context, dati: MutableList<Uri>): List<String>{
 
+    suspend fun salvaFoto(context: Context, dati: MutableList<Uri>): List<String>{
         return withContext(Dispatchers.IO){
             val urlCaricati = mutableListOf<String>()
             val bucket = supabase.storage.from("foto_fighthub")
@@ -37,6 +37,30 @@ object ControlloreStorage {
                 }
             }
             urlCaricati
+        }
+    }
+    suspend fun caricaFoto(context: Context, userId: String, uri: Uri): String? = withContext(Dispatchers.IO) {
+        val bucket = supabase.storage.from("foto_fighthub")
+        try {
+            val bytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: return@withContext null
+            val fileName = "$userId/${UUID.randomUUID()}.jpg"
+
+            bucket.upload(fileName, bytes) { upsert = true }
+            return@withContext bucket.publicUrl(fileName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun eliminaFoto(urlPubblico: String) = withContext(Dispatchers.IO) {
+        val bucket = supabase.storage.from("foto_fighthub")
+        try {
+            // Estrae il path interno al bucket (es. "userId/nomefile.jpg") dall'URL pubblico
+            val pathInBucket = urlPubblico.substringAfter("/foto_profili/")
+            bucket.delete(pathInBucket)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

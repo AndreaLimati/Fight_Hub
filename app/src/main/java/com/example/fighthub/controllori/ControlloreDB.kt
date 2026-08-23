@@ -1,9 +1,8 @@
 package com.example.fighthub.controllori
 
 import android.content.Context
-import android.location.Location
+import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import com.example.fighthub.model.Chat
 import com.example.fighthub.model.Messaggio
 import com.example.fighthub.model.Recensione
@@ -17,13 +16,12 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestoreSettings
 import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.firestore.toObject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
-import java.sql.Time
+import kotlinx.coroutines.withContext
 import java.util.PriorityQueue
 import kotlin.math.abs
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 object ControlloreDB {
 
@@ -50,7 +48,6 @@ object ControlloreDB {
                 }
             }
     }
-
     fun verificaLoginUtente(email: String, passw: String, onResult: (String?) -> Unit){
         auth.signInWithEmailAndPassword(email, passw)
             .addOnCompleteListener { task ->
@@ -61,6 +58,69 @@ object ControlloreDB {
                     onResult(null)
                 }
             }
+    }
+
+    suspend fun aggiornaProfiloEFoto(
+        context: Context,
+        userId: String,
+        peso: Int?,
+        desc: String,
+        artiMarziali: Set<String>,
+        vecchieFotoUrls: List<String>,   // Gli URL pubblicati precedentemente su Firestore
+        nuoveFotoUris: List<Uri>        // La lista correntemente nell'Adapter (può contenere http e content://)
+    ): Boolean = withContext(Dispatchers.IO) {
+
+        if (!ControlloreInterno.validaSelezioneArtiMarziali(artiMarziali)) return@withContext false
+        Log.d("AAAAA", "AAAAAAAAAA")
+        try {
+            // STEP 1: Conversione in stringhe per confronto
+            val nuoveFotoStringhe = nuoveFotoUris.map { it.toString() }
+
+            // STEP 2: Individua ed elimina da Supabase le foto che l'utente ha rimosso
+            val fotoDaEliminare = vecchieFotoUrls.filter { oldUrl -> !nuoveFotoStringhe.contains(oldUrl) }
+            for (url in fotoDaEliminare) {
+                ControlloreStorage.eliminaFoto(url)
+            }
+            Log.d("CCCCC", "CCCCCC")
+
+            // STEP 3: Carica solo le foto NUOVE (quelle con scheme content:// o file://)
+            val listaUrlFinale = mutableListOf<String>()
+
+            for (uri in nuoveFotoUris) {
+                if (uri.toString().startsWith("http")) {
+                    // Foto già presente su Supabase: la manteniamo
+                    listaUrlFinale.add(uri.toString())
+                } else {
+                    // Foto locale appena aggiunta: la carichiamo
+                    val urlCaricato = ControlloreStorage.caricaFoto(context, userId, uri)
+                    if (urlCaricato != null) {
+                        listaUrlFinale.add(urlCaricato)
+                    }
+                }
+            }
+            Log.d("DDDDDD", "$listaUrlFinale")
+
+            // STEP 4: Aggiornamento Firestore con l'elenco finale e aggiornato
+            val datiAggiornati = mapOf(
+                "peso" to peso,
+                "descrizione" to desc,
+                "artiPraticate" to artiMarziali.toList(),
+                "urlFoto" to listaUrlFinale
+            )
+
+            FirebaseFirestore.getInstance()
+                .collection("utente")
+                .document(userId)
+                .update(datiAggiornati)
+                .await()
+
+            return@withContext true
+
+        } catch (e: Exception) {
+            Log.d("BBBBBBBBB", "BBBBBBBB")
+            e.printStackTrace()
+            return@withContext false
+        }
     }
 
     fun salvaDatiUtente(user: User){

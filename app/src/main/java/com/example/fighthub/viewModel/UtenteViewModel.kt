@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
 
 class UtenteViewModel : ViewModel() {
     val userData = MutableLiveData(User())
+    private var fotoIniziali: List<String> = emptyList()
 
     fun updateEmailPassw(m: String?){
         userData.value = userData.value?.copy(
@@ -48,6 +49,7 @@ class UtenteViewModel : ViewModel() {
 
     fun updateUrlFoto(url: List<String>){
         userData.value = userData.value?.copy(urlFoto = url)
+        fotoIniziali = url
     }
 
     fun updatePos(la: Double?, lo: Double?){
@@ -60,6 +62,24 @@ class UtenteViewModel : ViewModel() {
     }
     fun getNome(): String? {
         return userData.value?.nome
+    }
+
+    fun aggiungiFoto(uri: String){
+        val fotoReali = userData.value?.urlFoto ?: emptyList()
+        val fotoModificate = fotoReali.toMutableList()
+        fotoModificate.add(uri)
+        userData.value = userData.value?.copy(urlFoto = fotoModificate)
+    }
+    fun getFotoPrecedenti(): List<String> {
+        return fotoIniziali
+    }
+    fun rimuoviFoto(position: Int){
+        val fotoReali = userData.value?.urlFoto ?: emptyList()
+        if (position in fotoReali.indices) {
+            val fotoModificate = fotoReali.toMutableList()
+            fotoModificate.removeAt(position)
+            userData.value = userData.value?.copy(urlFoto = fotoModificate)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -93,6 +113,7 @@ class UtenteViewModel : ViewModel() {
 
     fun updateTutto(u: User){
         userData.value = u
+        fotoIniziali = u.urlFoto ?: emptyList()
     }
 
     fun getLat(): Double?{
@@ -103,4 +124,7 @@ class UtenteViewModel : ViewModel() {
         return userData.value?.lon
     }
 
+    fun getDescrizione(): String{
+        return userData.value?.descrizione ?: ""
+    }
 }

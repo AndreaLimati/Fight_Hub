@@ -42,4 +42,7 @@ object ControlloreInterno {
             return null
         }
     }
+    fun validaSelezioneArtiMarziali(artiSelezionate: Set<String>): Boolean {
+        return artiSelezionate.isNotEmpty()
+    }
 }
