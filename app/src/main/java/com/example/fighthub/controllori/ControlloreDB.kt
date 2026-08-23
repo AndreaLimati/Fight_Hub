@@ -71,7 +71,6 @@ object ControlloreDB {
     ): Boolean = withContext(Dispatchers.IO) {
 
         if (!ControlloreInterno.validaSelezioneArtiMarziali(artiMarziali)) return@withContext false
-        Log.d("AAAAA", "AAAAAAAAAA")
         try {
             // STEP 1: Conversione in stringhe per confronto
             val nuoveFotoStringhe = nuoveFotoUris.map { it.toString() }
@@ -81,7 +80,6 @@ object ControlloreDB {
             for (url in fotoDaEliminare) {
                 ControlloreStorage.eliminaFoto(url)
             }
-            Log.d("CCCCC", "CCCCCC")
 
             // STEP 3: Carica solo le foto NUOVE (quelle con scheme content:// o file://)
             val listaUrlFinale = mutableListOf<String>()
@@ -98,7 +96,6 @@ object ControlloreDB {
                     }
                 }
             }
-            Log.d("DDDDDD", "$listaUrlFinale")
 
             // STEP 4: Aggiornamento Firestore con l'elenco finale e aggiornato
             val datiAggiornati = mapOf(
@@ -117,7 +114,6 @@ object ControlloreDB {
             return@withContext true
 
         } catch (e: Exception) {
-            Log.d("BBBBBBBBB", "BBBBBBBB")
             e.printStackTrace()
             return@withContext false
         }

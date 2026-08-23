@@ -13,12 +13,11 @@ class UtenteViewModel : ViewModel() {
     val userData = MutableLiveData(User())
     private var fotoIniziali: List<String> = emptyList()
 
-    fun updateEmailPassw(m: String?){
+    fun updateEmail(m: String?){
         userData.value = userData.value?.copy(
             email = m
         )
     }
-
     fun updateNome(n: String?){
         userData.value = userData.value?.copy(nome = n)
     }
@@ -94,11 +93,6 @@ class UtenteViewModel : ViewModel() {
             return 0
         }
     }
-
-    fun getEmail(): String?{
-        return userData.value?.email
-    }
-
     fun getPeso(): Int?{
         return userData.value?.peso
     }

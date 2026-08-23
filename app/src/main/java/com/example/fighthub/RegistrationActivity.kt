@@ -29,7 +29,7 @@ class RegistrationActivity : AppCompatActivity() {
 
         val email = intent.getStringExtra("email")!!
 
-        utenteViewModel.updateEmailPassw(email)
+        utenteViewModel.updateEmail(email)
 
         //video in fondo
         videoView.setVideoURI(uri)
