@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
         //video
         val videoView = findViewById<VideoView>(R.id.videoView)
         val path = "android.resource://" + packageName + "/" + R.raw.mgs3_video
-        val uri = path.toUri()
+        val uri = path.toUri() // i file multimediali vengono gestite tramite l'oggetto uri
 
         //layout
         val layoutBottoni = findViewById<LinearLayout>(R.id.layout_bottoni)
