@@ -52,10 +52,26 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
     implementation(libs.androidx.fragment.ktx)
     implementation(platform("io.github.jan-tennert.supabase:bom:3.5.0"))
     implementation("io.github.jan-tennert.supabase:storage-kt")
     implementation("io.ktor:ktor-client-android:3.0.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    debugImplementation("androidx.fragment:fragment-testing-manifest:1.8.9")
+    androidTestImplementation("androidx.fragment:fragment-testing:1.8.9")
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force("androidx.test.espresso:espresso-core:3.6.1")
+        force("androidx.test.espresso:espresso-base:3.6.1")
+        force("androidx.test:runner:1.6.2")
+        force("androidx.test:monitor:1.7.1")
+        force("androidx.test:rules:1.6.1")
+        force("androidx.test:core:1.6.1")
+        force("androidx.test.ext:junit:1.2.1")
+    }
 }

@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -218,6 +219,21 @@ class MainFragmentProfiloModifica : Fragment() {
         rvPhotos.adapter = photoAdapter
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Rimuove il callback momentaneamente ed esegue il pop dal BackStack
+                    isEnabled = false
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
     }
 
     private fun toggleSelezione(btn: Button) {

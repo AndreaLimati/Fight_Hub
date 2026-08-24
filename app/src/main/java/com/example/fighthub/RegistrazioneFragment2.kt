@@ -61,17 +61,17 @@ class RegistrazioneFragment2 : Fragment() {
     }
 
     private fun toggleSelezione(btn: Button) {
-        // Inverte lo stato grafico (isSelected attiva il selector XML)
+        // Inverte lo stato grafico
         btn.isSelected = !btn.isSelected
 
         val nomeArte = btn.text.toString()
 
         if (btn.isSelected) {
             artiSelezionate.add(nomeArte)
-            btn.setTextColor(Color.WHITE) // Feedback visivo: testo bianco se selezionato
+            btn.setTextColor(Color.WHITE) //testo bianco se selezionato
         } else {
             artiSelezionate.remove(nomeArte)
-            btn.setTextColor(Color.BLACK) // Torna nero se deselezionato
+            btn.setTextColor(Color.BLACK) //testo nero se deselezionato
         }
     }
 }

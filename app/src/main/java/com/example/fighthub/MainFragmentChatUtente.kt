@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -60,6 +61,17 @@ class MainFragmentChatUtente : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Rimuove il callback momentaneamente ed esegue il pop dal BackStack
+                    isEnabled = false
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
 
         // 1. Recupera il nome dell'utente passato dal Fragment precedente
         val nomeUtente = arguments?.getString("nome_utente") ?: "Chat"

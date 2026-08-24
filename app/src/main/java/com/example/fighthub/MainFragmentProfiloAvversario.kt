@@ -50,6 +50,17 @@ class MainFragmentProfiloAvversario : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Rimuove il callback momentaneamente ed esegue il pop dal BackStack
+                    isEnabled = false
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
+
         ControlloreDB.getDatiUtente(arguments?.getString("uid_avversario")){ avversario ->
             if(avversario!=null){
                 val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
