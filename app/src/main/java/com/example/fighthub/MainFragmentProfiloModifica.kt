@@ -210,6 +210,7 @@ class MainFragmentProfiloModifica : Fragment() {
                     Toast.makeText(requireContext(), "Errore durante il salvataggio del profilo", Toast.LENGTH_LONG).show()
                 }
             }
+            parentFragmentManager.popBackStack()
         }
 
         photoAdapter = PhotoAdapter()
@@ -219,6 +220,21 @@ class MainFragmentProfiloModifica : Fragment() {
         rvPhotos.adapter = photoAdapter
 
         return rootView
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, // Assicura che la callback si distrugga con il ciclo di vita del Fragment
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Esegue il popBackStack
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
