@@ -170,7 +170,7 @@ class MainFragmentMenu : Fragment() {
     }
 
     private fun setupIndicators() {
-        indicatorContainer.removeAllViews()
+        indicatorContainer.removeAllViews() //rimuove tutte le view nel contenitore
         listaFoto.forEachIndexed { index, _ ->
             val viewS = View(context)
             val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
