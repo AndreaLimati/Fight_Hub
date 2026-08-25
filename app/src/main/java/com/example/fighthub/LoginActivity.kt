@@ -113,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
             layoutBottoni.visibility = View.VISIBLE
             layoutRegistrazione.visibility = View.GONE
 
-            val r = ControlloreInterno.validaInput(mail, pass)
+            val r = ControlloreInterno.validaInput(mail, pass) //serve per controllare la validità dei caratteri di un email
 
             if(r==0){
                 intent.putExtra("email", mail)
@@ -144,19 +144,20 @@ class LoginActivity : AppCompatActivity() {
 
             if(r==0){
                 confLogin.isEnabled = false
-                ControlloreDB.verificaLoginUtente(mail, pass){ uid ->
-                    if(uid!=null){
+                ControlloreDB.verificaLoginUtente(mail, pass){ uid ->  //ricordiamo il terzo parametro asincrono onResult della funzione (in controlloreDB)
+                    if(uid!=null){          //inizio terzo parametro onResult, è tutto questo blocco di codice
                         confLogin.isEnabled = true
-                        intent.putExtra("uid", uid)
+                        intent.putExtra("uid", uid) //serve per passare uid alla prossima activity
                         //se si torna indietro nel main non va nel login
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //New Task significa aprire la nuova Activity su una nuova task, ClearTask distrugge tutte le Activity esistenti prima di avviare la task
                         startActivity(intent)
-                        finish()
+                        finish() //non necessario, ma sicurezza in piu chiusura activity
                     }else{
-                        Toast.makeText(this, "Credenziali errate", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Credenziali errate", Toast.LENGTH_SHORT).show() //breve messaggio informativo sullo schermo
                         confLogin.isEnabled = true
                     }
-                }
+                } //fine terzo parametro onResult
+
             }else if(r==1){
                 Toast.makeText(this, "Inserisci email e password!", Toast.LENGTH_SHORT).show()
             }else if(r==2){

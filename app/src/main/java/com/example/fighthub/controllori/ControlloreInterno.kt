@@ -6,7 +6,7 @@ import java.util.Locale
 
 object ControlloreInterno {
     fun validaInput(mail: String, pass: String): Int {
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" //definisce regole dell'email
         if (mail.isEmpty() || pass.isEmpty()) {
             return 1
         } else if (!mail.matches(emailRegex.toRegex())) {

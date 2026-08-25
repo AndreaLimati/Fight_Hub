@@ -30,30 +30,30 @@ object ControlloreDB {
     init {
         val settings = firestoreSettings {
             // Disattiva la persistenza su disco e usa solo la RAM
-            setLocalCacheSettings(memoryCacheSettings {})
+            setLocalCacheSettings(memoryCacheSettings {}) //Per impostazione predefinita, Firestore su Android salva una copia dei dati letti in memoriaper permettere all'app di funzionare anche offline
         }
-        db.firestoreSettings = settings
+        db.firestoreSettings = settings  //applica la configurazione citata prima all'istanza del database
     }
     private var distanzaMax = 100
     private var artiVolute = mutableListOf("Judo", "Karate", "Boxe", "Muay Thai", "MMA", "Altro...")
 
     fun autenticaUtenteRegistrazione(user: User, passw: String){
-        auth.createUserWithEmailAndPassword(user.email!!, passw)
-            .addOnCompleteListener { task ->
-                if(task.isSuccessful){
+        auth.createUserWithEmailAndPassword(user.email!!, passw) //metodo predefinito fornito dall'sdk di FirebaseAuth
+            .addOnCompleteListener { task -> //Listener per operazioni di rete asincrone, quando firebase finisce di elaborare la richiesta esegue il blocco di codice
+                if(task.isSuccessful){  //isSuccessful predefinita di firebase booleano
                     user.uid = auth.currentUser?.uid
-                    salvaDatiUtente(user)
+                    salvaDatiUtente(user) //funzione definita sotto
                 }else{
-                    Log.e("Fallimento Registrazione", "Registrazione fallita")
+                    Log.e("Fallimento Registrazione", "Registrazione fallita")  //per vedere sul logcat
                 }
             }
-    }
-    fun verificaLoginUtente(email: String, passw: String, onResult: (String?) -> Unit){
+    }                                                               //String tipo in ingresso, Unit tipo in uscita (no ritorno)
+    fun verificaLoginUtente(email: String, passw: String, onResult: (String?) -> Unit){ //onResult perchè è asincrona, dobbiamo aspettare la risposta del server
         auth.signInWithEmailAndPassword(email, passw)
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener { task -> //task è l'esito di auth
                 if(task.isSuccessful){
                     val userUID = auth.currentUser?.uid
-                    onResult(userUID)
+                    onResult(userUID) //passa il valore userUid all'Uid nel LoginActivity
                 }else{
                     onResult(null)
                 }
@@ -119,16 +119,16 @@ object ControlloreDB {
         }
     }
 
-    fun salvaDatiUtente(user: User){
+    fun salvaDatiUtente(user: User){ //collection:collezione di utenti. Document: singola istanza di utente. Set: salva i dati user aggiungendoli (senza merge sovrascriverebbe la collection utenti)
         db.collection("utente").document(user.uid!!).set(user, SetOptions.merge()).addOnSuccessListener {
-            Log.d("DB", "Utente salvato con successo!")
+            Log.d("DB", "Utente salvato con successo!")             //con !! l'uid NON deve essere nullo altrimenti l'app crasha
         }
     }
 
     fun getDatiUtente(uid: String?, onResult: (User?) -> Unit){
         if(uid!=null){
-            val utente = db.collection("utente").document(uid)
-            utente.get().addOnSuccessListener { document ->
+            val utente = db.collection("utente").document(uid) //salva l'indirizzo dell'uid non lo scarica da internt
+            utente.get().addOnSuccessListener { document -> //scarica da internet l'uid e dato che è asincrono addOnSuccessListener
                 val user = document.toObject<User>()
                 onResult(user)
             }.addOnFailureListener{
@@ -211,8 +211,8 @@ object ControlloreDB {
     }
 
     fun controlloCreazioneChat(uid1: String?, uid2: String?){
-        if(uid1!=null && uid2!=null){
-            db.collection("risposta").whereEqualTo("fromUid", uid2).get().addOnSuccessListener { documents ->
+        if(uid1!=null && uid2!=null){                               //confronta fromUid con uid2                                   //tutto quello prima è documents
+                db.collection("risposta").whereEqualTo("fromUid", uid2).get().addOnSuccessListener { documents ->
                 for(document in documents){
                     val risposta = document.toObject<Risposta>()
                     if(risposta.toUid == uid1 && uid1!=uid2){
@@ -230,7 +230,7 @@ object ControlloreDB {
 
     fun getListaChat(uid: String, onResult: (List<Chat>?) -> Unit){
         if(uid.isNotEmpty()){
-            db.collection("chat").whereArrayContains("partecipanti", uid).get().addOnSuccessListener { risposta ->
+            db.collection("chat").whereArrayContains("partecipanti", uid).get().addOnSuccessListener { risposta -> //cerca tutte le chat in cui l'utente partecipa
                 val listaChat: List<Chat> = risposta.toObjects(Chat::class.java)
                 if(listaChat.isEmpty()){
                     onResult(null)

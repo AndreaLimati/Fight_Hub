@@ -251,8 +251,8 @@ class MainFragmentMenu : Fragment() {
 
     private fun getNextAvversario(){
         if(codaUtenti.isNotEmpty()){
-            utenteMatch = codaUtenti.poll()!!.first
-            if(!utenteMatch.urlFoto.isEmpty()){
+            utenteMatch = codaUtenti.poll()!!.first //pool rimuove il primo elemento in cima alla coda e dato che codaUtenti sono coppie di dati .first indica proprio questo
+            if(!utenteMatch.urlFoto.isEmpty()){ //se l'url della foto di utenteMatch non è vuoto
                 listaFoto = utenteMatch.urlFoto
             }else{
                 listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
