@@ -41,6 +41,15 @@ class MainFragmentProfiloUtente : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Corpo vuoto, disabilito il tasto indietro
+                }
+            }
+        )
+
         val nome = utenteViewModel.getNome()
         val eta = utenteViewModel.getEta()
         val peso = utenteViewModel.getPeso()
@@ -112,12 +121,6 @@ class MainFragmentProfiloUtente : Fragment() {
         val rvRecensioni = view.findViewById<RecyclerView>(R.id.rvRecensioni)
         rvRecensioni.layoutManager = LinearLayoutManager(requireContext())
 
-        // Dati Mock
-        val listaRecensioni = listOf(
-            Recensione("Utente1","2", "buon combattente, abbiamo avuto una bella sessione di sparring", 5),
-            Recensione("Chuck", "2","debole...", 1),
-            Recensione("Rocky", "2","ha del potenziale ma deve allenarsi", 4)
-        )
         val uid = utenteViewModel.getUser()?.uid
         if(uid!=null){
             ControlloreDB.getListaRecensioni(uid){ listaRecensioni->
@@ -125,38 +128,20 @@ class MainFragmentProfiloUtente : Fragment() {
             }
         }
     }
-
-    /*fun apriProfilo(view: View){
-        requireActivity().supportFragmentManager.beginTransaction()
-            // Animazione: entra da destra, esce a sinistra
-            .setCustomAnimations(
-                android.R.anim.fade_in, // Entrata galleria
-                android.R.anim.fade_out, // Uscita galleria
-                android.R.anim.fade_in, // Ritorno al profilo (quando premi back)
-                android.R.anim.fade_out  // Scomparsa galleria (quando premi back)
-            )
-            .replace(R.id.fragment_main_container, MainFragmentProfiloUtenteFoto()) // Carica Fight
-            .addToBackStack(null) // Permette di tornare indietro col tasto back
-            .commit()
-    } */
 }
 
-// Adapter Interno per semplicità di copia
 class RecensioniAdapter(private val context: Context, private val lista: List<Recensione>) :
     RecyclerView.Adapter<RecensioniAdapter.ViewHolder>() {
-
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val nome = v.findViewById<TextView>(R.id.tvAutore)
         val testo = v.findViewById<TextView>(R.id.tvTesto)
         val stelle = v.findViewById<TextView>(R.id.tvStelle)
         val immagine = v.findViewById<ImageView>(R.id.ivAutore)
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_recensione, parent, false)
         return ViewHolder(v)
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = lista[position]
         if(item.valutazione!=null){
@@ -170,9 +155,6 @@ class RecensioniAdapter(private val context: Context, private val lista: List<Re
             }
         }
     }
-
     override fun getItemCount() = lista.size
-
-
 }
 

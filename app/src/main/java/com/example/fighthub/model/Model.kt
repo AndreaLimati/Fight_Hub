@@ -1,5 +1,7 @@
 package com.example.fighthub.model
 
+import com.google.firebase.Timestamp
+
 data class User(
     var uid: String? = null,
     var email: String? = null,
@@ -24,7 +26,8 @@ data class Recensione(
 
 data class Chat(
     var partecipanti: List<String?> = emptyList(),
-    var ultimoAggiornamento: String? = null
+    var ultimoAggiornamento: String? = null,
+    var ultimoOrario: Timestamp? = null
 )
 
 data class Messaggio(

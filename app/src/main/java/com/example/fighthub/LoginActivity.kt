@@ -43,7 +43,6 @@ class LoginActivity : AppCompatActivity() {
 
         //per navigation bar
         window.navigationBarColor = android.graphics.Color.BLACK
-        //fine  status bar
 
         //video
         val videoView = findViewById<VideoView>(R.id.videoView)
@@ -71,18 +70,13 @@ class LoginActivity : AppCompatActivity() {
         //funzione per settare tasto indietro per form
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-
                 if (layoutLogin.isVisible) {
                     layoutLogin.visibility = View.GONE
                     layoutBottoni.visibility = View.VISIBLE
-                }
-
-                else if (layoutRegistrazione.isVisible) {
+                } else if (layoutRegistrazione.isVisible) {
                     layoutRegistrazione.visibility = View.GONE
                     layoutBottoni.visibility = View.VISIBLE
-                }
-
-                else {
+                } else {
                     isEnabled = false
                     onBackPressedDispatcher.onBackPressed()
                 }
@@ -131,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        //btm_conferma_login
+        //btn_conferma_login
         confLogin.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             val mail = findViewById<EditText>(R.id.login_email_input).text.toString()
@@ -167,6 +161,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onStart(){
         super.onStart()
         val auth = FirebaseAuth.getInstance()
@@ -179,13 +174,12 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
     }
+
     override fun onResume() {
         super.onResume()
         val videoView = findViewById<VideoView>(R.id.videoView)
-
         videoView.start()
-
-         videoView.seekTo(0)
+        videoView.seekTo(0)
     }
 
 }

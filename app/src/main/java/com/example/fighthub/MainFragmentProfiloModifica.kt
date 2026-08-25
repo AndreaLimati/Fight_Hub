@@ -227,10 +227,11 @@ class MainFragmentProfiloModifica : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner, // Assicura che la callback si distrugga con il ciclo di vita del Fragment
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // Esegue il popBackStack
+                    // Rimuove il callback momentaneamente ed esegue il pop dal BackStack
+                    isEnabled = false
                     parentFragmentManager.popBackStack()
                 }
             }

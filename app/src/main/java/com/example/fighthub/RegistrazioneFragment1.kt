@@ -32,7 +32,6 @@ class RegistrazioneFragment1 : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Collega il layout XML della card
         val view = inflater.inflate(R.layout.fragment_registrazione1, container, false)
 
         val btnDate = view.findViewById<Button>(R.id.SceltaData)
@@ -61,7 +60,6 @@ class RegistrazioneFragment1 : Fragment() {
 
         //bottone per cambiare fragment
         btnInvia.setOnClickListener {
-            //leggo variabili
             val nome = view.findViewById<EditText>(R.id.etNome).text.toString()
             val cognome = view.findViewById<EditText>(R.id.etCognome).text.toString()
             val peso = view.findViewById<EditText>(R.id.etPeso).text.toString().toIntOrNull() ?: 0

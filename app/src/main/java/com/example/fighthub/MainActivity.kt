@@ -35,6 +35,7 @@ class MyPagerAdapter(activity: MainActivity) : FragmentStateAdapter(activity) {
 }
 class MainActivity : AppCompatActivity() {
     private val utenteViewModel : UtenteViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() //per la navigation bar

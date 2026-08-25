@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.example.fighthub.model.User
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Filter
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestoreSettings
 import com.google.firebase.firestore.memoryCacheSettings
@@ -235,7 +236,8 @@ object ControlloreDB {
                 if(listaChat.isEmpty()){
                     onResult(null)
                 }else{
-                    onResult(listaChat)
+                    val listaOrdinata = listaChat.sortedByDescending { it.ultimoOrario }
+                    onResult(listaOrdinata)
                 }
             }
         }
@@ -246,8 +248,30 @@ object ControlloreDB {
         val orario = FieldValue.serverTimestamp()
         val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
         db.collection("messaggio").add(messaggio).addOnSuccessListener {
-            onResult(true)
+            db.collection("chat")
+                .whereArrayContains("partecipanti", mittenteUid)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    // Converti i documenti nella tua Data Class "Chat"
+                    val chatTrovata = querySnapshot.documents.firstOrNull { doc ->
+                        val chat = doc.toObject(Chat::class.java)
+                        chat?.partecipanti?.contains(destinatarioUid) == true
+                    }
+
+                    if (chatTrovata != null) {
+                        chatTrovata.reference.update(
+                            "ultimoAggiornamento", testo,
+                            "ultimoOrario", orario
+                        )
+                            .addOnSuccessListener { onResult(true) }
+                            .addOnFailureListener { onResult(false) }
+                    } else {
+                        onResult(false)
+                    }
+                }
+                .addOnFailureListener { onResult(false) }
         }.addOnFailureListener {
+            Log.d("ControlloreDB", "Chat non trovata")
             onResult(false)
         }
     }

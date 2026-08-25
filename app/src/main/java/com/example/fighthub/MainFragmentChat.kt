@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,16 +21,14 @@ import com.bumptech.glide.Glide
 import com.example.fighthub.controllori.ControlloreDB
 import com.example.fighthub.model.Chat
 import com.example.fighthub.viewModel.UtenteViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.getValue
 
 class MainFragmentChat : Fragment() {
     private val utenteViewModel : UtenteViewModel by activityViewModels()
     private lateinit var chatAdapter: ChatAdapter
     private val listaChat = mutableListOf<Chat>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +41,15 @@ class MainFragmentChat : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Corpo vuoto per disabilitare
+                }
+            }
+        )
 
         // Configura RecyclerView
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
@@ -103,6 +111,7 @@ class MainFragmentChat : Fragment() {
             val nome = v.findViewById<TextView>(R.id.tvNome)
             val testo = v.findViewById<TextView>(R.id.tvTesto)
             val foto = v.findViewById<ImageView>(R.id.ivProfile)
+            val tempo = v.findViewById<TextView>(R.id.tvTime)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -120,9 +129,13 @@ class MainFragmentChat : Fragment() {
                     Glide.with(context).load(user?.urlFoto[0]).circleCrop().into(holder.foto)
                 }
                 if(item.ultimoAggiornamento!=null){
+                    val date = item.ultimoOrario?.toDate()
+                    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
                     holder.testo.text = item.ultimoAggiornamento
+                    holder.tempo.text = formatter.format(date)
                 }else{
                     holder.testo.text = "Nessun aggiornamento recente"
+                    holder.tempo.text = "00:00"
                 }
 
                 //per il click

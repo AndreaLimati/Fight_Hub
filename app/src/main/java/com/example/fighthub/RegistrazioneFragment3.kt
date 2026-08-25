@@ -39,7 +39,6 @@ class RegistrazioneFragment3 : Fragment() {
             } else {
                 selectedImagesUris.addAll(uris)
             }
-
             aggiornaUI()
         }
     }
@@ -68,7 +67,6 @@ class RegistrazioneFragment3 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_registrazione3, container, false)
-
         // Inizializzazione viste
         btnUpload = view.findViewById(R.id.btnUpload)
         tvPhotoCount = view.findViewById(R.id.tvPhotoCount)
@@ -90,7 +88,6 @@ class RegistrazioneFragment3 : Fragment() {
                     val urlImmagini = ControlloreStorage.salvaFoto(requireContext(), selectedImagesUris)
                     utenteViewModel.updateUrlFoto(urlImmagini)
                     (activity as? RegistrationActivity)?.navigaAlQuartoStep()
-                    // Nota: Assicurati che RegistrationActivity abbia questa funzione
                 }
             }
         }
