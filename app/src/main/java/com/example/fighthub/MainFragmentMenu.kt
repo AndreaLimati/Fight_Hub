@@ -58,6 +58,12 @@ class MainFragmentMenu : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        parentFragmentManager.setFragmentResultListener("FILTRI_AGGIORNATI_KEY", viewLifecycleOwner) { _, _ ->
+            indiceAttuale = 0
+            codaUtenti.clear()
+            riempiCoda()
+        }
+
         riempiCoda()
 
         profileImage = view.findViewById(R.id.profileImage)
