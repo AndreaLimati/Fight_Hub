@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -156,6 +157,8 @@ class MainFragmentChatUtente : Fragment() {
                                     rvMessages.scrollToPosition(listaMessaggi.size - 1)
                                 }
                             }
+                        } else {
+                            Toast.makeText(requireContext(), "Errore nell'invio del messaggio", Toast.LENGTH_SHORT).show()
                         }
                     }
                     view.findViewById<EditText>(R.id.etMessageInput).text.clear()
