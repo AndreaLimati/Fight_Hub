@@ -56,6 +56,7 @@ class MainFragmentMenuFiltra : DialogFragment() {
         btnApplicaFiltri.setOnClickListener {
             if(artiSelezionate.isNotEmpty()){
                 ControlloreDB.modificaParametri(distanzaScelta, artiSelezionate)
+                parentFragmentManager.setFragmentResult("FILTRI_AGGIORNATI_KEY", Bundle())
                 dismiss() // Chiude il popup
             }
         }
