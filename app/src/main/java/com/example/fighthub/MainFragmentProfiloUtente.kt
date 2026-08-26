@@ -82,13 +82,11 @@ class MainFragmentProfiloUtente : Fragment() {
 
 
         immagine.setOnClickListener {
-          //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
             val gallery = MainFragmentProfiloUtenteFoto()  //Creazione istanza
             gallery.show(parentFragmentManager, "foto_gallery")
         }
 
         btnStatistiche.setOnClickListener {
-            //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
             val statistiche = MainFragmentStatistiche()  //Creazione istanza
             statistiche.show(parentFragmentManager, "statistiche")
         }
