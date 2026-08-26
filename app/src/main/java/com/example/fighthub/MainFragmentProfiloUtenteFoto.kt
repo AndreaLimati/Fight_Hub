@@ -50,7 +50,7 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
         val uidAvversario = arguments?.getString("uid_avversario")
         if(uidAvversario!=null){
             ControlloreDB.getDatiUtente(uidAvversario){ u ->
-                if(u != null){
+                if(u != null){ //per foto avversario
                     urls = u.urlFoto
                     setupIndicators()
                     val immagine = view.findViewById<ImageView>(R.id.profileImage)
@@ -59,7 +59,7 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
                     }
                 }
             }
-        } else {
+        } else { //per foto utente
             urls = utenteViewModel.getFoto() ?: emptyList()
             setupIndicators()
             val immagine = view.findViewById<ImageView>(R.id.profileImage)
