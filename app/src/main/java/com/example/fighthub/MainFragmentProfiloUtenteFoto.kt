@@ -68,8 +68,7 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
             }
         }
 
-        // AGGIUNTO: Logica per chiudere il dialog toccando lo sfondo scuro
-        // Assicurati che nel tuo XML il ConstraintLayout principale abbia android:id="@+id/rootLayout"
+        // Logica per chiudere il dialog toccando lo sfondo scuro
         val rootLayout = view.findViewById<View>(R.id.rootLayout)
         rootLayout?.setOnClickListener {
             dismiss() // Chiude il Dialog e torna al profilo
