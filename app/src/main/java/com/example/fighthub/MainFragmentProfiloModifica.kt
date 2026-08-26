@@ -219,7 +219,7 @@ class MainFragmentProfiloModifica : Fragment() {
         rvPhotos.layoutManager = GridLayoutManager(requireContext(), 3)
         rvPhotos.adapter = photoAdapter
 
-        return rootView
+        return rootView //restituisce la vista da mostrare a schermo, siamo in onCreateView
 
     }
 
@@ -236,6 +236,7 @@ class MainFragmentProfiloModifica : Fragment() {
                 }
             }
         )
+
     }
 
     private fun toggleSelezione(btn: Button) {

@@ -28,19 +28,10 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
             // 1. Rimuove il background predefinito del sistema (che è nero/bianco)
             window.setBackgroundDrawableResource(android.R.color.transparent)
 
-            // 2. Opzionale: Rimuove l'oscuramento (dim) se vuoi che sia chiarissimo
-            // window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
-            // 3. Forza il dialog a occupare tutto lo schermo
+            // 2. Forza il dialog a occupare tutto lo schermo
             window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
     }
-
-    // AGGIUNTO: Imposta lo stile per la trasparenza e il tutto schermo
-   /* override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
-    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,8 +43,6 @@ class MainFragmentProfiloUtenteFoto : DialogFragment() { // Estende DialogFragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //val urls = utenteViewModel.getFoto()
 
         profileImage = view.findViewById(R.id.profileImage)
         indicatorContainer = view.findViewById(R.id.indicatorContainer)
