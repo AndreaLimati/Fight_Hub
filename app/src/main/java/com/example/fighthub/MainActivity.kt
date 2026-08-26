@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //per la navigation bar
-        setContentView(R.layout.activity_main)
+        enableEdgeToEdge() //per la navigation bar, incastra la ui tra navbar e sopra
+        setContentView(R.layout.activity_main) //fa l'inflant ma aggancia la navbar in tutti i fragment
 
         val uid = intent.getStringExtra("uid")
 

@@ -128,7 +128,7 @@ object ControlloreDB {
 
     fun getDatiUtente(uid: String?, onResult: (User?) -> Unit){
         if(uid!=null){
-            val utente = db.collection("utente").document(uid) //salva l'indirizzo dell'uid non lo scarica da internt
+            val utente = db.collection("utente").document(uid) //salva l'indirizzo dell'uid non lo scarica da internet
             utente.get().addOnSuccessListener { document -> //scarica da internet l'uid e dato che è asincrono addOnSuccessListener
                 val user = document.toObject<User>()
                 onResult(user)
@@ -249,17 +249,16 @@ object ControlloreDB {
         val messaggio = Messaggio(mittenteUid, destinatarioUid, testo, orario)
         db.collection("messaggio").add(messaggio).addOnSuccessListener {
             db.collection("chat")
-                .whereArrayContains("partecipanti", mittenteUid)
+                .whereArrayContains("partecipanti", mittenteUid) //query per trovare le chat in cui c'è l'uid del mittente
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                    // Converti i documenti nella tua Data Class "Chat"
-                    val chatTrovata = querySnapshot.documents.firstOrNull { doc ->
+                    val chatTrovata = querySnapshot.documents.firstOrNull { doc -> //metodo dell'interfaccia iterable, scorre una lista e restituisce il primo elemento che rispetta una condizione
                         val chat = doc.toObject(Chat::class.java)
-                        chat?.partecipanti?.contains(destinatarioUid) == true
+                        chat?.partecipanti?.contains(destinatarioUid) == true //per trovare le chat con uid destinatario, viene tutto iterato da firstOfNull
                     }
 
                     if (chatTrovata != null) {
-                        chatTrovata.reference.update(
+                        chatTrovata.reference.update(  //reference permette di accere all'id della chat a cui non possiamo accedere, update per modificare testo e orario
                             "ultimoAggiornamento", testo,
                             "ultimoOrario", orario
                         )
@@ -278,14 +277,14 @@ object ControlloreDB {
 
     fun getListaMessaggi(mittenteUid: String, destinatarioUid: String, onResult: (List<Messaggio>?)->Unit){
         val filtro1 = Filter.and(
-            Filter.equalTo("mittenteUid", mittenteUid),
+            Filter.equalTo("mittenteUid", mittenteUid), //filtro in cui prendiamo i messaggi inviati dal mittente e presi dal destinatario
             Filter.equalTo("destinatarioUid", destinatarioUid)
         )
         val filtro2 = Filter.and(
-            Filter.equalTo("mittenteUid", destinatarioUid),
+            Filter.equalTo("mittenteUid", destinatarioUid), //filtro in cui prendiamo i messaggi inviati dal destinatario e presi da dal mittente
             Filter.equalTo("destinatarioUid", mittenteUid)
         )
-        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).orderBy("orario").addSnapshotListener { ris, err ->
+        db.collection("messaggio").where(Filter.or(filtro1, filtro2)).orderBy("orario").addSnapshotListener { ris, err -> //SnapshotListener metodo di FireStore utilizzato per ascoltare aggionramenti in tempo reale su dei dati
             if(err!=null){
                 onResult(null)
                 return@addSnapshotListener

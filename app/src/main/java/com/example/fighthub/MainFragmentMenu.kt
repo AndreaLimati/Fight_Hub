@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
@@ -97,22 +98,22 @@ class MainFragmentMenu : Fragment() {
         })
 
         // Impedisce all'Activity di intercettare lo swipe mentre trascini la card
-        profileImage.setOnTouchListener { v, event ->
+        profileImage.setOnTouchListener { v, event -> //v view, event il MotionEvent
             clickDetector.onTouchEvent(event)
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> { //action down premere
                     // Dice all'Activity (e al ViewPager se presente) di non toccare questo gesto
-                    v.parent.requestDisallowInterceptTouchEvent(true)
+                    v.parent.requestDisallowInterceptTouchEvent(true) //gestisce la funzione lo swipe
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    v.parent.requestDisallowInterceptTouchEvent(false)
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { //action down rilasciare il dito,
+                    v.parent.requestDisallowInterceptTouchEvent(false) //finisce a gestire lo swipe
                 }
             }
             motionLayout.onTouchEvent(event)
             false // Importante: false così il MotionLayout riceve comunque l'evento
         }
 
-        // Creiamo il callback per il tasto back
+        // Creiamo il callback per il tasto back, per tornare dai dettagli dell'utente alla visuale normale
         val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)
             override fun handleOnBackPressed() {
                 // Se l'utente preme back, torniamo allo stato iniziale
@@ -134,12 +135,12 @@ class MainFragmentMenu : Fragment() {
 
         // Monitoriamo lo stato del MotionLayout per attivare/disattivare il tasto back
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
-            override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {}
+            override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {} //quando implemento un interfaccia devo ridefinire i metodi anche se non li uso
             override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
             override fun onTransitionCompleted(p0: MotionLayout?, currentId: Int) {
                 // Se siamo nello stato END (info aperte), attiviamo il callback del tasto back
                 // Se siamo nello stato START (foto grande), lo disattiviamo così il back fa l'azione normale
-                backCallback.isEnabled = (currentId == R.id.end)
+                backCallback.isEnabled = (currentId == R.id.end) //un if abbreviato che controlla se sto nella sezione info
 
                 if (currentId == R.id.like || currentId == R.id.pass) {
                     if (currentId == R.id.like) {
@@ -159,7 +160,7 @@ class MainFragmentMenu : Fragment() {
                     }
                     // Reset istantaneo e ricarica
                     motionLayout.progress = 0f
-                    motionLayout.setTransition(R.id.start, R.id.end)
+                    motionLayout.setTransition(R.id.start, R.id.end)//ridefinisce la transizione dallo start all'end
                     indiceAttuale = 0
                     getNextAvversario()
                 }
@@ -171,12 +172,12 @@ class MainFragmentMenu : Fragment() {
         btnFiltra.setOnClickListener {
             //  apriProfilo(it) // Ora la funzione sotto diventerà colorata!
             val filtro = MainFragmentMenuFiltra()  //Creazione istanza
-            filtro.show(parentFragmentManager, "foto_gallery")
+            filtro.show(parentFragmentManager, "foto_gallery") //apre dialog fragment
         }
     }
 
     private fun setupIndicators() {
-        indicatorContainer.removeAllViews()
+        indicatorContainer.removeAllViews() //rimuove tutte le view nel contenitore
         listaFoto.forEachIndexed { index, _ ->
             val viewS = View(context)
             val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
@@ -205,7 +206,7 @@ class MainFragmentMenu : Fragment() {
             Glide.with(requireContext()).load(listaFoto[indiceAttuale]).into(profileImage)
 
             // Cambia il colore delle lineette
-            for (i in 0 until indicatorContainer.childCount) {
+            for (i in 0 until indicatorContainer.childCount) { //scorre tutti gli elementi di indicatorContainer
                 val indicator = indicatorContainer.getChildAt(i)
                 if (i == indiceAttuale) {
                     indicator.setBackgroundColor(Color.WHITE)
@@ -214,7 +215,6 @@ class MainFragmentMenu : Fragment() {
                 }
             }
 
-            //cambia le scritte occhio che cambia ogni volta che clicchi la foto dovrei solo cambiare foto ricordati!!!!
             Log.d("cambiamo utente", "${utenteMatch.nome}")
 
             titolo?.text = "${utenteMatch.nome} ${utenteMatch.cognome}"
@@ -246,9 +246,9 @@ class MainFragmentMenu : Fragment() {
             "Altro..." to view?.findViewById<TextView>(R.id.altro)
         )
 
-        mappaId.values.forEach { it?.visibility = View.GONE }
+        mappaId.values.forEach { it?.visibility = View.GONE } //non si vedono tutte le arti
 
-        lista.forEach { arte ->
+        lista.forEach { arte -> //itero e attivo solo le arti interessate
             mappaId[arte]?.apply{
                 visibility = View.VISIBLE
             }
@@ -259,15 +259,15 @@ class MainFragmentMenu : Fragment() {
         if(codaUtenti.isNotEmpty()){
             utenteMatch = codaUtenti.poll()!!.first //pool rimuove il primo elemento in cima alla coda e dato che codaUtenti sono coppie di dati .first indica proprio questo
             if(!utenteMatch.urlFoto.isEmpty()){ //se l'url della foto di utenteMatch non è vuoto
-                listaFoto = utenteMatch.urlFoto
+                listaFoto = utenteMatch.urlFoto //url foto è una lista
             }else{
-                listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+                Toast.makeText(requireContext(), "nessuna foto", Toast.LENGTH_SHORT).show()
             }
             setupIndicators()
             aggiornaInterfaccia()
         } else {
             utenteMatch = User()
-            listaFoto += "https://guebusnndyspxxmlmltl.supabase.co/storage/v1/object/public/foto_fighthub/img_945a3fa2-aaf6-4544-8447-f666808806f0.jpg"
+            Toast.makeText(requireContext(), "nessun utente", Toast.LENGTH_SHORT).show()
             setupIndicators()
             aggiornaInterfaccia()
         }
