@@ -140,16 +140,6 @@ class MainFragmentProfiloAvversario : Fragment() {
             }
         )
 
-        //configurazione tasto back
-        val motionLayout = view.findViewById<MotionLayout>(R.id.motionLayout)
-        val backCallback = object : OnBackPressedCallback(false) { // Inizialmente disattivato (false)
-            override fun handleOnBackPressed() {
-                // Se l'utente preme back, torniamo allo stato iniziale
-                parentFragmentManager.popBackStack()
-                motionLayout.transitionToStart()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backCallback)
     }
 }
 
